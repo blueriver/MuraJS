@@ -1,5 +1,5 @@
 
-Mura=require('Mura');
+var Mura=require('Mura');
 root=this;
 
 Mura.DOMSelection = Mura.Core.extend(
@@ -48,7 +48,7 @@ Mura.DOMSelection = Mura.Core.extend(
        * @return {object}
        */
       select: function(selector) {
-          return mura(selector);
+          return Mura(selector);
       },
 
 
@@ -73,7 +73,7 @@ Mura.DOMSelection = Mura.Core.extend(
        * @return {object}    New Mura.DOMSelection
        */
       filter: function(fn) {
-          return mura(this.selection.filter(function(el,
+          return Mura(this.selection.filter(function(el,
               idx, array) {
               return fn.call(el, el, idx,
                   array);
@@ -87,7 +87,7 @@ Mura.DOMSelection = Mura.Core.extend(
        * @return {object}    New Mura.DOMSelection
        */
       map: function(fn) {
-          return mura(this.selection.map(function(el, idx,
+          return Mura(this.selection.map(function(el, idx,
               array) {
               return fn.call(el, el, idx,
                   array);
@@ -163,7 +163,7 @@ Mura.DOMSelection = Mura.Core.extend(
                       function() {
                           self.each(function() {
                               if (selector) {
-                                  mura(this).find(
+                                  Mura(this).find(
                                       selector
                                   ).each(
                                       function() {
@@ -198,7 +198,7 @@ Mura.DOMSelection = Mura.Core.extend(
                       eventName,
                       function(event) {
                           if (selector) {
-                              if (mura(event.target)
+                              if (Mura(event.target)
                                   .is(
                                       selector
                                   )) {
@@ -381,7 +381,7 @@ Mura.DOMSelection = Mura.Core.extend(
           if (!this.selection.length) {
               return this;
           }
-          return mura(this.selection[0].parentNode);
+          return Mura(this.selection[0].parentNode);
       },
 
       /**
@@ -396,7 +396,7 @@ Mura.DOMSelection = Mura.Core.extend(
           }
 
           if (this.selection[0].hasChildNodes()) {
-              var children = mura(this.selection[0].childNodes);
+              var children = Mura(this.selection[0].childNodes);
 
               if (typeof selector == 'string') {
                   var filterFn = function() {
@@ -416,7 +416,7 @@ Mura.DOMSelection = Mura.Core.extend(
 
               return children.filter(filterFn);
           } else {
-              return mura([]);
+              return Mura([]);
           }
 
       },
@@ -443,9 +443,9 @@ Mura.DOMSelection = Mura.Core.extend(
               } else {
                   var result = [];
               }
-              return mura(result);
+              return Mura(result);
           } else {
-              return mura([]);
+              return Mura([]);
           }
       },
 
@@ -456,9 +456,9 @@ Mura.DOMSelection = Mura.Core.extend(
        */
       first: function() {
           if (this.selection.length) {
-              return mura(this.selection[0]);
+              return Mura(this.selection[0]);
           } else {
-              return mura([]);
+              return Mura([]);
           }
       },
 
@@ -469,10 +469,10 @@ Mura.DOMSelection = Mura.Core.extend(
        */
       last: function() {
           if (this.selection.length) {
-              return mura(this.selection[this.selection.length -
+              return Mura(this.selection[this.selection.length -
                   1]);
           } else {
-              return mura([]);
+              return Mura([]);
           }
       },
 
@@ -483,7 +483,7 @@ Mura.DOMSelection = Mura.Core.extend(
        */
       selector: function() {
           var pathes = [];
-          var path, node = mura(this.selection[0]);
+          var path, node = Mura(this.selection[0]);
 
           while (node.length) {
               var realNode = node.get(0),
@@ -540,7 +540,7 @@ Mura.DOMSelection = Mura.Core.extend(
           var el = this.selection[0];
 
           if (el.hasChildNodes()) {
-              var silbings = mura(this.selection[0].childNodes);
+              var silbings = Mura(this.selection[0].childNodes);
 
               if (typeof selector == 'string') {
                   var filterFn = function() {
@@ -560,7 +560,7 @@ Mura.DOMSelection = Mura.Core.extend(
 
               return silbings.filter(filterFn);
           } else {
-              return mura([]);
+              return Mura([]);
           }
       },
 
@@ -604,9 +604,9 @@ Mura.DOMSelection = Mura.Core.extend(
           };
 
           if (parent) {
-              return mura(parent)
+              return Mura(parent)
           } else {
-              return mura([]);
+              return Mura([]);
           }
 
       },
@@ -672,7 +672,7 @@ Mura.DOMSelection = Mura.Core.extend(
                       Mura.createUUID()
                   );
 
-                  mura(this).append(el);
+                  Mura(this).append(el);
 
                   Mura.processDisplayObject(
                       el,true,true).then(
@@ -726,7 +726,7 @@ Mura.DOMSelection = Mura.Core.extend(
                       Mura.createUUID()
                   );
 
-                  mura(this).prepend(el);
+                  Mura(this).prepend(el);
 
                   Mura.processDisplayObject(
                       el,true,true).then(

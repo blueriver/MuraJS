@@ -1,5 +1,5 @@
 
-Mura=require('Mura');
+var Mura=require('Mura');
 
 /**
  * Creates a new Mura.Cache
@@ -106,3 +106,5 @@ Mura.Cache=Mura.Core.extend(
 	}
 
 });
+
+Mura.datacache=new Mura.Cache();

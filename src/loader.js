@@ -1,6 +1,8 @@
 
+
+var Mura=require('Mura');
+
 //https://github.com/malko/l.js
-;(function(root){
 /*
 * script for js/css parallel loading with dependancies management
 * @author Jonathan Gotti < jgotti at jgotti dot net >
@@ -34,7 +36,7 @@
 	;
 
 	//avoid multiple inclusion to override current loader but allow tag content evaluation
-	if( ! root.Mura.ljs ){
+	if( ! Mura.ljs ){
 		var checkLoaded = scriptTag.src.match(/checkLoaded/)?1:0
 			//-- keep trace of header as we will make multiple access to it
 			,header  = D[getElementsByTagName]("head")[0] || D.documentElement
@@ -261,8 +263,7 @@
 			}
 		}
 		//export ljs
-		root.Mura.ljs = loader;
+		Mura.ljs = loader;
 		// eval inside tag code if any
 	}
 	scriptTag.src && script && appendElmt('script', {innerHTML: script});
-})(this);

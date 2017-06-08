@@ -1,5 +1,5 @@
 
-Mura=require('Mura');
+var Mura=require('Mura');
 
 /**
  * Creates a new Mura.EntityCollection

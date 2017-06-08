@@ -23,7 +23,9 @@
  * @version     SVN: $Id: shadowbox.js 75 2008-02-21 16:51:29Z mjijackson $
  */
 
- if(typeof mura == 'undefined'){
+ var Mura =require("Mura");
+
+ if(typeof Mura == 'undefined'){
      throw 'Unable to load Shadowbox, Mura library not found.';
  }
 
@@ -41,8 +43,8 @@
       * @public
       */
      getStyle: function(el, style){
-         //console.log(style + ': ' +  mura(el).css(style))
-         return mura(el).css(style);
+         //console.log(style + ': ' +  Mura(el).css(style))
+         return Mura(el).css(style);
      },
 
      /**
@@ -63,7 +65,7 @@
              temp[style] = value;
              style = temp;
          }
-         mura(el).css(style);
+         Mura(el).css(style);
      },
 
      /**
@@ -85,7 +87,7 @@
       * @public
       */
      remove: function(el){
-         mura(el).remove();
+         Mura(el).remove();
      },
 
      /**
@@ -131,7 +133,7 @@
       * @public
       */
      addEvent: function(el, name, handler){
-         mura(el).bind(name, handler);
+         Mura(el).bind(name, handler);
      },
 
      /**
@@ -145,7 +147,7 @@
       * @public
       */
      removeEvent: function(el, name, handler){
-         mura(el).unbind(name, handler);
+         Mura(el).unbind(name, handler);
      },
 
      /**
@@ -175,7 +177,7 @@
          if(jQuery){
              jQuery(el).animate(o, duration, null, callback);
          } else {
-             mura(el).css(o);
+             Mura(el).css(o);
              if(callback) { callback();}
          }
      }
@@ -207,7 +209,7 @@
          *
          * @var     {String}    assetURL
          */
-        assetURL:        mura.context +  '/core/modules/v1/core_assets/images/shadowbox/',
+        assetURL:        Mura.context +  '/core/modules/v1/core_assets/images/shadowbox/',
 
         /**
          * The path to the image to display while loading.
@@ -2687,3 +2689,5 @@ String.format = String.format || function(format){
         return args[i];
     });
 };
+
+module.exports=Shadowbox;

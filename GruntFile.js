@@ -24,7 +24,9 @@ module.exports = function(grunt) {
                 options: {
                   processTemplates: false
                 },
-                replacements: [{
+
+              replacements: [
+                {
                       from: 'Handlebars',
                       to: function () {
                         return "this.Mura.Handlebars";

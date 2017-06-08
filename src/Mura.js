@@ -1,6 +1,7 @@
 
 require("babel-polyfill");
 
+(function(root){
 /**
  * Creates a new Mura
  * @class {class} Mura
@@ -1177,7 +1178,7 @@ require("babel-polyfill");
 
   function noSpam(user, domain) {
       locationstring = "mailto:" + user + "@" + domain;
-      root.location = locationstring;
+      location = locationstring;
   }
 
   /**
@@ -2568,7 +2569,7 @@ require("babel-polyfill");
                   var a = this.getAttribute('href').split(
                       '?');
                   if (a.length == 2) {
-                      root.location.hash = a[1];
+                      location.hash = a[1];
                   }
 
               });
@@ -2805,7 +2806,7 @@ require("babel-polyfill");
 
   function handleHashChange() {
 
-      var hash = root.location.hash;
+      var hash = location.hash;
 
       if (hash) {
           hash = hash.substring(1);
@@ -2922,7 +2923,7 @@ require("babel-polyfill");
    * @memberof Mura
    */
   function getQueryStringParams(queryString) {
-      queryString = queryString || root.location.search;
+      queryString = queryString || location.search;
       var params = {};
       var e,
           a = /\+/g, // Regex for replacing addition symbol with a space
@@ -3050,16 +3051,16 @@ require("babel-polyfill");
 
       if (typeof config.rootdocumentdomain != 'undefined' && config.rootdocumentdomain !=
           '') {
-          root.document.domain = config.rootdocumentdomain;
+          document.domain = config.rootdocumentdomain;
       }
 
       Mura.editing;
 
-      extend(root.Mura, config);
+      extend(Mura, config);
 
       Mura(function() {
 
-          var hash = root.location.hash;
+          var hash = location.hash;
 
           if (hash) {
               hash = hash.substring(1);
@@ -3068,7 +3069,7 @@ require("babel-polyfill");
           hashparams = setLowerCaseKeys(getQueryStringParams(
               hash));
           urlparams = setLowerCaseKeys(getQueryStringParams(
-              root.location.search));
+              location.search));
 
           if (hashparams.nextnid) {
               Mura('.mura-async-object[data-nextnid="' +
@@ -3174,7 +3175,16 @@ require("babel-polyfill");
       });
 
       readyInternal(initReadyQueue);
+      /*
+      if(typeof window != 'undefined'){
+        window.mura = root.Mura
+        window.m = root.Mura;
+        //window.validateForm = root.Mura.validateForm;
+      }
 
+      root.Mura.displayObject = root.Mura.DisplayObject;
+
+      */
       return root.Mura
   }
 
@@ -3267,8 +3277,9 @@ require("babel-polyfill");
       initMura: init
   });
 
-  module.exports=Mura;
+})(this);
 
+module.exports=this.Mura;
 
 /**
  * A namespace.
