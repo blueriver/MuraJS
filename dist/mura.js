@@ -2284,7 +2284,7 @@ __webpack_require__(129);
                           "text/javascript")
                       fileref.setAttribute("src", root.Mura
                           .corepath +
-                          '/cfformprotect/js/cffp.js'
+                          '/vendor/cfformprotect/js/cffp.js'
                       )
 
                       document.getElementsByTagName(
@@ -20026,6 +20026,21 @@ if(typeof window != 'undefined'){
   window.m=Mura;
   window.mura=Mura;
   window.Mura=Mura;
+
+  window.Element && function(ElementPrototype) {
+    ElementPrototype.matchesSelector = ElementPrototype.matchesSelector ||
+    ElementPrototype.mozMatchesSelector ||
+    ElementPrototype.msMatchesSelector ||
+    ElementPrototype.oMatchesSelector ||
+    ElementPrototype.webkitMatchesSelector ||
+    function (selector) {
+      var node = this, nodes = (node.parentNode || node.document).querySelectorAll(selector), i = -1;
+
+      while (nodes[++i] && nodes[i] != node);
+
+      return !!nodes[i];
+    }
+  }(Element.prototype);
 
   function ready(event) {
     if (ready.interval && this.document.body) {

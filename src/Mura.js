@@ -1906,7 +1906,7 @@ require("babel-polyfill");
                           "text/javascript")
                       fileref.setAttribute("src", root.Mura
                           .corepath +
-                          '/cfformprotect/js/cffp.js'
+                          '/vendor/cfformprotect/js/cffp.js'
                       )
 
                       document.getElementsByTagName(
