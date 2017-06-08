@@ -27,6 +27,12 @@ module.exports = function(grunt) {
 
               replacements: [
                 {
+                      from: 'this["Mura"] = this["Mura"] || {};',
+                      to: function () {
+                        return 'this["Mura"]=require("Mura");';
+                      }
+                },
+                {
                       from: 'Handlebars',
                       to: function () {
                         return "this.Mura.Handlebars";
