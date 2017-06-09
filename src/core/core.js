@@ -1508,13 +1508,13 @@ require("core/polyfill");
               [
                   Mura.context + '/core/modules/v1/core_assets/css/shadowbox.min.css',
                   Mura.context +
-                  '/core/modules/v1/core_assets/js/external/shadowbox/shadowbox.js'
+                  '/core/modules/v1/core_assets/js/shadowbox.js'
               ],
               function() {
                   Mura('#shadowbox_overlay,#shadowbox_container')
                       .remove();
-                  if (root.Shadowbox) {
-                      root.Shadowbox.init();
+                  if (window.Shadowbox) {
+                      window.Shadowbox.init();
                   }
               }
           );

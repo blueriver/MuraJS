@@ -14,8 +14,6 @@ require('core/templates');
 
 if(typeof window != 'undefined'){
 
-  window.Shadowbox=require('core/shadowbox');
-
   window.m=Mura;
   window.mura=Mura;
   window.Mura=Mura;

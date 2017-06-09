@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 330);
+/******/ 	return __webpack_require__(__webpack_require__.s = 329);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -82,8 +82,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 var global    = __webpack_require__(2)
   , core      = __webpack_require__(25)
-  , hide      = __webpack_require__(13)
-  , redefine  = __webpack_require__(14)
+  , hide      = __webpack_require__(12)
+  , redefine  = __webpack_require__(13)
   , ctx       = __webpack_require__(26)
   , PROTOTYPE = 'prototype';
 
@@ -241,11 +241,105 @@ module.exports = function(it, key){
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports) {
+
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP         = __webpack_require__(7)
+  , createDesc = __webpack_require__(31);
+module.exports = __webpack_require__(6) ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global    = __webpack_require__(2)
+  , hide      = __webpack_require__(12)
+  , has       = __webpack_require__(10)
+  , SRC       = __webpack_require__(41)('src')
+  , TO_STRING = 'toString'
+  , $toString = Function[TO_STRING]
+  , TPL       = ('' + $toString).split(TO_STRING);
+
+__webpack_require__(25).inspectSource = function(it){
+  return $toString.call(it);
+};
+
+(module.exports = function(O, key, val, safe){
+  var isFunction = typeof val == 'function';
+  if(isFunction)has(val, 'name') || hide(val, 'name', key);
+  if(O[key] === val)return;
+  if(isFunction)has(val, SRC) || hide(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
+  if(O === global){
+    O[key] = val;
+  } else {
+    if(!safe){
+      delete O[key];
+      hide(O, key, val);
+    } else {
+      if(O[key])O[key] = val;
+      else hide(O, key, val);
+    }
+  }
+// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+})(Function.prototype, TO_STRING, function toString(){
+  return typeof this == 'function' && this[SRC] || $toString.call(this);
+});
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(0)
+  , fails   = __webpack_require__(3)
+  , defined = __webpack_require__(20)
+  , quot    = /"/g;
+// B.2.3.2.1 CreateHTML(string, tag, attribute, value)
+var createHTML = function(string, tag, attribute, value) {
+  var S  = String(defined(string))
+    , p1 = '<' + tag;
+  if(attribute !== '')p1 += ' ' + attribute + '="' + String(value).replace(quot, '&quot;') + '"';
+  return p1 + '>' + S + '</' + tag + '>';
+};
+module.exports = function(NAME, exec){
+  var O = {};
+  O[NAME] = exec(createHTML);
+  $export($export.P + $export.F * fails(function(){
+    var test = ''[NAME]('"');
+    return test !== test.toLowerCase() || test.split('"').length > 3;
+  }), 'String', O);
+};
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(48)
+  , defined = __webpack_require__(20);
+module.exports = function(it){
+  return IObject(defined(it));
+};
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-__webpack_require__(129);
-__webpack_require__(328);
+__webpack_require__(128);
+__webpack_require__(327);
 
 (function(root){
 /**
@@ -1753,13 +1847,13 @@ __webpack_require__(328);
               [
                   Mura.context + '/core/modules/v1/core_assets/css/shadowbox.min.css',
                   Mura.context +
-                  '/core/modules/v1/core_assets/js/external/shadowbox/shadowbox.js'
+                  '/core/modules/v1/core_assets/js/shadowbox.js'
               ],
               function() {
                   Mura('#shadowbox_overlay,#shadowbox_container')
                       .remove();
-                  if (root.Shadowbox) {
-                      root.Shadowbox.init();
+                  if (window.Shadowbox) {
+                      window.Shadowbox.init();
                   }
               }
           );
@@ -3535,106 +3629,12 @@ module.exports=this.Mura;
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = function(it){
-  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
-  return it;
-};
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP         = __webpack_require__(7)
-  , createDesc = __webpack_require__(31);
-module.exports = __webpack_require__(6) ? function(object, key, value){
-  return dP.f(object, key, createDesc(1, value));
-} : function(object, key, value){
-  object[key] = value;
-  return object;
-};
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global    = __webpack_require__(2)
-  , hide      = __webpack_require__(13)
-  , has       = __webpack_require__(10)
-  , SRC       = __webpack_require__(41)('src')
-  , TO_STRING = 'toString'
-  , $toString = Function[TO_STRING]
-  , TPL       = ('' + $toString).split(TO_STRING);
-
-__webpack_require__(25).inspectSource = function(it){
-  return $toString.call(it);
-};
-
-(module.exports = function(O, key, val, safe){
-  var isFunction = typeof val == 'function';
-  if(isFunction)has(val, 'name') || hide(val, 'name', key);
-  if(O[key] === val)return;
-  if(isFunction)has(val, SRC) || hide(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
-  if(O === global){
-    O[key] = val;
-  } else {
-    if(!safe){
-      delete O[key];
-      hide(O, key, val);
-    } else {
-      if(O[key])O[key] = val;
-      else hide(O, key, val);
-    }
-  }
-// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
-})(Function.prototype, TO_STRING, function toString(){
-  return typeof this == 'function' && this[SRC] || $toString.call(this);
-});
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $export = __webpack_require__(0)
-  , fails   = __webpack_require__(3)
-  , defined = __webpack_require__(20)
-  , quot    = /"/g;
-// B.2.3.2.1 CreateHTML(string, tag, attribute, value)
-var createHTML = function(string, tag, attribute, value) {
-  var S  = String(defined(string))
-    , p1 = '<' + tag;
-  if(attribute !== '')p1 += ' ' + attribute + '="' + String(value).replace(quot, '&quot;') + '"';
-  return p1 + '>' + S + '</' + tag + '>';
-};
-module.exports = function(NAME, exec){
-  var O = {};
-  O[NAME] = exec(createHTML);
-  $export($export.P + $export.F * fails(function(){
-    var test = ''[NAME]('"');
-    return test !== test.toLowerCase() || test.split('"').length > 3;
-  }), 'String', O);
-};
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(48)
-  , defined = __webpack_require__(20);
-module.exports = function(it){
-  return IObject(defined(it));
-};
-
-/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var pIE            = __webpack_require__(49)
   , createDesc     = __webpack_require__(31)
-  , toIObject      = __webpack_require__(16)
+  , toIObject      = __webpack_require__(15)
   , toPrimitive    = __webpack_require__(24)
   , has            = __webpack_require__(10)
   , IE8_DOM_DEFINE = __webpack_require__(97)
@@ -3714,7 +3714,7 @@ var ctx      = __webpack_require__(26)
   , IObject  = __webpack_require__(48)
   , toObject = __webpack_require__(9)
   , toLength = __webpack_require__(8)
-  , asc      = __webpack_require__(132);
+  , asc      = __webpack_require__(131);
 module.exports = function(TYPE, $create){
   var IS_MAP        = TYPE == 1
     , IS_FILTER     = TYPE == 2
@@ -3792,7 +3792,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(12);
+var aFunction = __webpack_require__(11);
 module.exports = function(fn, that, length){
   aFunction(fn);
   if(that === undefined)return fn;
@@ -3884,7 +3884,7 @@ if(__webpack_require__(6)){
     , ctx                 = __webpack_require__(26)
     , anInstance          = __webpack_require__(33)
     , propertyDesc        = __webpack_require__(31)
-    , hide                = __webpack_require__(13)
+    , hide                = __webpack_require__(12)
     , redefineAll         = __webpack_require__(38)
     , toInteger           = __webpack_require__(32)
     , toLength            = __webpack_require__(8)
@@ -4657,7 +4657,7 @@ module.exports = Object.keys || function keys(O){
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var redefine = __webpack_require__(14);
+var redefine = __webpack_require__(13);
 module.exports = function(target, src, safe){
   for(var key in src)redefine(target, key, src[key], safe);
   return target;
@@ -4711,7 +4711,7 @@ module.exports = function(key){
 // 22.1.3.31 Array.prototype[@@unscopables]
 var UNSCOPABLES = __webpack_require__(5)('unscopables')
   , ArrayProto  = Array.prototype;
-if(ArrayProto[UNSCOPABLES] == undefined)__webpack_require__(13)(ArrayProto, UNSCOPABLES, {});
+if(ArrayProto[UNSCOPABLES] == undefined)__webpack_require__(12)(ArrayProto, UNSCOPABLES, {});
 module.exports = function(key){
   ArrayProto[UNSCOPABLES][key] = true;
 };
@@ -4910,7 +4910,7 @@ module.exports = exports['default'];
 
 // false -> Array#indexOf
 // true  -> Array#includes
-var toIObject = __webpack_require__(16)
+var toIObject = __webpack_require__(15)
   , toLength  = __webpack_require__(8)
   , toIndex   = __webpack_require__(40);
 module.exports = function(IS_INCLUDES){
@@ -4938,7 +4938,7 @@ module.exports = function(IS_INCLUDES){
 
 var global            = __webpack_require__(2)
   , $export           = __webpack_require__(0)
-  , redefine          = __webpack_require__(14)
+  , redefine          = __webpack_require__(13)
   , redefineAll       = __webpack_require__(38)
   , meta              = __webpack_require__(30)
   , forOf             = __webpack_require__(43)
@@ -5027,8 +5027,8 @@ module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
 
 "use strict";
 
-var hide     = __webpack_require__(13)
-  , redefine = __webpack_require__(14)
+var hide     = __webpack_require__(12)
+  , redefine = __webpack_require__(13)
   , fails    = __webpack_require__(3)
   , defined  = __webpack_require__(20)
   , wks      = __webpack_require__(5);
@@ -5168,7 +5168,7 @@ module.exports = function(key){
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(2)
-  , hide   = __webpack_require__(13)
+  , hide   = __webpack_require__(12)
   , uid    = __webpack_require__(41)
   , TYPED  = uid('typed_array')
   , VIEW   = uid('view')
@@ -5321,7 +5321,7 @@ var create         = __webpack_require__(35)
   , IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(13)(IteratorPrototype, __webpack_require__(5)('iterator'), function(){ return this; });
+__webpack_require__(12)(IteratorPrototype, __webpack_require__(5)('iterator'), function(){ return this; });
 
 module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -5336,8 +5336,8 @@ module.exports = function(Constructor, NAME, next){
 
 var LIBRARY        = __webpack_require__(34)
   , $export        = __webpack_require__(0)
-  , redefine       = __webpack_require__(14)
-  , hide           = __webpack_require__(13)
+  , redefine       = __webpack_require__(13)
+  , hide           = __webpack_require__(12)
   , has            = __webpack_require__(10)
   , Iterators      = __webpack_require__(44)
   , $iterCreate    = __webpack_require__(71)
@@ -5547,7 +5547,7 @@ module.exports = function(key){
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
 var anObject  = __webpack_require__(1)
-  , aFunction = __webpack_require__(12)
+  , aFunction = __webpack_require__(11)
   , SPECIES   = __webpack_require__(5)('species');
 module.exports = function(O, D){
   var C = anObject(O).constructor, S;
@@ -5704,7 +5704,7 @@ var global         = __webpack_require__(2)
   , DESCRIPTORS    = __webpack_require__(6)
   , LIBRARY        = __webpack_require__(34)
   , $typed         = __webpack_require__(61)
-  , hide           = __webpack_require__(13)
+  , hide           = __webpack_require__(12)
   , redefineAll    = __webpack_require__(38)
   , fails          = __webpack_require__(3)
   , anInstance     = __webpack_require__(33)
@@ -6009,7 +6009,7 @@ module.exports = __webpack_require__(25).getIteratorMethod = function(it){
 var addToUnscopables = __webpack_require__(42)
   , step             = __webpack_require__(100)
   , Iterators        = __webpack_require__(44)
-  , toIObject        = __webpack_require__(16);
+  , toIObject        = __webpack_require__(15);
 
 // 22.1.3.4 Array.prototype.entries()
 // 22.1.3.13 Array.prototype.keys()
@@ -6126,7 +6126,7 @@ module.exports = function(iter, ITERATOR){
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var aFunction = __webpack_require__(12)
+var aFunction = __webpack_require__(11)
   , toObject  = __webpack_require__(9)
   , IObject   = __webpack_require__(48)
   , toLength  = __webpack_require__(8);
@@ -6161,7 +6161,7 @@ module.exports = function(that, callbackfn, aLen, memo, isRight){
 
 "use strict";
 
-var aFunction  = __webpack_require__(12)
+var aFunction  = __webpack_require__(11)
   , isObject   = __webpack_require__(4)
   , invoke     = __webpack_require__(55)
   , arraySlice = [].slice
@@ -6551,7 +6551,7 @@ module.exports = __webpack_require__(6) ? Object.defineProperties : function def
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__(16)
+var toIObject = __webpack_require__(15)
   , gOPN      = __webpack_require__(36).f
   , toString  = {}.toString;
 
@@ -6576,7 +6576,7 @@ module.exports.f = function getOwnPropertyNames(it){
 /***/ (function(module, exports, __webpack_require__) {
 
 var has          = __webpack_require__(10)
-  , toIObject    = __webpack_require__(16)
+  , toIObject    = __webpack_require__(15)
   , arrayIndexOf = __webpack_require__(51)(false)
   , IE_PROTO     = __webpack_require__(77)('IE_PROTO');
 
@@ -6598,7 +6598,7 @@ module.exports = function(object, names){
 /***/ (function(module, exports, __webpack_require__) {
 
 var getKeys   = __webpack_require__(37)
-  , toIObject = __webpack_require__(16)
+  , toIObject = __webpack_require__(15)
   , isEnum    = __webpack_require__(49).f;
 module.exports = function(isEntries){
   return function(it){
@@ -6751,7 +6751,7 @@ module.exports = __webpack_require__(52)('Set', function(get){
 "use strict";
 
 var each         = __webpack_require__(22)(0)
-  , redefine     = __webpack_require__(14)
+  , redefine     = __webpack_require__(13)
   , meta         = __webpack_require__(30)
   , assign       = __webpack_require__(102)
   , weak         = __webpack_require__(96)
@@ -6825,11 +6825,11 @@ var _exception = __webpack_require__(50);
 
 var _exception2 = _interopRequireDefault(_exception);
 
-var _helpers = __webpack_require__(314);
+var _helpers = __webpack_require__(313);
 
-var _decorators = __webpack_require__(312);
+var _decorators = __webpack_require__(311);
 
-var _logger = __webpack_require__(322);
+var _logger = __webpack_require__(321);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -6922,7 +6922,7 @@ exports.logger = _logger2['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 
 /**
  * Creates a new Mura.Cache
@@ -7038,7 +7038,7 @@ Mura.datacache=new Mura.Cache();
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 
 Mura.DOMSelection = Mura.Core.extend(
   /** @lends Mura.DOMSelection.prototype */
@@ -8590,7 +8590,7 @@ Mura.DOMSelection = Mura.Core.extend(
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 /**
 * Creates a new Mura.Entity
 * @class {class} Mura.Entity
@@ -9154,7 +9154,7 @@ Mura.Entity = Mura.Core.extend(
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 
 /**
  * Creates a new Mura.EntityCollection
@@ -9328,7 +9328,7 @@ Mura.EntityCollection=Mura.Entity.extend(
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 
 /**
  * Creates a new Mura.Feed
@@ -9755,7 +9755,7 @@ Mura.Feed = Mura.Core.extend(
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 
 Mura.DisplayObject.Form=Mura.UI.extend({
 context:{},
@@ -11110,7 +11110,7 @@ Mura.DisplayObject.form=Mura.DisplayObject.Form;
 
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 
 //https://github.com/malko/l.js
 /*
@@ -11384,7 +11384,7 @@ var Mura=__webpack_require__(11);
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura=__webpack_require__(11);
+var Mura=__webpack_require__(16);
 
 function core(){
 	this.init.apply(this,arguments);
@@ -11420,2708 +11420,9 @@ Mura.Core=core;
 /* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
- * A media-viewer script for web pages that allows content to be viewed without
- * navigating away from the original linking page.
- *
- * This file is part of Shadowbox.
- *
- * Shadowbox is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option)
- * any later version.
- *
- * Shadowbox is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for
- * more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Shadowbox. If not, see <http://www.gnu.org/licenses/>.
- *
- * @author      Michael J. I. Jackson <mjijackson@gmail.com>
- * @copyright   2007 Michael J. I. Jackson
- * @license     http://www.gnu.org/licenses/lgpl-3.0.txt GNU LGPL 3.0
- * @version     SVN: $Id: shadowbox.js 75 2008-02-21 16:51:29Z mjijackson $
- */
 
- var Mura =__webpack_require__(11);
-
- if(typeof Mura == 'undefined'){
-     throw 'Unable to load Shadowbox, Mura library not found.';
- }
-
- // create the Shadowbox object first
- var Shadowbox = {};
-
- Shadowbox.lib = {
-
-     /**
-      * Gets the value of the style on the given element.
-      *
-      * @param   {HTMLElement}   el      The DOM element
-      * @param   {String}        style   The name of the style (e.g. margin-top)
-      * @return  {mixed}                 The value of the given style
-      * @public
-      */
-     getStyle: function(el, style){
-         //console.log(style + ': ' +  Mura(el).css(style))
-         return Mura(el).css(style);
-     },
-
-     /**
-      * Sets the style on the given element to the given value. May be an
-      * object to specify multiple values.
-      *
-      * @param   {HTMLElement}   el      The DOM element
-      * @param   {String/Object} style   The name of the style to set if a
-      *                                  string, or an object of name =>
-      *                                  value pairs
-      * @param   {String}        value   The value to set the given style to
-      * @return  void
-      * @public
-      */
-     setStyle: function(el, style, value){
-         if(typeof style != 'object'){
-             var temp = {};
-             temp[style] = value;
-             style = temp;
-         }
-         Mura(el).css(style);
-     },
-
-     /**
-      * Gets a reference to the given element.
-      *
-      * @param   {String/HTMLElement}    el      The element to fetch
-      * @return  {HTMLElement}                   A reference to the element
-      * @public
-      */
-     get: function(el){
-         return (typeof el == 'string') ? document.getElementById(el) : el;
-     },
-
-     /**
-      * Removes an element from the DOM.
-      *
-      * @param   {HTMLElement}           el      The element to remove
-      * @return  void
-      * @public
-      */
-     remove: function(el){
-         Mura(el).remove();
-     },
-
-     /**
-      * Gets the target of the given event. The event object passed will be
-      * the same object that is passed to listeners registered with
-      * addEvent().
-      *
-      * @param   {mixed}                 e       The event object
-      * @return  {HTMLElement}                   The event's target element
-      * @public
-      */
-     getTarget: function(e){
-         return e.target;
-     },
-
-     /**
-      * Prevents the event's default behavior. The event object passed will
-      * be the same object that is passed to listeners registered with
-      * addEvent().
-      *
-      * @param   {mixed}                 e       The event object
-      * @return  void
-      * @public
-      */
-     preventDefault: function(e){
-         e = e.browserEvent || e;
-         if(e.preventDefault){
-             e.preventDefault();
-         }else{
-             e.returnValue = false;
-         }
-     },
-
-     /**
-      * Adds an event listener to the given element. It is expected that this
-      * function will be passed the event as its first argument.
-      *
-      * @param   {HTMLElement}   el          The DOM element to listen to
-      * @param   {String}        name        The name of the event to register
-      *                                      (i.e. 'click', 'scroll', etc.)
-      * @param   {Function}      handler     The event handler function
-      * @return  void
-      * @public
-      */
-     addEvent: function(el, name, handler){
-         Mura(el).bind(name, handler);
-     },
-
-     /**
-      * Removes an event listener from the given element.
-      *
-      * @param   {HTMLElement}   el          The DOM element to stop listening to
-      * @param   {String}        name        The name of the event to stop
-      *                                      listening for (i.e. 'click')
-      * @param   {Function}      handler     The event handler function
-      * @return  void
-      * @public
-      */
-     removeEvent: function(el, name, handler){
-         Mura(el).unbind(name, handler);
-     },
-
-     /**
-      * Animates numerous styles of the given element. The second parameter
-      * of this function will be an object of the type that is expected by
-      * YAHOO.util.Anim. See http://developer.yahoo.com/yui/docs/YAHOO.util.Anim.html
-      * for more information.
-      *
-      * @param   {HTMLElement}   el          The DOM element to animate
-      * @param   {Object}        obj         The animation attributes/parameters
-      * @param   {Number}        duration    The duration of the animation
-      *                                      (in seconds)
-      * @param   {Function}      callback    A callback function to call when
-      *                                      the animation completes
-      * @return  void
-      * @public
-      */
-     animate: function(el, obj, duration, callback){
-         duration = Math.round(duration * 1000); // convert to milliseconds
-         var o = {};
-         for(var p in obj){
-             for(var p in obj){
-                 o[p] = String(obj[p].to);
-                 if(p != 'opacity') o[p] += 'px';
-             }
-         }
-         if(jQuery){
-             jQuery(el).animate(o, duration, null, callback);
-         } else {
-             Mura(el).css(o);
-             if(callback) { callback();}
-         }
-     }
-
- };
-
-(function(){
-
-    /**
-     * The current version of Shadowbox.
-     *
-     * @property    {String}    version
-     * @private
-     */
-    var version = '1.0';
-
-    /**
-     * Contains the default options for Shadowbox. This object is almost
-     * entirely customizable.
-     *
-     * @property    {Object}    options
-     * @private
-     */
-    var options = {
-
-        /**
-         * A base URL that will be prepended to the loadingImage, flvPlayer, and
-         * overlayBgImage options to save on typing.
-         *
-         * @var     {String}    assetURL
-         */
-        assetURL:        Mura.context +  '/core/modules/v1/core_assets/images/shadowbox/',
-
-        /**
-         * The path to the image to display while loading.
-         *
-         * @var     {String}    loadingImage
-         */
-        loadingImage:       'loading.gif',
-
-        /**
-         * Enable animations.
-         *
-         * @var     {Boolean}   animate
-         */
-        animate:            true,
-
-        /**
-         * Specifies the sequence of the height and width animations. May be
-         * 'wh' (width then height), 'hw' (height then width), or 'sync' (both
-         * at the same time). Of course this will only work if animate is true.
-         *
-         * @var     {String}    animSequence
-         */
-        animSequence:       'wh',
-
-        /**
-         * The path to flvplayer.swf.
-         *
-         * @var     {String}    flvPlayer
-         */
-        flvPlayer:          'flvplayer.swf',
-
-        /**
-         * The background color and opacity of the overlay. Note: When viewing
-         * movie files on FF Mac, the default background image will be used
-         * because that browser has problems displaying movies above layers
-         * that aren't 100% opaque.
-         *
-         * @var     {String}    overlayColor
-         */
-        overlayColor:       '#000',
-
-        /**
-         * The background opacity to use for the overlay.
-         *
-         * @var     {Number}    overlayOpacity
-         */
-        overlayOpacity:     0.8,
-
-        /**
-         * A background image to use for browsers such as FF Mac that don't
-         * support displaying movie content over backgrounds that aren't 100%
-         * opaque.
-         *
-         * @var     {String}    overlayBgImage
-         */
-        overlayBgImage:     'overlay-85.png',
-
-        /**
-         * Listen to the overlay for clicks. If the user clicks the overlay,
-         * it will trigger Shadowbox.close().
-         *
-         * @var     {Boolean}   listenOverlay
-         */
-        listenOverlay:      false,
-
-        /**
-         * Automatically play movies.
-         *
-         * @var     {Boolean}   autoplayMovies
-         */
-        autoplayMovies:     true,
-
-        /**
-         * Enable movie controllers on movie players.
-         *
-         * @var     {Boolean}   showMovieControls
-         */
-        showMovieControls:  true,
-
-        /**
-         * The duration of the resizing animations (in seconds).
-         *
-         * @var     {Number}    resizeDuration
-         */
-        resizeDuration:     0.35,
-
-        /**
-         * The duration of the overlay fade animation (in seconds).
-         *
-         * @var     {Number}    fadeDuration
-         */
-        fadeDuration:       0.35,
-
-        /**
-         * Show the navigation controls.
-         *
-         * @var     {Boolean}   displayNav
-         */
-        displayNav:         true,
-
-        /**
-         * Enable continuous galleries. When this is true, users will be able
-         * to skip to the first gallery image from the last using next and vice
-         * versa.
-         *
-         * @var     {Boolean}   continuous
-         */
-        continuous:         false,
-
-        /**
-         * Display the gallery counter.
-         *
-         * @var     {Boolean}   displayCounter
-         */
-        displayCounter:     true,
-
-        /**
-         * This option may be either 'default' or 'skip'. The default counter is
-         * a simple '1 of 5' message. The skip counter displays a link for each
-         * piece in the gallery that enables a user to skip directly to any
-         * piece.
-         *
-         * @var     {String}    counterType
-         */
-        counterType:        'default',
-
-        /**
-         * The amount of padding to maintain around the viewport edge (in
-         * pixels). This only applies when the image is very large and takes up
-         * the entire viewport.
-         *
-         * @var     {Number}    viewportPadding
-         */
-        viewportPadding:    40,
-
-        /**
-         * How to handle images that are too large for the viewport. 'resize'
-         * will resize the image while preserving aspect ratio and display it at
-         * the smaller resolution. 'drag' will display the image at its native
-         * resolution but it will be draggable within the Shadowbox. 'none' will
-         * display the image at its native resolution but it may be cropped.
-         *
-         * @var     {String}    handleLgImages
-         */
-        handleLgImages:     'resize',
-
-        /**
-         * The initial height of Shadowbox (in pixels).
-         *
-         * @var     {Number}    initialHeight
-         */
-        initialHeight:      160,
-
-        /**
-         * The initial width of Shadowbox (in pixels).
-         *
-         * @var     {Number}    initialWidth
-         */
-        initialWidth:       320,
-
-        /**
-         * Enable keyboard control. Note: If you disable the keys, you may want
-         * to change the visual styles for the navigation elements that suggest
-         * keyboard shortcuts.
-         *
-         * @var     {Boolean}   enableKeys
-         */
-        enableKeys:         true,
-
-        /**
-         * The keys used to control Shadowbox. Note: In order to use these,
-         * enableKeys must be true. Key values or key codes may be used.
-         *
-         * @var     {Array}
-         */
-        keysClose:          ['c', 'q', 27], // c, q, or esc
-        keysNext:           ['n', 39],      // n or right arrow
-        keysPrev:           ['p', 37],      // p or left arrow
-
-        /**
-         * A hook function to be fired when Shadowbox opens. The single argument
-         * will be the current gallery element.
-         *
-         * @var     {Function}
-         */
-        onOpen:             null,
-
-        /**
-         * A hook function to be fired when Shadowbox finishes loading its
-         * content. The single argument will be the current gallery element on
-         * display.
-         *
-         * @var     {Function}
-         */
-        onFinish:           null,
-
-        /**
-         * A hook function to be fired when Shadowbox changes from one gallery
-         * element to the next. The single argument will be the current gallery
-         * element that is about to be displayed.
-         *
-         * @var     {Function}
-         */
-        onChange:           null,
-
-        /**
-         * A hook function that will be fired when Shadowbox closes. The single
-         * argument will be the gallery element most recently displayed.
-         *
-         * @var     {Function}
-         */
-        onClose:            null,
-
-        /**
-         * The mode to use when handling unsupported media. May be either
-         * 'remove' or 'link'. If it is 'remove', the unsupported gallery item
-         * will merely be removed from the gallery. If it is the only item in
-         * the gallery, the link will simply be followed. If it is 'link', a
-         * link will be provided to the appropriate plugin page in place of the
-         * gallery element.
-         *
-         * @var     {String}    handleUnsupported
-         */
-        handleUnsupported:  'link',
-
-        /**
-         * Skips calling Shadowbox.setup() in init(). This means that it must
-         * be called later manually.
-         *
-         * @var     {Boolean}   skipSetup
-         */
-        skipSetup:          false,
-
-        /**
-         * Text messages to use for Shadowbox. These are provided so they may be
-         * translated into different languages.
-         *
-         * @var     {Object}    text
-         */
-        text:           {
-
-            cancel:     'Cancel',
-
-            loading:    'Loading',
-
-            close:      '<span class="shortcut">C</span>lose',
-
-            next:       '<span class="shortcut">N</span>ext',
-
-            prev:       '<span class="shortcut">P</span>revious',
-
-            errors:     {
-                single: 'You must install the <a href="{0}">{1}</a> browser plugin to view this content.',
-                shared: 'You must install both the <a href="{0}">{1}</a> and <a href="{2}">{3}</a> browser plugins to view this content.',
-                either: 'You must install either the <a href="{0}">{1}</a> or the <a href="{2}">{3}</a> browser plugin to view this content.'
-            }
-
-        },
-
-        /**
-         * An object containing names of plugins and links to their respective
-         * download pages.
-         *
-         * @var     {Object}    errors
-         */
-        errors:         {
-
-            fla:        {
-                name:   'Flash',
-                url:    'http://www.adobe.com/products/flashplayer/'
-            },
-
-            qt:         {
-                name:   'QuickTime',
-                url:    'http://www.apple.com/quicktime/download/'
-            },
-
-            wmp:        {
-                name:   'Windows Media Player',
-                url:    'http://www.microsoft.com/windows/windowsmedia/'
-            },
-
-            f4m:        {
-                name:   'Flip4Mac',
-                url:    'http://www.flip4mac.com/wmv_download.htm'
-            }
-
-        },
-
-        /**
-         * The HTML markup to use for Shadowbox. Note: The script depends on
-         * most of these elements being present, so don't modify this variable
-         * unless you know what you're doing.
-         *
-         * @var     {Object}    skin
-         */
-        skin:           {
-
-            main:       '<div id="shadowbox_overlay"></div>' +
-                        '<div id="shadowbox_container">' +
-                            '<div id="shadowbox">' +
-                                '<div id="shadowbox_title">' +
-                                    '<div id="shadowbox_title_inner"></div>' +
-                                '</div>' +
-                                '<div id="shadowbox_body">' +
-                                    '<div id="shadowbox_body_inner"></div>' +
-                                    '<div id="shadowbox_loading"></div>' +
-                                '</div>' +
-                                '<div id="shadowbox_toolbar">' +
-                                    '<div id="shadowbox_toolbar_inner"></div>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>',
-
-            loading:    '<img src="{0}" alt="{1}" />' +
-                        '<span><a href="javascript:Shadowbox.close();">{2}</a></span>',
-
-            counter:    '<div id="shadowbox_counter">{0}</div>',
-
-            close:      '<div id="shadowbox_nav_close">' +
-                            '<a href="javascript:Shadowbox.close();">{0}</a>' +
-                        '</div>',
-
-            next:       '<div id="shadowbox_nav_next">' +
-                            '<a href="javascript:Shadowbox.next();">{0}</a>' +
-                        '</div>',
-
-            prev:       '<div id="shadowbox_nav_previous">' +
-                            '<a href="javascript:Shadowbox.previous();">{0}</a>' +
-                        '</div>'
-
-        },
-
-        /**
-         * An object containing arrays of all supported file extensions. Each
-         * property of this object contains an array. If this object is to be
-         * modified, it must be done before calling init().
-         *
-         * - img: Supported image file extensions
-         * - qt: Movie file extensions supported by QuickTime
-         * - wmp: Movie file extensions supported by Windows Media Player
-         * - qtwmp: Movie file extensions supported by both QuickTime and Windows Media Player
-         * - iframe: File extensions that will be display in an iframe
-         *
-         * @var     {Object}    ext
-         */
-        ext:     {
-            img:        ['png', 'jpg', 'jpeg', 'gif', 'bmp'],
-            qt:         ['dv', 'mov', 'moov', 'movie', 'mp4'],
-            wmp:        ['asf', 'wm', 'wmv'],
-            qtwmp:      ['avi', 'mpg', 'mpeg'],
-            iframe:     ['asp', 'aspx', 'cgi', 'cfm', 'htm', 'html', 'pl', 'php',
-                        'php3', 'php4', 'php5', 'phtml', 'rb', 'rhtml', 'shtml',
-                        'txt', 'vbs']
-        }
-
-    };
-
-    /**
-     * Stores the default set of options in case a custom set of options is used
-     * on a link-by-link basis so we can restore them later.
-     *
-     * @property    {Object}    default_options
-     * @private
-     */
-    var default_options = null;
-
-    /**
-     * Shorthand for Shadowbox.lib.
-     *
-     * @property    {Object}        SL
-     * @private
-     */
-    var SL = Shadowbox.lib;
-
-    /**
-     * An object containing some regular expressions we'll need later. Compiled
-     * up front for speed.
-     *
-     * @property    {Object}        RE
-     * @private
-     */
-    var RE = {
-        resize:         /(img|swf|flv)/, // file types to resize
-        overlay:        /(img|iframe|html|inline)/, // content types to not use an overlay image for on FF Mac
-        swf:            /\.swf\s*$/i, // swf file extension
-        flv:            /\.flv\s*$/i, // flv file extension
-        domain:         /:\/\/(.*?)[:\/]/, // domain prefix
-        inline:         /#(.+)$/, // inline element id
-        rel:            /^(light|shadow)box/i, // rel attribute format
-        gallery:        /^(light|shadow)box\[(.*?)\]/i, // rel attribute format for gallery link
-        unsupported:    /^unsupported-(\w+)/, // unsupported media type
-        param:          /\s*([a-z_]*?)\s*=\s*(.+)\s*/, // rel string parameter
-        empty:          /^(?:br|frame|hr|img|input|link|meta|range|spacer|wbr|area|param|col)$/i // elements that don't have children
-    };
-
-    /**
-     * A cache of options for links that have been set up for use with
-     * Shadowbox.
-     *
-     * @property    {Array}         cache
-     * @private
-     */
-    var cache = [];
-
-    /**
-     * An array of pieces currently being viewed. In the case of non-gallery
-     * pieces, this will only hold one object.
-     *
-     * @property    {Array}         current_gallery
-     * @private
-     */
-    var current_gallery;
-
-    /**
-     * The array index of the current_gallery that is currently being viewed.
-     *
-     * @property    {Number}        current
-     * @private
-     */
-    var current;
-
-    /**
-     * Keeps track of the current optimal height of the box. We use this so that
-     * if the user resizes the browser window to get a better view, and we're
-     * currently at a size smaller than the optimal, we can resize easily.
-     *
-     * @see         resizeContent()
-     * @property    {Number}        optimal_height
-     * @private
-     */
-    var optimal_height = options.initialHeight;
-
-    /**
-     * Keeps track of the current optimal width of the box. See optimal_height
-     * explanation (above).
-     *
-     * @property    {Number}        optimal_width
-     * @private
-     */
-    var optimal_width = options.initialWidth;
-
-    /**
-     * Keeps track of the current height of the box. This is useful in drag
-     * calculations.
-     *
-     * @property    {Number}        current_height
-     * @private
-     */
-    var current_height = 0;
-
-    /**
-     * Keeps track of the current width of the box. Useful in drag calculations.
-     *
-     * @property    {Number}        current_width
-     * @private
-     */
-    var current_width = 0;
-
-    /**
-     * Resource used to preload images. It's class-level so that when a new
-     * image is requested, the same resource can be reassigned, cancelling
-     * the original's callback.
-     *
-     * @property    {HTMLElement}   preloader
-     * @private
-     */
-    var preloader;
-
-    /**
-     * Keeps track of whether or not Shadowbox has been initialized. We never
-     * want to initialize twice.
-     *
-     * @property    {Boolean}       initialized
-     * @private
-     */
-    var initialized = false;
-
-    /**
-     * Keeps track of whether or not Shadowbox is activated.
-     *
-     * @property    {Boolean}       activated
-     * @private
-     */
-    var activated = false;
-
-    /**
-     * Keeps track of 4 floating values (x, y, start_x, & start_y) that are used
-     * in the drag calculations.
-     *
-     * @property    {Object}        drag
-     * @private
-     */
-    var drag;
-
-    /**
-     * Holds the draggable element so we don't have to fetch it every time
-     * the mouse moves.
-     *
-     * @property    {HTMLElement}   draggable
-     * @private
-     */
-    var draggable;
-
-    /**
-     * Keeps track of whether or not we're currently using the overlay
-     * background image to display the current gallery. We do this because we
-     * use different methods for fading the overlay in and out. The color fill
-     * overlay fades in and out nicely, but the image overlay stutters. By
-     * keeping track of the type of overlay in use, we don't have to check again
-     * what type of overlay we're using when it's time to get rid of it later.
-     *
-     * @property    {Boolean}       overlay_img_needed
-     * @private
-     */
-    var overlay_img_needed;
-
-    /**
-     * These parameters for simple browser detection. Used in Ext.js.
-     *
-     * @ignore
-     */
-    var ua = navigator.userAgent.toLowerCase();
-    var isStrict = document.compatMode == 'CSS1Compat',
-        isOpera = ua.indexOf("opera") > -1,
-        isIE = ua.indexOf('msie') > -1,
-        isIE7 = ua.indexOf('msie 7') > -1,
-        isIE9 = ua.indexOf('msie 9') > -1,
-        isBorderBox = isIE && !isStrict,
-        isSafari = (/webkit|khtml/).test(ua),
-        isSafari3 = isSafari && !!(document.evaluate),
-        isGecko = !isSafari && ua.indexOf('gecko') > -1,
-        isWindows = (ua.indexOf('windows') != -1 || ua.indexOf('win32') != -1),
-        isMac = (ua.indexOf('macintosh') != -1 || ua.indexOf('mac os x') != -1),
-        isLinux = (ua.indexOf('linux') != -1);
-
-    /**
-     * Do we need to hack the position to make Shadowbox appear fixed? We could
-     * hack this using CSS, but let's just get over all the hacks and let IE6
-     * users get what they deserve! Down with hacks! Hmm...now that I think
-     * about it, I should just flash all kinds of alerts and annoying popups on
-     * their screens, and then redirect them to some foreign spyware site that
-     * will upload a nasty virus...
-     *
-     * @property    {Boolean}   absolute_pos
-     * @private
-     */
-    var absolute_pos = isIE && !isIE7;
-
-    /**
-     * Contains plugin support information. Each property of this object is a
-     * boolean indicating whether that plugin is supported.
-     *
-     * - fla: Flash player
-     * - qt: QuickTime player
-     * - wmp: Windows Media player
-     * - f4m: Flip4Mac plugin
-     *
-     * @property    {Object}    plugins
-     * @private
-     */
-    var plugins = null;
-
-    // detect plugin support
-    if(navigator.plugins && navigator.plugins.length){
-        var detectPlugin = function(plugin_name){
-            var detected = false;
-            for (var i = 0, len = navigator.plugins.length; i < len; ++i){
-                if(navigator.plugins[i].name.indexOf(plugin_name) > -1){
-                    detected = true;
-                    break;
-                }
-            }
-            return detected;
-        };
-        var f4m = detectPlugin('Flip4Mac');
-        var plugins = {
-            fla:    detectPlugin('Shockwave Flash'),
-            qt:     detectPlugin('QuickTime'),
-            wmp:    !f4m && detectPlugin('Windows Media'), // if it's Flip4Mac, it's not really WMP
-            f4m:    f4m
-        };
-    }else{
-        var detectPlugin = function(plugin_name){
-            var detected = false;
-            try {
-                var axo = new ActiveXObject(plugin_name);
-                if(axo){
-                    detected = true;
-                }
-            } catch (e) {}
-            return detected;
-        };
-        var plugins = {
-            fla:    detectPlugin('ShockwaveFlash.ShockwaveFlash'),
-            qt:     detectPlugin('QuickTime.QuickTime'),
-            wmp:    detectPlugin('wmplayer.ocx'),
-            f4m:    false
-        };
-    }
-
-    /**
-     * Applies all properties of e to o. This function is recursive so that if
-     * any properties of e are themselves objects, those objects will be applied
-     * to objects with the same key that may exist in o.
-     *
-     * @param   {Object}    o       The original object
-     * @param   {Object}    e       The extension object
-     * @return  {Object}            The original object with all properties
-     *                              of the extension object applied (deep)
-     * @private
-     */
-    var apply = function(o, e){
-        for(var p in e) o[p] = e[p];
-        return o;
-    };
-
-    /**
-     * Determines if the given object is an anchor/area element.
-     *
-     * @param   {mixed}     el      The object to check
-     * @return  {Boolean}           True if the object is a link element
-     * @private
-     */
-    var isLink = function(el){
-        return typeof el.tagName == 'string' && (el.tagName.toUpperCase() == 'A' || el.tagName.toUpperCase() == 'AREA');
-    };
-
-    /**
-     * Gets the height of the viewport in pixels. Note: This function includes
-     * scrollbars in Safari 3.
-     *
-     * @return  {Number}        The height of the viewport
-     * @public
-     * @static
-     */
-    SL.getViewportHeight = function(){
-        var height = window.innerHeight; // Safari
-        var mode = document.compatMode;
-        if((mode || isIE) && !isOpera){
-            height = isStrict ? document.documentElement.clientHeight : document.body.clientHeight;
-        }
-        return height;
-    };
-
-    /**
-     * Gets the width of the viewport in pixels. Note: This function includes
-     * scrollbars in Safari 3.
-     *
-     * @return  {Number}        The width of the viewport
-     * @public
-     * @static
-     */
-    SL.getViewportWidth = function(){
-        var width = window.innerWidth; // Safari
-        var mode = document.compatMode;
-        if(mode || isIE){
-            width = isStrict ? document.documentElement.clientWidth : document.body.clientWidth;
-        }
-        return width;
-    };
-
-    /**
-     * Gets the height of the document (body and its margins) in pixels.
-     *
-     * @return  {Number}        The height of the document
-     * @public
-     * @static
-     */
-    SL.getDocumentHeight = function(){
-        var scrollHeight = isStrict ? document.documentElement.scrollHeight : document.body.scrollHeight;
-        return Math.max(scrollHeight, SL.getViewportHeight());
-    };
-
-    /**
-     * Gets the width of the document (body and its margins) in pixels.
-     *
-     * @return  {Number}        The width of the document
-     * @public
-     * @static
-     */
-    SL.getDocumentWidth = function(){
-        var scrollWidth = isStrict ? document.documentElement.scrollWidth : document.body.scrollWidth;
-        return Math.max(scrollWidth, SL.getViewportWidth());
-    };
-
-    /**
-     * A utility function used by the fade functions to clear the opacity
-     * style setting of the given element. Required in some cases for IE.
-     * Based on Ext.Element's clearOpacity.
-     *
-     * @param   {HTMLElement}   el      The DOM element
-     * @return  void
-     * @private
-     */
-    var clearOpacity = function(el){
-        if(isIE && !isIE9){
-            if(typeof el.style.filter == 'string' && (/alpha/i).test(el.style.filter)){
-                el.style.filter = '';
-            }
-        }else{
-            el.style.opacity = '';
-            el.style['-moz-opacity'] = '';
-            el.style['-khtml-opacity'] = '';
-        }
-    };
-
-    /**
-     * Fades the given element from 0 to the specified opacity.
-     *
-     * @param   {HTMLElement}   el              The DOM element to fade
-     * @param   {Number}        endingOpacity   The final opacity to animate to
-     * @param   {Number}        duration        The duration of the animation
-     *                                          (in seconds)
-     * @param   {Function}      callback        A callback function to call
-     *                                          when the animation completes
-     * @return  void
-     * @private
-     */
-    var fadeIn = function(el, endingOpacity, duration, callback){
-        if(options.animate){
-            SL.setStyle(el, 'opacity', 0);
-            el.style.visibility = 'visible';
-            SL.animate(el, {
-                opacity: { to: endingOpacity }
-            }, duration, function(){
-                if(endingOpacity == 1) clearOpacity(el);
-                if(typeof callback == 'function') callback();
-            });
-        }else{
-            if(endingOpacity == 1){
-                clearOpacity(el);
-            }else{
-                SL.setStyle(el, 'opacity', endingOpacity);
-            }
-            el.style.visibility = 'visible';
-            if(typeof callback == 'function') callback();
-        }
-    };
-
-    /**
-     * Fades the given element from its current opacity to 0.
-     *
-     * @param   {HTMLElement}   el          The DOM element to fade
-     * @param   {Number}        duration    The duration of the fade animation
-     * @param   {Function}      callback    A callback function to call when
-     *                                      the animation completes
-     * @return  void
-     * @private
-     */
-    var fadeOut = function(el, duration, callback){
-        var cb = function(){
-            el.style.visibility = 'hidden';
-            clearOpacity(el);
-            if(typeof callback == 'function') callback();
-        };
-        if(options.animate){
-            SL.animate(el, {
-                opacity: { to: 0 }
-            }, duration, cb);
-        }else{
-            cb();
-        }
-    };
-
-    /**
-     * Appends an HTML fragment to the given element.
-     *
-     * @param   {String/HTMLElement}    el      The element to append to
-     * @param   {String}                html    The HTML fragment to use
-     * @return  {HTMLElement}                   The newly appended element
-     * @private
-     */
-    var appendHTML = function(el, html){
-        el = SL.get(el);
-        if(el.insertAdjacentHTML){
-            el.insertAdjacentHTML('BeforeEnd', html);
-            return el.lastChild;
-        }
-        if(el.lastChild){
-            var range = el.ownerDocument.createRange();
-            range.setStartAfter(el.lastChild);
-            var frag = range.createContextualFragment(html);
-            el.appendChild(frag);
-            return el.lastChild;
-        }else{
-            el.innerHTML = html;
-            return el.lastChild;
-        }
-    };
-
-    /**
-     * Overwrites the HTML of the given element.
-     *
-     * @param   {String/HTMLElement}    el      The element to overwrite
-     * @param   {String}                html    The new HTML to use
-     * @return  {HTMLElement}                   The new firstChild element
-     * @private
-     */
-    var overwriteHTML = function(el, html){
-        el = SL.get(el);
-        el.innerHTML = html;
-        return el.firstChild;
-    };
-
-    /**
-     * Gets either the offsetHeight or the height of the given element plus
-     * padding and borders (when offsetHeight is not available). Based on
-     * Ext.Element's getComputedHeight.
-     *
-     * @return  {Number}            The computed height of the element
-     * @private
-     */
-    var getComputedHeight = function(el){
-        var h = Math.max(el.offsetHeight, el.clientHeight);
-        if(!h){
-            h = parseInt(SL.getStyle(el, 'height'), 10) || 0;
-            if(!isBorderBox){
-                h += parseInt(SL.getStyle(el, 'padding-top'), 10)
-                    + parseInt(SL.getStyle(el, 'padding-bottom'), 10)
-                    + parseInt(SL.getStyle(el, 'border-top-width'), 10)
-                    + parseInt(SL.getStyle(el, 'border-bottom-width'), 10);
-            }
-        }
-        return h;
-    };
-
-    /**
-     * Gets either the offsetWidth or the width of the given element plus
-     * padding and borders (when offsetWidth is not available). Based on
-     * Ext.Element's getComputedWidth.
-     *
-     * @return  {Number}            The computed width of the element
-     * @private
-     */
-    var getComputedWidth = function(el){
-        var w = Math.max(el.offsetWidth, el.clientWidth);
-        if(!w){
-            w = parseInt(SL.getStyle(el, 'width'), 10) || 0;
-            if(!isBorderBox){
-                w += parseInt(SL.getStyle(el, 'padding-left'), 10)
-                    + parseInt(SL.getStyle(el, 'padding-right'), 10)
-                    + parseInt(SL.getStyle(el, 'border-left-width'), 10)
-                    + parseInt(SL.getStyle(el, 'border-right-width'), 10);
-            }
-        }
-        return w;
-    };
-
-    /**
-     * Determines the player needed to display the file at the given URL. If
-     * the file type is not supported, the return value will be 'unsupported'.
-     * If the file type is not supported but the correct player can be
-     * determined, the return value will be 'unsupported-*' where * will be the
-     * player abbreviation (e.g. 'qt' = QuickTime).
-     *
-     * @param   {String}        url     The url of the file
-     * @return  {String}                The name of the player to use
-     * @private
-     */
-    var getPlayerType = function(url){
-        if(RE.img.test(url)) return 'img';
-        var match = url.match(RE.domain);
-        var this_domain = match ? document.domain == match[1] : false;
-        if(url.indexOf('#') > -1 && this_domain) return 'inline';
-        var q_index = url.indexOf('?');
-        if(q_index > -1) url = url.substring(0, q_index); // strip query string for player detection purposes
-        if(RE.swf.test(url)) return plugins.fla ? 'swf' : 'unsupported-swf';
-        if(RE.flv.test(url)) return plugins.fla ? 'flv' : 'unsupported-flv';
-        if(RE.qt.test(url)) return plugins.qt ? 'qt' : 'unsupported-qt';
-        if(RE.wmp.test(url)){
-            if(plugins.wmp){
-                return 'wmp';
-            }else if(plugins.f4m){
-                return 'qt';
-            }else{
-                return isMac ? (plugins.qt ? 'unsupported-f4m' : 'unsupported-qtf4m') : 'unsupported-wmp';
-            }
-        }else if(RE.qtwmp.test(url)){
-            if(plugins.qt){
-                return 'qt';
-            }else if(plugins.wmp){
-                return 'wmp';
-            }else{
-                return isMac ? 'unsupported-qt' : 'unsupported-qtwmp';
-            }
-        }else if(!this_domain || RE.iframe.test(url)){
-            return 'iframe';
-        }
-        return 'iframe';
-    };
-
-    /**
-     * Handles all clicks on links that have been set up to work with Shadowbox
-     * and cancels the default event behavior when appropriate.
-     *
-     * @param   {Event}         ev          The click event object
-     * @return  void
-     * @private
-     */
-    var handleClick = function(ev){
-        // get anchor/area element
-        var link;
-        if(isLink(this)){
-            link = this; // jQuery, Prototype, YUI
-        }else{
-            link = SL.getTarget(ev); // Ext
-            while(!isLink(link) && link.parentNode){
-                link = link.parentNode;
-            }
-        }
-
-        Shadowbox.open(link);
-        if(current_gallery.length) SL.preventDefault(ev);
-    };
-
-    /**
-     * Sets up the current gallery for the given object. Modifies the current
-     * and current_gallery variables to contain the appropriate information.
-     * Also, checks to see if there are any gallery pieces that are not
-     * supported by the client's browser/plugins. If there are, they will be
-     * handled according to the handleUnsupported option.
-     *
-     * @param   {Object}    obj         The content to get the gallery for
-     * @return  void
-     * @private
-     */
-    var setupGallery = function(obj){
-        // create a copy so it doesn't get modified later
-        var copy = apply({}, obj);
-
-        // is it part of a gallery?
-        if(!obj.gallery){ // single item, no gallery
-            current_gallery = [copy];
-            current = 0;
-        }else{
-            current_gallery = []; // clear the current gallery
-            var index, ci;
-            for(var i = 0, len = cache.length; i < len; ++i){
-                ci = cache[i];
-                if(ci.gallery){
-                    if(ci.content == obj.content
-                        && ci.gallery == obj.gallery
-                        && ci.title == obj.title){ // compare content, gallery, & title
-                            index = current_gallery.length; // key element found
-                    }
-                    if(ci.gallery == obj.gallery){
-                        current_gallery.push(apply({}, ci));
-                    }
-                }
-            }
-            // if not found in cache, prepend to front of gallery
-            if(index == null){
-                current_gallery.unshift(copy);
-                index = 0;
-            }
-            current = index;
-        }
-
-        // are any media in the current gallery supported?
-        var match, r;
-        for(var i = 0, len = current_gallery.length; i < len; ++i){
-            r = false;
-            if(current_gallery[i].type == 'unsupported'){ // don't support this at all
-                r = true;
-            }else if(match = RE.unsupported.exec(current_gallery[i].type)){ // handle unsupported elements
-                if(options.handleUnsupported == 'link'){
-                    current_gallery[i].type = 'html';
-                    // generate a link to the appropriate plugin download page(s)
-                    var m;
-                    switch(match[1]){
-                        case 'qtwmp':
-                            m = String.format(options.text.errors.either,
-                                options.errors.qt.url, options.errors.qt.name,
-                                options.errors.wmp.url, options.errors.wmp.name);
-                        break;
-                        case 'qtf4m':
-                            m = String.format(options.text.errors.shared,
-                                options.errors.qt.url, options.errors.qt.name,
-                                options.errors.f4m.url, options.errors.f4m.name);
-                        break;
-                        default:
-                            if(match[1] == 'swf' || match[1] == 'flv') match[1] = 'fla';
-                            m = String.format(options.text.errors.single,
-                                options.errors[match[1]].url, options.errors[match[1]].name);
-                    }
-                    current_gallery[i] = apply(current_gallery[i], {
-                        height:     160, // error messages are short so they
-                        width:      320, // only need a small box to display properly
-                        content:    '<div class="shadowbox_message">' + m + '</div>'
-                    });
-                }else{
-                    r = true;
-                }
-            }else if(current_gallery[i].type == 'inline'){ // handle inline elements
-                // retrieve the innerHTML of the inline element
-                var match = RE.inline.exec(current_gallery[i].content);
-                if(match){
-                    var el;
-                    if(el = SL.get(match[1])){
-                        current_gallery[i].content = el.innerHTML;
-                    }else{
-                        throw 'No element found with id ' + match[1];
-                    }
-                }else{
-                    throw 'No element id found for inline content';
-                }
-            }
-            if(r){
-                // remove the element from the gallery
-                current_gallery.splice(i, 1);
-                if(i < current) --current;
-                --i;
-            }
-        }
-    };
-
-    /**
-     * Hides the title bar and toolbar and populates them with the proper
-     * content.
-     *
-     * @return  void
-     * @private
-     */
-    var buildBars = function(){
-        var link = current_gallery[current];
-        if(!link) return; // nothing to build
-
-        // build the title
-        var title_i = SL.get('shadowbox_title_inner');
-        title_i.innerHTML = (link.title) ? link.title : '';
-        // empty the toolbar
-        var tool_i = SL.get('shadowbox_toolbar_inner');
-        tool_i.innerHTML = '';
-
-        // build the nav
-        if(options.displayNav){
-            tool_i.innerHTML = String.format(options.skin.close, options.text.close);
-            if(current_gallery.length > 1){
-                if(options.continuous){
-                    // show both
-                    appendHTML(tool_i, String.format(options.skin.next, options.text.next));
-                    appendHTML(tool_i, String.format(options.skin.prev, options.text.prev));
-                }else{
-                    // not last in the gallery, show the next link
-                    if((current_gallery.length - 1) > current){
-                        appendHTML(tool_i, String.format(options.skin.next, options.text.next));
-                    }
-                    // not first in the gallery, show the previous link
-                    if(current > 0){
-                        appendHTML(tool_i, String.format(options.skin.prev, options.text.prev));
-                    }
-                }
-            }
-        }
-
-        // build the counter
-        if(current_gallery.length > 1 && options.displayCounter){
-            // append the counter div
-            var counter = '';
-            if(options.counterType == 'skip'){
-                for(var i = 0, len = current_gallery.length; i < len; ++i){
-                    counter += '<a href="javascript:Shadowbox.change(' + i + ');"';
-                    if(i == current){
-                        counter += ' class="shadowbox_counter_current"';
-                    }
-                    counter += '>' + (i + 1) + '</a>';
-                }
-            }else{
-                counter = (current + 1) + ' of ' + current_gallery.length;
-            }
-            appendHTML(tool_i, String.format(options.skin.counter, counter));
-        }
-    };
-
-    /**
-     * Hides the title and tool bars.
-     *
-     * @param   {Function}  callback        A function to call on finish
-     * @return  void
-     * @private
-     */
-    var hideBars = function(callback){
-        var title_m = getComputedHeight(SL.get('shadowbox_title'));
-        var tool_m = 0 - getComputedHeight(SL.get('shadowbox_toolbar'));
-        var title_i = SL.get('shadowbox_title_inner');
-        var tool_i = SL.get('shadowbox_toolbar_inner');
-
-        if(options.animate && callback){
-            // animate the transition
-            SL.animate(title_i, {
-                marginTop: { to: title_m }
-            }, 0.2);
-            SL.animate(tool_i, {
-                marginTop: { to: tool_m }
-            }, 0.2, callback);
-        }else{
-            SL.setStyle(title_i, 'marginTop', title_m + 'px');
-            SL.setStyle(tool_i, 'marginTop', tool_m + 'px');
-        }
-    };
-
-    /**
-     * Shows the title and tool bars.
-     *
-     * @param   {Function}  callback        A callback function to execute after
-     *                                      the animation completes
-     * @return  void
-     * @private
-     */
-    var showBars = function(callback){
-        var title_i = SL.get('shadowbox_title_inner');
-        if(options.animate){
-            if(title_i.innerHTML != ''){
-                SL.animate(title_i, { marginTop: { to: 0 } }, 0.35);
-            }
-            SL.animate(SL.get('shadowbox_toolbar_inner'), {
-                marginTop: { to: 0 }
-            }, 0.35, callback);
-        }else{
-            if(title_i.innerHTML != ''){
-                SL.setStyle(title_i, 'margin-top', '0px');
-            }
-            SL.setStyle(SL.get('shadowbox_toolbar_inner'), 'margin-top', '0px');
-            callback();
-        }
-    };
-
-    /**
-     * Resets the class drag variable.
-     *
-     * @return  void
-     * @private
-     */
-    var resetDrag = function(){
-        drag = {
-            x:          0,
-            y:          0,
-            start_x:    null,
-            start_y:    null
-        };
-    };
-
-    /**
-     * Toggles the drag function on and off.
-     *
-     * @param   {Boolean}   on      True to toggle on, false to toggle off
-     * @return  void
-     * @private
-     */
-    var toggleDrag = function(on){
-        if(on){
-            resetDrag();
-            // add drag layer to prevent browser dragging of actual image
-            var styles = [
-                'position:absolute',
-                'cursor:' + (isGecko ? '-moz-grab' : 'move')
-            ];
-            // make drag layer transparent
-            styles.push(isIE ? 'background-color:#fff;filter:alpha(opacity=0)' : 'background-color:transparent');
-            appendHTML('shadowbox_body_inner', '<div id="shadowbox_drag_layer" style="' + styles.join(';') + '"></div>');
-            SL.addEvent(SL.get('shadowbox_drag_layer'), 'mousedown', listenDrag);
-        }else{
-            var d = SL.get('shadowbox_drag_layer');
-            if(d){
-                SL.removeEvent(d, 'mousedown', listenDrag);
-                SL.remove(d);
-            }
-        }
-    };
-
-    /**
-     * Sets up a drag listener on the document. Called when the mouse button is
-     * pressed (mousedown).
-     *
-     * @param   {mixed}     ev      The mousedown event
-     * @return  void
-     * @private
-     */
-    var listenDrag = function(ev){
-        drag.start_x = ev.clientX;
-        drag.start_y = ev.clientY;
-        draggable = SL.get('shadowbox_content');
-        SL.addEvent(document, 'mousemove', positionDrag);
-        SL.addEvent(document, 'mouseup', unlistenDrag);
-        if(isGecko) SL.setStyle(SL.get('shadowbox_drag_layer'), 'cursor', '-moz-grabbing');
-    };
-
-    /**
-     * Removes the drag listener. Called when the mouse button is released
-     * (mouseup).
-     *
-     * @return  void
-     * @private
-     */
-    var unlistenDrag = function(){
-        SL.removeEvent(document, 'mousemove', positionDrag);
-        SL.removeEvent(document, 'mouseup', unlistenDrag); // clean up
-        if(isGecko) SL.setStyle(SL.get('shadowbox_drag_layer'), 'cursor', '-moz-grab');
-    };
-
-    /**
-     * Positions an oversized image on drag.
-     *
-     * @param   {mixed}     ev      The drag event
-     * @return  void
-     * @private
-     */
-    var positionDrag = function(ev){
-        var move_y = ev.clientY - drag.start_y;
-        drag.start_y = drag.start_y + move_y;
-        drag.y = Math.max(Math.min(0, drag.y + move_y), current_height - optimal_height); // y boundaries
-        SL.setStyle(draggable, 'top', drag.y + 'px');
-        var move_x = ev.clientX - drag.start_x;
-        drag.start_x = drag.start_x + move_x;
-        drag.x = Math.max(Math.min(0, drag.x + move_x), current_width - optimal_width); // x boundaries
-        SL.setStyle(draggable, 'left', drag.x + 'px');
-    };
-
-    /**
-     * Loads the Shadowbox with the current piece.
-     *
-     * @return  void
-     * @private
-     */
-    var loadContent = function(){
-        var obj = current_gallery[current];
-        if(!obj) return; // invalid
-
-        buildBars();
-
-        switch(obj.type){
-            case 'img':
-                // preload the image
-                preloader = new Image();
-                preloader.onload = function(){
-                    // images default to image height and width
-                    var h = obj.height ? parseInt(obj.height, 10) : preloader.height;
-                    var w = obj.width ? parseInt(obj.width, 10) : preloader.width;
-                    resizeContent(h, w, function(dims){
-                        showBars(function(){
-                            setContent({
-                                tag:    'img',
-                                height: dims.i_height,
-                                width:  dims.i_width,
-                                src:    obj.content,
-                                style:  'position:absolute'
-                            });
-                            if(dims.enableDrag && options.handleLgImages == 'drag'){
-                                // listen for drag
-                                toggleDrag(true);
-                                SL.setStyle(SL.get('shadowbox_drag_layer'), {
-                                    height:     dims.i_height + 'px',
-                                    width:      dims.i_width + 'px'
-                                });
-                            }
-                            finishContent();
-                        });
-                    });
-
-                    preloader.onload = function(){}; // clear onload for IE
-                };
-                preloader.src = obj.content;
-            break;
-
-            case 'swf':
-            case 'flv':
-            case 'qt':
-            case 'wmp':
-                var markup = Shadowbox.movieMarkup(obj);
-                resizeContent(markup.height, markup.width, function(){
-                    showBars(function(){
-                        setContent(markup);
-                        finishContent();
-                    });
-                });
-            break;
-
-            case 'iframe':
-                // iframes default to full viewport height and width
-                var h = obj.height ? parseInt(obj.height, 10) : SL.getViewportHeight();
-                var w = obj.width ? parseInt(obj.width, 10) : SL.getViewportWidth();
-                var content = {
-                    tag:            'iframe',
-                    name:           'shadowbox_content',
-                    height:         '100%',
-                    width:          '100%',
-                    frameborder:    '0',
-                    marginwidth:    '0',
-                    marginheight:   '0',
-                    scrolling:      'auto'
-                };
-
-                resizeContent(h, w, function(dims){
-                    showBars(function(){
-                        setContent(content);
-                        var win = (isIE)
-                            ? SL.get('shadowbox_content').contentWindow
-                            : window.frames['shadowbox_content'];
-                        win.location = obj.content;
-                        finishContent();
-                    });
-                });
-            break;
-
-            case 'html':
-            case 'inline':
-                // HTML content defaults to full viewport height and width
-                var h = obj.height ? parseInt(obj.height, 10) : SL.getViewportHeight();
-                var w = obj.width ? parseInt(obj.width, 10) : SL.getViewportWidth();
-                var content = {
-                    tag:    'div',
-                    cls:    'html', /* give special class to make scrollable */
-                    html:   obj.content
-                };
-                resizeContent(h, w, function(){
-                    showBars(function(){
-                        setContent(content);
-                        finishContent();
-                    });
-                });
-            break;
-
-            default:
-                // should never happen
-                throw 'Shadowbox cannot open content of type ' + obj.type;
-        }
-
-        // preload neighboring images
-        if(current_gallery.length > 0){
-            var next = current_gallery[current + 1];
-            if(!next){
-                next = current_gallery[0];
-            }
-            if(next.type == 'img'){
-                var preload_next = new Image();
-                preload_next.src = next.content;
-            }
-
-            var prev = current_gallery[current - 1];
-            if(!prev){
-                prev = current_gallery[current_gallery.length - 1];
-            }
-            if(prev.type == 'img'){
-                var preload_prev = new Image();
-                preload_prev.src = prev.content;
-            }
-        }
-    };
-
-    /**
-     * Removes old content and sets the new content of the Shadowbox.
-     *
-     * @param   {Object}        obj     The content to set (appropriate to pass
-     *                                  directly to Shadowbox.createHTML())
-     * @return  {HTMLElement}           The newly appended element (or null if
-     *                                  none is provided)
-     * @private
-     */
-    var setContent = function(obj){
-        var id = 'shadowbox_content';
-        var content = SL.get(id);
-        if(content){
-            // remove old content first
-            switch(content.tagName.toUpperCase()){
-                case 'OBJECT':
-                    // if we're in a gallery (i.e. changing and there's a new
-                    // object) we want the LAST link object
-                    var link = current_gallery[(obj ? current - 1 : current)];
-                    if(link.type == 'wmp' && isIE){
-                        try{
-                            shadowbox_content.controls.stop(); // stop the movie
-                            shadowbox_content.URL = 'non-existent.wmv'; // force player refresh
-                            window.shadowbox_content = function(){}; // remove from window
-                        }catch(e){}
-                    }else if(link.type == 'qt' && isSafari){
-                        try{
-                            document.shadowbox_content.Stop(); // stop QT movie
-                        }catch(e){}
-                        // stop QT audio stream for movies that have not yet loaded
-                        content.innerHTML = '';
-                        // console.log(document.shadowbox_content);
-                    }
-                    setTimeout(function(){ // using setTimeout prevents browser crashes with WMP
-                        SL.remove(content);
-                    }, 10);
-                break;
-                case 'IFRAME':
-                    SL.remove(content);
-                    if(isGecko) delete window.frames[id]; // needed for Firefox
-                break;
-                default:
-                    SL.remove(content);
-            }
-        }
-        if(obj){
-            if(!obj.id) obj.id = id;
-            return appendHTML('shadowbox_body_inner', Shadowbox.createHTML(obj));
-        }
-        return null;
-    };
-
-    /**
-     * This function is used as the callback after the Shadowbox has been
-     * positioned, resized, and loaded with content.
-     *
-     * @return  void
-     * @private
-     */
-    var finishContent = function(){
-        var obj = current_gallery[current];
-        if(!obj) return; // invalid
-        hideLoading(function(){
-            listenKeyboard(true);
-            // fire onFinish handler
-            if(options.onFinish && typeof options.onFinish == 'function'){
-                options.onFinish(obj);
-            }
-        });
-    };
-
-    /**
-     * Resizes and positions the content box using the given height and width.
-     * If the callback parameter is missing, the transition will not be
-     * animated. If the callback parameter is present, it will be passed the
-     * new calculated dimensions object as its first parameter. Note: the height
-     * and width here should represent the optimal height and width of the box.
-     *
-     * @param   {Function}  callback    A callback function to use when the
-     *                                  resize completes
-     * @return  void
-     * @private
-     */
-    var resizeContent = function(height, width, callback){
-        // update optimal height and width
-        optimal_height = height;
-        optimal_width = width;
-        var resizable = RE.resize.test(current_gallery[current].type);
-        var dims = getDimensions(optimal_height, optimal_width, resizable);
-        if(callback){
-            var cb = function(){ callback(dims); };
-            switch(options.animSequence){
-                case 'hw':
-                    adjustHeight(dims.height, dims.top, true, function(){
-                        adjustWidth(dims.width, true, cb);
-                    });
-                break;
-                case 'wh':
-                    adjustWidth(dims.width, true, function(){
-                        adjustHeight(dims.height, dims.top, true, cb);
-                    });
-                break;
-                default: // sync
-                    adjustWidth(dims.width, true);
-                    adjustHeight(dims.height, dims.top, true, cb);
-            }
-        }else{ // window resize
-            adjustWidth(dims.width, false);
-            adjustHeight(dims.height, dims.top, false);
-            // resize content images & flash in 'resize' mode
-            if(options.handleLgImages == 'resize' && resizable){
-                var content = SL.get('shadowbox_content');
-                if(content){ // may be animating, not present
-                    content.height = dims.i_height;
-                    content.width = dims.i_width;
-                }
-            }
-        }
-    };
-
-    /**
-     * Calculates the dimensions for Shadowbox, taking into account the borders,
-     * margins, and surrounding elements of the shadowbox_body. If the image
-     * is still to large for Shadowbox, and options.handleLgImages is 'resize',
-     * the resized dimensions will be returned (preserving the original aspect
-     * ratio). Otherwise, the originally calculated dimensions will be returned.
-     * The returned object will have the following properties:
-     *
-     * - height: The height to use for shadowbox_body_inner
-     * - width: The width to use for shadowbox
-     * - i_height: The height to use for resizable content
-     * - i_width: The width to use for resizable content
-     * - top: The top to use for shadowbox
-     * - enableDrag: True if dragging should be enabled (image is oversized)
-     *
-     * @param   {Number}    o_height    The optimal height
-     * @param   {Number}    o_width     The optimal width
-     * @param   {Boolean}   resizable   True if the content is able to be
-     *                                  resized. Defaults to false.
-     * @return  {Object}                The resize dimensions (see above)
-     * @private
-     */
-    var getDimensions = function(o_height, o_width, resizable){
-        if(typeof resizable == 'undefined') resizable = false;
-
-        var height = o_height = parseInt(o_height);
-        var width = o_width = parseInt(o_width);
-        var shadowbox_b = SL.get('shadowbox_body');
-
-        // calculate the max height
-        var view_height = SL.getViewportHeight();
-        var extra_height = parseInt(SL.getStyle(shadowbox_b, 'border-top-width'), 10)
-            + parseInt(SL.getStyle(shadowbox_b, 'border-bottom-width'), 10)
-            + parseInt(SL.getStyle(shadowbox_b, 'margin-top'), 10)
-            + parseInt(SL.getStyle(shadowbox_b, 'margin-bottom'), 10)
-            + getComputedHeight(SL.get('shadowbox_title'))
-            + getComputedHeight(SL.get('shadowbox_toolbar'))
-            + (2 * options.viewportPadding);
-        if((height + extra_height) >= view_height){
-            height = view_height - extra_height;
-        }
-
-        // calculate the max width
-        var view_width = SL.getViewportWidth();
-        var extra_body_width = parseInt(SL.getStyle(shadowbox_b, 'border-left-width'), 10)
-            + parseInt(SL.getStyle(shadowbox_b, 'border-right-width'), 10)
-            + parseInt(SL.getStyle(shadowbox_b, 'margin-left'), 10)
-            + parseInt(SL.getStyle(shadowbox_b, 'margin-right'), 10);
-        var extra_width = extra_body_width + (2 * options.viewportPadding);
-        if((width + extra_width) >= view_width){
-            width = view_width - extra_width;
-        }
-
-        // handle oversized images & flash
-        var enableDrag = false;
-        var i_height = o_height;
-        var i_width = o_width;
-        var handle = options.handleLgImages;
-        if(resizable && (handle == 'resize' || handle == 'drag')){
-            var change_h = (o_height - height) / o_height;
-            var change_w = (o_width - width) / o_width;
-            if(handle == 'resize'){
-                if(change_h > change_w){
-                    width = Math.round((o_width / o_height) * height);
-                }else if(change_w > change_h){
-                    height = Math.round((o_height / o_width) * width);
-                }
-                // adjust image height or width accordingly
-                i_width = width;
-                i_height = height;
-            }else{
-                // drag on oversized images only
-                var link = current_gallery[current];
-                if(link) enableDrag = link.type == 'img' && (change_h > 0 || change_w > 0);
-            }
-        }
-
-        return {
-            height: height,
-            width: width + extra_body_width,
-            i_height: i_height,
-            i_width: i_width,
-            top: ((view_height - (height + extra_height)) / 2) + options.viewportPadding,
-            enableDrag: enableDrag
-        };
-    };
-
-    /**
-     * Centers Shadowbox vertically in the viewport. Needs to be called on
-     * scroll in IE6 because it does not support fixed positioning.
-     *
-     * @return  void
-     * @private
-     */
-    var centerVertically = function(){
-        var shadowbox = SL.get('shadowbox');
-        var scroll = document.documentElement.scrollTop;
-        var s_top = scroll + Math.round((SL.getViewportHeight() - (shadowbox.offsetHeight || 0)) / 2);
-        SL.setStyle(shadowbox, 'top', s_top + 'px');
-    };
-
-    /**
-     * Adjusts the height of shadowbox_body_inner and centers Shadowbox
-     * vertically in the viewport.
-     *
-     * @param   {Number}    height      The height of shadowbox_body_inner
-     * @param   {Number}    top         The top of the Shadowbox
-     * @param   {Boolean}   animate     True to animate the transition
-     * @param   {Function}  callback    A callback to use when the animation completes
-     * @return  void
-     * @private
-     */
-    var adjustHeight = function(height, top, animate, callback){
-        height = parseInt(height);
-
-        // update current_height
-        current_height = height;
-
-        // adjust the height
-        var sbi = SL.get('shadowbox_body_inner');
-        if(animate && options.animate){
-            SL.animate(sbi, {
-                height: { to: height }
-            }, options.resizeDuration, callback);
-        }else{
-            SL.setStyle(sbi, 'height', height + 'px');
-            if(typeof callback == 'function') callback();
-        }
-
-        // manually adjust the top because we're using fixed positioning in IE6
-        if(absolute_pos){
-            // listen for scroll so we can adjust
-            centerVertically();
-            SL.addEvent(window, 'scroll', centerVertically);
-
-            // add scroll to top
-            top += document.documentElement.scrollTop;
-        }
-
-        // adjust the top
-        var shadowbox = SL.get('shadowbox');
-        if(animate && options.animate){
-            SL.animate(shadowbox, {
-                top: { to: top }
-            }, options.resizeDuration);
-        }else{
-            SL.setStyle(shadowbox, 'top', top + 'px');
-        }
-    };
-
-    /**
-     * Adjusts the width of shadowbox.
-     *
-     * @param   {Number}    width       The width to use
-     * @param   {Boolean}   animate     True to animate the transition
-     * @param   {Function}  callback    A callback to use when the animation completes
-     * @return  void
-     * @private
-     */
-    var adjustWidth = function(width, animate, callback){
-        width = parseInt(width);
-
-        // update current_width
-        current_width = width;
-
-        var shadowbox = SL.get('shadowbox');
-        if(animate && options.animate){
-            SL.animate(shadowbox, {
-                width: { to: width }
-            }, options.resizeDuration, callback);
-        }else{
-            SL.setStyle(shadowbox, 'width', width + 'px');
-            if(typeof callback == 'function') callback();
-        }
-    };
-
-    /**
-     * Sets up a listener on the document for keystrokes.
-     *
-     * @param   {Boolean}   on      True to enable the listner, false to turn
-     *                              it off
-     * @return  void
-     * @private
-     */
-    var listenKeyboard = function(on){
-        if(!options.enableKeys) return;
-        if(on){
-            document.onkeydown = handleKey;
-        }else{
-            document.onkeydown = '';
-        }
-    };
-
-    /**
-     * Asserts the given key or code is present in the array of valid keys.
-     *
-     * @param   {Array}     valid       An array of valid keys and codes
-     * @param   {String}    key         The character that was pressed
-     * @param   {Number}    code        The key code that was pressed
-     * @return  {Boolean}               True if the key is valid
-     * @private
-     */
-    var assertKey = function(valid, key, code){
-        return (valid.indexOf(key) != -1 || valid.indexOf(code) != -1);
-    };
-
-    /**
-     * A listener function that will act on a key pressed.
-     *
-     * @param   {Event}     e       The event object
-     * @return  void
-     * @private
-     */
-    var handleKey = function(e){
-        var code = e ? e.which : event.keyCode;
-        var key = String.fromCharCode(code).toLowerCase();
-        if(assertKey(options.keysClose, key, code)){
-            Shadowbox.close();
-        }else if(assertKey(options.keysPrev, key, code)){
-            Shadowbox.previous();
-        }else if(assertKey(options.keysNext, key, code)){
-            Shadowbox.next();
-        }
-    };
-
-    /**
-     * Shows and hides elements that are troublesome for modal overlays.
-     *
-     * @param   {Boolean}   on      True to show the elements, false otherwise
-     * @return  void
-     * @private
-     */
-    var toggleTroubleElements = function(on){
-        var vis = (on ? 'visible' : 'hidden');
-        var selects = document.getElementsByTagName('select');
-        for(i = 0, len = selects.length; i < len; ++i){
-            selects[i].style.visibility = vis;
-        }
-        var objects = document.getElementsByTagName('object');
-        for(i = 0, len = objects.length; i < len; ++i){
-            objects[i].style.visibility = vis;
-        }
-        var embeds = document.getElementsByTagName('embed');
-        for(i = 0, len = embeds.length; i < len; ++i){
-            embeds[i].style.visibility = vis;
-        }
-    };
-
-    /**
-     * Fills the Shadowbox with the loading skin.
-     *
-     * @return  void
-     * @private
-     */
-    var showLoading = function(){
-        var loading = SL.get('shadowbox_loading');
-        overwriteHTML(loading, String.format(options.skin.loading,
-            options.assetURL + options.loadingImage,
-            options.text.loading,
-            options.text.cancel));
-        loading.style.visibility = 'visible';
-    };
-
-    /**
-     * Hides the Shadowbox loading skin.
-     *
-     * @param   {Function}  callback        The callback function to call after
-     *                                      hiding the loading skin
-     * @return  void
-     * @private
-     */
-    var hideLoading = function(callback){
-        var t = current_gallery[current].type;
-        var anim = (t == 'img' || t == 'html'); // fade on images & html
-        var loading = SL.get('shadowbox_loading');
-        if(anim){
-            fadeOut(loading, 0.35, callback);
-        }else{
-            loading.style.visibility = 'hidden';
-            callback();
-        }
-    };
-
-    /**
-     * Sets the size of the overlay to the size of the document.
-     *
-     * @return  void
-     * @private
-     */
-    var resizeOverlay = function(){
-        var overlay = SL.get('shadowbox_overlay');
-        SL.setStyle(overlay, {
-            height: '100%',
-            width: '100%'
-        });
-        SL.setStyle(overlay, 'height', SL.getDocumentHeight() + 'px');
-        if(!isSafari3){
-            // Safari3 includes vertical scrollbar in SL.getDocumentWidth()!
-            // Leave overlay width at 100% for now...
-            SL.setStyle(overlay, 'width', SL.getDocumentWidth() + 'px');
-        }
-    };
-
-    /**
-     * Used to determine if the pre-made overlay background image is needed
-     * instead of using the trasparent background overlay. A pre-made background
-     * image is used for all but image pieces in FF Mac because it has problems
-     * displaying correctly if the background layer is not 100% opaque. When
-     * displaying a gallery, if any piece in the gallery meets these criteria,
-     * the pre-made background image will be used.
-     *
-     * @return  {Boolean}       Whether or not an overlay image is needed
-     * @private
-     */
-    var checkOverlayImgNeeded = function(){
-        if(!(isGecko && isMac)) return false;
-        for(var i = 0, len = current_gallery.length; i < len; ++i){
-            if(!RE.overlay.exec(current_gallery[i].type)) return true;
-        }
-        return false;
-    };
-
-    /**
-     * Activates (or deactivates) the Shadowbox overlay. If a callback function
-     * is provided, we know we're activating. Otherwise, deactivate the overlay.
-     *
-     * @param   {Function}  callback    A callback to call after activation
-     * @return  void
-     * @private
-     */
-    var toggleOverlay = function(callback){
-        var overlay = SL.get('shadowbox_overlay');
-        if(overlay_img_needed == null){
-            overlay_img_needed = checkOverlayImgNeeded();
-        }
-
-        if(callback){
-            resizeOverlay(); // size the overlay before showing
-            if(overlay_img_needed){
-                SL.setStyle(overlay, {
-                    visibility:         'visible',
-                    backgroundColor:    'transparent',
-                    backgroundImage:    'url(' + options.assetURL + options.overlayBgImage + ')',
-                    backgroundRepeat:   'repeat',
-                    opacity:            1
-                });
-                callback();
-            }else{
-                SL.setStyle(overlay, {
-                    visibility:         'visible',
-                    backgroundColor:    options.overlayColor,
-                    backgroundImage:    'none'
-                });
-                fadeIn(overlay, options.overlayOpacity, options.fadeDuration,
-                    callback);
-            }
-        }else{
-            if(overlay_img_needed){
-                SL.setStyle(overlay, 'visibility', 'hidden');
-            }else{
-                fadeOut(overlay, options.fadeDuration);
-            }
-
-            // reset for next time
-            overlay_img_needed = null;
-        }
-    };
-
-    /**
-     * Initializes the Shadowbox environment. Appends Shadowbox' HTML to the
-     * document and sets up listeners on the window and overlay element.
-     *
-     * @param   {Object}    opts    The default options to use
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.init = function(opts){
-        //if(initialized) return; // don't initialize twice
-        options = apply(options, opts || {});
-
-        // add markup
-        appendHTML(document.body, options.skin.main);
-
-        // compile file type regular expressions here for speed
-        RE.img = new RegExp('\.(' + options.ext.img.join('|') + ')\s*$', 'i');
-        RE.qt = new RegExp('\.(' + options.ext.qt.join('|') + ')\s*$', 'i');
-        RE.wmp = new RegExp('\.(' + options.ext.wmp.join('|') + ')\s*$', 'i');
-        RE.qtwmp = new RegExp('\.(' + options.ext.qtwmp.join('|') + ')\s*$', 'i');
-        RE.iframe = new RegExp('\.(' + options.ext.iframe.join('|') + ')\s*$', 'i');
-
-        // handle window resize events
-        var id = null;
-        var resize = function(){
-            clearInterval(id);
-            id = null;
-            resizeOverlay();
-            resizeContent(optimal_height, optimal_width);
-        };
-        SL.addEvent(window, 'resize', function(){
-            if(activated){
-                // use event buffering to prevent jerky window resizing
-                if(id){
-                    clearInterval(id);
-                    id = null;
-                }
-                if(!id) id = setInterval(resize, 50);
-            }
-        });
-
-        if(options.listenOverlay){
-            // add a listener to the overlay
-            SL.addEvent(SL.get('shadowbox_overlay'), 'click', Shadowbox.close);
-        }
-
-        // adjust some positioning if needed
-        if(absolute_pos){
-            // give the container absolute positioning
-            SL.setStyle(SL.get('shadowbox_container'), 'position', 'absolute');
-            // give shadowbox_body "layout"...whatever that is
-            SL.setStyle('shadowbox_body', 'zoom', 1);
-            // need to listen to the container element because it covers the top
-            // half of the page
-            SL.addEvent(SL.get('shadowbox_container'), 'click', function(e){
-                var target = SL.getTarget(e);
-                if(target.id && target.id == 'shadowbox_container') Shadowbox.close();
-            });
-        }
-
-        // skip setup, will need to be done manually later
-        if(!options.skipSetup) Shadowbox.setup();
-        initialized = true;
-    };
-
-    /**
-     * Sets up listeners on the given links that will trigger Shadowbox. If no
-     * links are given, this method will set up every anchor element on the page
-     * with the appropriate rel attribute. Note: Because AREA elements do not
-     * support the rel attribute, they must be explicitly passed to this method.
-     *
-     * @param   {Array}     links       An array (or array-like) list of anchor
-     *                                  and/or area elements to set up
-     * @param   {Object}    opts        Some options to use for the given links
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.setup = function(links, opts){
-        // get links if none specified
-        if(!links){
-            var links = [];
-            var a = document.getElementsByTagName('a'), rel;
-            for(var i = 0, len = a.length; i < len; ++i){
-                rel = a[i].getAttribute('data\-rel');
-
-                if(!rel){
-                    rel = a[i].getAttribute('rel') ;
-                }
-
-                if(rel && RE.rel.test(rel)) links[links.length] = a[i];
-            }
-        }else if(!links.length){
-            links = [links]; // one link
-        }
-
-        var link;
-        for(var i = 0, len = links.length; i < len; ++i){
-            link = links[i];
-            if(typeof link.shadowboxCacheKey == 'undefined'){
-                // assign cache key expando
-                // use integer primitive to avoid memory leak in IE
-                link.shadowboxCacheKey = cache.length;
-                SL.addEvent(link, 'click', handleClick); // add listener
-            }
-            cache[link.shadowboxCacheKey] = this.buildCacheObj(link, opts);
-        }
-    };
-
-    /**
-     * Builds an object from the original link element data to store in cache.
-     * These objects contain (most of) the following keys:
-     *
-     * - el: the link element
-     * - title: the linked file title
-     * - type: the linked file type
-     * - content: the linked file's URL
-     * - gallery: the gallery the file belongs to (optional)
-     * - height: the height of the linked file (only necessary for movies)
-     * - width: the width of the linked file (only necessary for movies)
-     * - options: custom options to use (optional)
-     *
-     * @param   {HTMLElement}   link    The link element to process
-     * @return  {Object}                An object representing the link
-     * @public
-     * @static
-     */
-    Shadowbox.buildCacheObj = function(link, opts){
-        var href = link.href; // don't use getAttribute() here
-        var o = {
-            el:         link,
-            title:      link.getAttribute('title'),
-            type:       getPlayerType(href),
-            options:    apply({}, opts || {}), // break the reference
-            content:    href
-        };
-
-        // remove link-level options from top-level options
-        var opt, l_opts = ['title', 'type', 'height', 'width', 'gallery'];
-        for(var i = 0, len = l_opts.length; i < len; ++i){
-            opt = l_opts[i];
-            if(typeof o.options[opt] != 'undefined'){
-                o[opt] = o.options[opt];
-                delete o.options[opt];
-            }
-        }
-
-        // HTML options always trump JavaScript options, so do these last
-        var rel = link.getAttribute('data\-rel');
-
-        if(!rel){
-            rel = link.getAttribute('rel') ;
-        }
-
-        if(rel){
-            // extract gallery name from shadowbox[name] format
-            var match = rel.match(RE.gallery);
-            if(match) o.gallery = escape(match[2]);
-
-            // other parameters
-            var params = rel.split(';');
-            for(var i = 0, len = params.length; i < len; ++i){
-                match = params[i].match(RE.param);
-                if(match){
-                    if(match[1] == 'options'){
-                        eval('o.options = apply(o.options, ' + match[2] + ')');
-                    }else{
-                        o[match[1]] = match[2];
-                    }
-                }
-            }
-        }
-
-        return o;
-    };
-
-    /**
-     * Applies the given set of options to those currently in use. Note: Options
-     * will be reset on Shadowbox.open() so this function is only useful after
-     * it has already been called (while Shadowbox is open).
-     *
-     * @param   {Object}    opts        The options to apply
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.applyOptions = function(opts){
-        if(opts){
-            // use apply here to break references
-            default_options = apply({}, options); // store default options
-            options = apply(options, opts); // apply options
-        }
-    };
-
-    /**
-     * Reverts Shadowbox' options to the last default set in use before
-     * Shadowbox.applyOptions() was called.
-     *
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.revertOptions = function(){
-        if(default_options){
-            options = default_options; // revert to default options
-            default_options = null; // erase for next time
-        }
-    };
-
-    /**
-     * Opens the given object in Shadowbox. This object may be either an
-     * anchor/area element, or an object similar to the one created by
-     * Shadowbox.buildCacheObj().
-     *
-     * @param   {mixed}     obj         The object or link element that defines
-     *                                  what to display
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.open = function(obj, opts){
-        if(activated) return; // already open
-        activated = true;
-
-        // is it a link?
-        if(isLink(obj)){
-            if(typeof obj.shadowboxCacheKey == 'undefined' || typeof cache[obj.shadowboxCacheKey] == 'undefined'){
-                // link element that hasn't been set up before
-                // create an object on-the-fly
-                obj = this.buildCacheObj(obj, opts);
-            }else{
-                // link element that has been set up before, get from cache
-                obj = cache[obj.shadowboxCacheKey];
-            }
-        }
-
-        this.revertOptions();
-        if(obj.options || opts){
-            // use apply here to break references
-            this.applyOptions(apply(apply({}, obj.options || {}), opts || {}));
-        }
-
-        // update current & current_gallery
-        setupGallery(obj);
-
-        // anything to display?
-        if(current_gallery.length){
-            // fire onOpen hook
-            if(options.onOpen && typeof options.onOpen == 'function'){
-                options.onOpen(obj);
-            }
-            document.body.style.overflow = "hidden";
-
-            // display:block here helps with correct dimension calculations
-            SL.setStyle(SL.get('shadowbox'), 'display', 'block');
-
-            toggleTroubleElements(false);
-            var dims = getDimensions(options.initialHeight, options.initialWidth);
-            adjustHeight(dims.height, dims.top);
-            adjustWidth(dims.width);
-            hideBars(false);
-
-            // show the overlay and load the content
-            toggleOverlay(function(){
-                SL.setStyle(SL.get('shadowbox'), 'visibility', 'visible');
-                showLoading();
-                loadContent();
-            });
-        }
-    };
-
-    /**
-     * Jumps to the piece in the current gallery with index num.
-     *
-     * @param   {Number}    num     The gallery index to view
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.change = function(num){
-        if(!current_gallery) return; // no current gallery
-        if(!current_gallery[num]){ // index does not exist
-            if(!options.continuous){
-                return;
-            }else{
-                num = (num < 0) ? (current_gallery.length - 1) : 0; // loop
-            }
-        }
-
-        // update current
-        current = num;
-
-        // stop listening for drag
-        toggleDrag(false);
-        // empty the content
-        setContent(null);
-        // turn this back on when done
-        listenKeyboard(false);
-
-        // fire onChange handler
-        if(options.onChange && typeof options.onChange == 'function'){
-            options.onChange(current_gallery[current]);
-        }
-
-        showLoading();
-        hideBars(loadContent);
-    };
-
-    /**
-     * Jumps to the next piece in the gallery.
-     *
-     * @return  {Boolean}       True if the gallery changed to next item, false
-     *                          otherwise
-     * @public
-     * @static
-     */
-    Shadowbox.next = function(){
-        return this.change(current + 1);
-    };
-
-    /**
-     * Jumps to the previous piece in the gallery.
-     *
-     * @return  {Boolean}       True if the gallery changed to previous item,
-     *                          false otherwise
-     * @public
-     * @static
-     */
-    Shadowbox.previous = function(){
-        return this.change(current - 1);
-    };
-
-    /**
-     * Deactivates Shadowbox.
-     *
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.close = function(){
-        if(!activated) return; // already closed
-
-        // stop listening for keys
-        listenKeyboard(false);
-        // hide
-        SL.setStyle(SL.get('shadowbox'), {
-            display: 'none',
-            visibility: 'hidden'
-        });
-        // stop listening for scroll on IE
-        if(absolute_pos) SL.removeEvent(window, 'scroll', centerVertically);
-        // stop listening for drag
-        toggleDrag(false);
-        // empty the content
-        setContent(null);
-        // prevent old image requests from loading
-        if(preloader){
-            preloader.onload = function(){};
-            preloader = null;
-        }
-        // hide the overlay
-        toggleOverlay(false);
-        // turn on trouble elements
-        toggleTroubleElements(true);
-
-        // fire onClose handler
-        if(options.onClose && typeof options.onClose == 'function'){
-            options.onClose(current_gallery[current]);
-        }
-        document.body.style.overflow = "auto";
-
-        activated = false;
-    };
-
-    /**
-     * Clears Shadowbox' cache and removes listeners and expandos from all
-     * cached link elements. May be used to completely reset Shadowbox in case
-     * links on a page change.
-     *
-     * @return  void
-     * @public
-     * @static
-     */
-    Shadowbox.clearCache = function(){
-        for(var i = 0, len = cache.length; i < len; ++i){
-            if(cache[i].el){
-                SL.removeEvent(cache[i].el, 'click', handleClick);
-                delete cache[i].shadowboxCacheKey;
-            }
-        }
-        cache = [];
-    };
-
-    /**
-     * Generates the markup necessary to embed the movie file with the given
-     * link element. This markup will be browser-specific. Useful for generating
-     * the media test suite.
-     *
-     * @param   {HTMLElement}   link        The link to the media file
-     * @return  {Object}                    The proper markup to use (see above)
-     * @public
-     * @static
-     */
-    Shadowbox.movieMarkup = function(obj){
-        // movies default to 300x300 pixels
-        var h = obj.height ? parseInt(obj.height, 10) : 300;
-        var w = obj.width ? parseInt(obj.width, 10) : 300;
-
-        var autoplay = options.autoplayMovies;
-        var controls = options.showMovieControls;
-        if(obj.options){
-            if(obj.options.autoplayMovies != null){
-                autoplay = obj.options.autoplayMovies;
-            }
-            if(obj.options.showMovieControls != null){
-                controls = obj.options.showMovieControls;
-            }
-        }
-
-        var markup = {
-            tag:    'object',
-            name:   'shadowbox_content'
-        };
-
-        switch(obj.type){
-            case 'swf':
-                var dims = getDimensions(h, w, true);
-                h = dims.height;
-                w = dims.width;
-                markup.type = 'application/x-shockwave-flash';
-                markup.data = obj.content;
-                markup.children = [
-                    { tag: 'param', name: 'movie', value: obj.content }
-                ];
-            break;
-            case 'flv':
-                autoplay = autoplay ? 'true' : 'false';
-                var showicons = 'false';
-                var a = h/w; // aspect ratio
-                if(controls){
-                    showicons = 'true';
-                    h += 20; // height of JW FLV player controller
-                }
-                var dims = getDimensions(h, h/a, true); // resize
-                h = dims.height;
-                w = (h-(controls?20:0))/a; // maintain aspect ratio
-                var flashvars = [
-                    'file=' + obj.content,
-                    'height=' + h,
-                    'width=' + w,
-                    'autostart=' + autoplay,
-                    'displayheight=' + (h - (controls?20:0)),
-                    'showicons=' + showicons,
-                    'backcolor=0x000000&amp;frontcolor=0xCCCCCC&amp;lightcolor=0x557722'
-                ];
-                markup.type = 'application/x-shockwave-flash';
-                markup.data = options.assetURL + options.flvPlayer;
-                markup.children = [
-                    { tag: 'param', name: 'movie', value: options.assetURL + options.flvPlayer },
-                    { tag: 'param', name: 'flashvars', value: flashvars.join('&amp;') },
-                    { tag: 'param', name: 'allowfullscreen', value: 'true' }
-                ];
-            break;
-            case 'qt':
-                autoplay = autoplay ? 'true' : 'false';
-                if(controls){
-                    controls = 'true';
-                    h += 16; // height of QuickTime controller
-                }else{
-                    controls = 'false';
-                }
-                markup.children = [
-                    { tag: 'param', name: 'src', value: obj.content },
-                    { tag: 'param', name: 'scale', value: 'aspect' },
-                    { tag: 'param', name: 'controller', value: controls },
-                    { tag: 'param', name: 'autoplay', value: autoplay }
-                ];
-                if(isIE){
-                    markup.classid = 'clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B';
-                    markup.codebase = 'http://www.apple.com/qtactivex/qtplugin.cab#version=6,0,2,0';
-                }else{
-                    markup.type = 'video/quicktime';
-                    markup.data = obj.content;
-                }
-            break;
-            case 'wmp':
-                autoplay = autoplay ? 1 : 0;
-                markup.children = [
-                    { tag: 'param', name: 'autostart', value: autoplay }
-                ];
-                if(isIE){
-                    if(controls){
-                        controls = 'full';
-                        h += 70; // height of WMP controller in IE
-                    }else{
-                        controls = 'none';
-                    }
-                    // markup.type = 'application/x-oleobject';
-                    markup.classid = 'clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6';
-                    markup.children[markup.children.length] = { tag: 'param', name: 'url', value: obj.content };
-                    markup.children[markup.children.length] = { tag: 'param', name: 'uimode', value: controls };
-                }else{
-                    if(controls){
-                        controls = 1;
-                        h += 45; // height of WMP controller in non-IE
-                    }else{
-                        controls = 0;
-                    }
-                    markup.type = 'video/x-ms-wmv';
-                    markup.data = obj.content;
-                    markup.children[markup.children.length] = { tag: 'param', name: 'showcontrols', value: controls };
-                }
-            break;
-        }
-
-        markup.height = h; // new height includes controller
-        markup.width = w;
-
-        return markup;
-    };
-
-    /**
-     * Creates an HTML string from an object representing HTML elements. Based
-     * on Ext.DomHelper's createHtml.
-     *
-     * @param   {Object}    obj     The HTML definition object
-     * @return  {String}            An HTML string
-     * @public
-     * @static
-     */
-    Shadowbox.createHTML = function(obj){
-        var html = '<' + obj.tag;
-        for(var attr in obj){
-            if(attr == 'tag' || attr == 'html' || attr == 'children') continue;
-            if(attr == 'cls'){
-                html += ' class="' + obj['cls'] + '"';
-            }else{
-                html += ' ' + attr + '="' + obj[attr] + '"';
-            }
-        }
-        if(RE.empty.test(obj.tag)){
-            html += '/>\n';
-        }else{
-            html += '>\n';
-            var cn = obj.children;
-            if(cn){
-                for(var i = 0, len = cn.length; i < len; ++i){
-                    html += this.createHTML(cn[i]);
-                }
-            }
-            if(obj.html) html += obj.html;
-            html += '</' + obj.tag + '>\n';
-        }
-        return html;
-    };
-
-    /**
-     * Gets an object that lists which plugins are supported by the client. The
-     * keys of this object will be:
-     *
-     * - fla: Adobe Flash Player
-     * - qt: QuickTime Player
-     * - wmp: Windows Media Player
-     * - f4m: Flip4Mac QuickTime Player
-     *
-     * @return  {Object}        The plugins object
-     * @public
-     * @static
-     */
-    Shadowbox.getPlugins = function(){
-        return plugins;
-    };
-
-    /**
-     * Gets the current options object in use.
-     *
-     * @return  {Object}        The options object
-     * @public
-     * @static
-     */
-    Shadowbox.getOptions = function(){
-        return options;
-    };
-
-    /**
-     * Gets the current gallery object.
-     *
-     * @return  {Object}        The current gallery item
-     * @public
-     * @static
-     */
-    Shadowbox.getCurrent = function(){
-        return current_gallery[current];
-    };
-
-    /**
-     * Gets the current version number of Shadowbox.
-     *
-     * @return  {String}        The current version
-     * @public
-     * @static
-     */
-    Shadowbox.getVersion = function(){
-        return version;
-    };
-
-})();
-
-/**
- * Finds the index of the given object in this array.
- *
- * @param   {mixed}     o   The object to search for
- * @return  {Number}        The index of the given object
- * @public
- */
-Array.prototype.indexOf = Array.prototype.indexOf || function(o){
-    for(var i = 0, len = this.length; i < len; ++i){
-        if(this[i] == o) return i;
-    }
-    return -1;
-};
-
-/**
- * Formats a string with the given parameters. The string for format must have
- * placeholders that correspond to the numerical index of the arguments passed
- * in surrounded by curly braces (e.g. 'Some {0} string {1}').
- *
- * @param   {String}    format      The string to format
- * @param   ...                     The parameters to put inside the string
- * @return  {String}                The string with the specified parameters
- *                                  replaced
- * @public
- * @static
- */
-String.format = String.format || function(format){
-    var args = Array.prototype.slice.call(arguments, 1);
-    return format.replace(/\{(\d+)\}/g, function(m, i){
-        return args[i];
-    });
-};
-
-module.exports=Shadowbox;
-
-
-/***/ }),
-/* 127 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var Mura=__webpack_require__(11);
-var Handlebars=__webpack_require__(326);
+var Mura=__webpack_require__(16);
+var Handlebars=__webpack_require__(325);
 Mura.Handlebars=Handlebars.create();
 Mura.templatesLoaded=false;
 Handlebars.noConflict();
@@ -14151,15 +11452,15 @@ Mura.templates['embed']=function(context){
   return context.source;
 }
 
-__webpack_require__(329);
+__webpack_require__(328);
 
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var Mura =__webpack_require__(11);
+var Mura =__webpack_require__(16);
 
 /**
  * Creates a new Mura.Entity
@@ -14220,17 +11521,17 @@ Mura.UI=Mura.Core.extend(
 
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-__webpack_require__(310);
+__webpack_require__(309);
 
-__webpack_require__(327);
+__webpack_require__(326);
 
-__webpack_require__(130);
+__webpack_require__(129);
 
 if (global._babelPolyfill) {
   throw new Error("only one instance of babel-polyfill is allowed");
@@ -14255,14 +11556,14 @@ define(String.prototype, "padRight", "".padEnd);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(88)))
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(139);
+__webpack_require__(138);
 module.exports = __webpack_require__(25).RegExp.escape;
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(4)
@@ -14283,18 +11584,18 @@ module.exports = function(original){
 };
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 9.4.2.3 ArraySpeciesCreate(originalArray, length)
-var speciesConstructor = __webpack_require__(131);
+var speciesConstructor = __webpack_require__(130);
 
 module.exports = function(original, length){
   return new (speciesConstructor(original))(length);
 };
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14309,7 +11610,7 @@ module.exports = function(hint){
 };
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
@@ -14329,11 +11630,11 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getKeys   = __webpack_require__(37)
-  , toIObject = __webpack_require__(16);
+  , toIObject = __webpack_require__(15);
 module.exports = function(object, el){
   var O      = toIObject(object)
     , keys   = getKeys(O)
@@ -14344,14 +11645,14 @@ module.exports = function(object, el){
 };
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var path      = __webpack_require__(137)
+var path      = __webpack_require__(136)
   , invoke    = __webpack_require__(55)
-  , aFunction = __webpack_require__(12);
+  , aFunction = __webpack_require__(11);
 module.exports = function(/* ...pargs */){
   var fn     = aFunction(this)
     , length = arguments.length
@@ -14373,13 +11674,13 @@ module.exports = function(/* ...pargs */){
 };
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(2);
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, exports) {
 
 module.exports = function(regExp, replace){
@@ -14392,18 +11693,18 @@ module.exports = function(regExp, replace){
 };
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/benjamingr/RexExp.escape
 var $export = __webpack_require__(0)
-  , $re     = __webpack_require__(138)(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+  , $re     = __webpack_require__(137)(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 
 $export($export.S, 'RegExp', {escape: function escape(it){ return $re(it); }});
 
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
@@ -14414,7 +11715,7 @@ $export($export.P, 'Array', {copyWithin: __webpack_require__(90)});
 __webpack_require__(42)('copyWithin');
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14430,7 +11731,7 @@ $export($export.P + $export.F * !__webpack_require__(21)([].every, true), 'Array
 });
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
@@ -14441,7 +11742,7 @@ $export($export.P, 'Array', {fill: __webpack_require__(62)});
 __webpack_require__(42)('fill');
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14457,7 +11758,7 @@ $export($export.P + $export.F * !__webpack_require__(21)([].filter, true), 'Arra
 });
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14477,7 +11778,7 @@ $export($export.P + $export.F * forced, 'Array', {
 __webpack_require__(42)(KEY);
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14497,7 +11798,7 @@ $export($export.P + $export.F * forced, 'Array', {
 __webpack_require__(42)(KEY);
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14514,7 +11815,7 @@ $export($export.P + $export.F * !STRICT, 'Array', {
 });
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14558,7 +11859,7 @@ $export($export.S + $export.F * !__webpack_require__(57)(function(iter){ Array.f
 
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14579,7 +11880,7 @@ $export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(21)($nati
 });
 
 /***/ }),
-/* 149 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
@@ -14588,14 +11889,14 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Array', {isArray: __webpack_require__(70)});
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // 22.1.3.13 Array.prototype.join(separator)
 var $export   = __webpack_require__(0)
-  , toIObject = __webpack_require__(16)
+  , toIObject = __webpack_require__(15)
   , arrayJoin = [].join;
 
 // fallback for not array-like strings
@@ -14606,13 +11907,13 @@ $export($export.P + $export.F * (__webpack_require__(48) != Object || !__webpack
 });
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export       = __webpack_require__(0)
-  , toIObject     = __webpack_require__(16)
+  , toIObject     = __webpack_require__(15)
   , toInteger     = __webpack_require__(32)
   , toLength      = __webpack_require__(8)
   , $native       = [].lastIndexOf
@@ -14634,7 +11935,7 @@ $export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(21)($nati
 });
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14650,7 +11951,7 @@ $export($export.P + $export.F * !__webpack_require__(21)([].map, true), 'Array',
 });
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14675,7 +11976,7 @@ $export($export.S + $export.F * __webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14691,7 +11992,7 @@ $export($export.P + $export.F * !__webpack_require__(21)([].reduceRight, true), 
 });
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14707,7 +12008,7 @@ $export($export.P + $export.F * !__webpack_require__(21)([].reduce, true), 'Arra
 });
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14741,7 +12042,7 @@ $export($export.P + $export.F * __webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14757,13 +12058,13 @@ $export($export.P + $export.F * !__webpack_require__(21)([].some, true), 'Array'
 });
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export   = __webpack_require__(0)
-  , aFunction = __webpack_require__(12)
+  , aFunction = __webpack_require__(11)
   , toObject  = __webpack_require__(9)
   , fails     = __webpack_require__(3)
   , $sort     = [].sort
@@ -14786,13 +12087,13 @@ $export($export.P + $export.F * (fails(function(){
 });
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(39)('Array');
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.3.3.1 / 15.9.4.4 Date.now()
@@ -14801,7 +12102,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Date', {now: function(){ return new Date().getTime(); }});
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14835,7 +12136,7 @@ $export($export.P + $export.F * (fails(function(){
 });
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14855,16 +12156,16 @@ $export($export.P + $export.F * __webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var TO_PRIMITIVE = __webpack_require__(5)('toPrimitive')
   , proto        = Date.prototype;
 
-if(!(TO_PRIMITIVE in proto))__webpack_require__(13)(proto, TO_PRIMITIVE, __webpack_require__(133));
+if(!(TO_PRIMITIVE in proto))__webpack_require__(12)(proto, TO_PRIMITIVE, __webpack_require__(132));
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var DateProto    = Date.prototype
@@ -14873,14 +12174,14 @@ var DateProto    = Date.prototype
   , $toString    = DateProto[TO_STRING]
   , getTime      = DateProto.getTime;
 if(new Date(NaN) + '' != INVALID_DATE){
-  __webpack_require__(14)(DateProto, TO_STRING, function toString(){
+  __webpack_require__(13)(DateProto, TO_STRING, function toString(){
     var value = getTime.call(this);
     return value === value ? $toString.call(this) : INVALID_DATE;
   });
 }
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.2.3.2 / 15.3.4.5 Function.prototype.bind(thisArg, args...)
@@ -14889,7 +12190,7 @@ var $export = __webpack_require__(0);
 $export($export.P, 'Function', {bind: __webpack_require__(93)});
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14908,7 +12209,7 @@ if(!(HAS_INSTANCE in FunctionProto))__webpack_require__(7).f(FunctionProto, HAS_
 }});
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP         = __webpack_require__(7).f
@@ -14938,7 +12239,7 @@ NAME in FProto || __webpack_require__(6) && dP(FProto, NAME, {
 });
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.3 Math.acosh(x)
@@ -14961,7 +12262,7 @@ $export($export.S + $export.F * !($acosh
 });
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.5 Math.asinh(x)
@@ -14976,7 +12277,7 @@ function asinh(x){
 $export($export.S + $export.F * !($asinh && 1 / $asinh(0) > 0), 'Math', {asinh: asinh});
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.7 Math.atanh(x)
@@ -14991,7 +12292,7 @@ $export($export.S + $export.F * !($atanh && 1 / $atanh(-0) < 0), 'Math', {
 });
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.9 Math.cbrt(x)
@@ -15005,7 +12306,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 172 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.11 Math.clz32(x)
@@ -15018,7 +12319,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.12 Math.cosh(x)
@@ -15032,7 +12333,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 174 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.14 Math.expm1(x)
@@ -15042,7 +12343,7 @@ var $export = __webpack_require__(0)
 $export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', {expm1: $expm1});
 
 /***/ }),
-/* 175 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.16 Math.fround(x)
@@ -15073,7 +12374,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 176 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.17 Math.hypot([value1[, value2[, … ]]])
@@ -15103,7 +12404,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 177 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.18 Math.imul(x, y)
@@ -15125,7 +12426,7 @@ $export($export.S + $export.F * __webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 178 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.21 Math.log10(x)
@@ -15138,7 +12439,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 179 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.20 Math.log1p(x)
@@ -15147,7 +12448,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Math', {log1p: __webpack_require__(101)});
 
 /***/ }),
-/* 180 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.22 Math.log2(x)
@@ -15160,7 +12461,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 181 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.28 Math.sign(x)
@@ -15169,7 +12470,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Math', {sign: __webpack_require__(74)});
 
 /***/ }),
-/* 182 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.30 Math.sinh(x)
@@ -15189,7 +12490,7 @@ $export($export.S + $export.F * __webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 183 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.33 Math.tanh(x)
@@ -15206,7 +12507,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 184 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.34 Math.trunc(x)
@@ -15219,7 +12520,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 185 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15290,11 +12591,11 @@ if(!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')){
   }
   $Number.prototype = proto;
   proto.constructor = $Number;
-  __webpack_require__(14)(global, NUMBER, $Number);
+  __webpack_require__(13)(global, NUMBER, $Number);
 }
 
 /***/ }),
-/* 186 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.1 Number.EPSILON
@@ -15303,7 +12604,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Number', {EPSILON: Math.pow(2, -52)});
 
 /***/ }),
-/* 187 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.2 Number.isFinite(number)
@@ -15317,7 +12618,7 @@ $export($export.S, 'Number', {
 });
 
 /***/ }),
-/* 188 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.3 Number.isInteger(number)
@@ -15326,7 +12627,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Number', {isInteger: __webpack_require__(98)});
 
 /***/ }),
-/* 189 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.4 Number.isNaN(number)
@@ -15339,7 +12640,7 @@ $export($export.S, 'Number', {
 });
 
 /***/ }),
-/* 190 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.5 Number.isSafeInteger(number)
@@ -15354,7 +12655,7 @@ $export($export.S, 'Number', {
 });
 
 /***/ }),
-/* 191 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.6 Number.MAX_SAFE_INTEGER
@@ -15363,7 +12664,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Number', {MAX_SAFE_INTEGER: 0x1fffffffffffff});
 
 /***/ }),
-/* 192 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.10 Number.MIN_SAFE_INTEGER
@@ -15372,7 +12673,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Number', {MIN_SAFE_INTEGER: -0x1fffffffffffff});
 
 /***/ }),
-/* 193 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export     = __webpack_require__(0)
@@ -15381,7 +12682,7 @@ var $export     = __webpack_require__(0)
 $export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', {parseFloat: $parseFloat});
 
 /***/ }),
-/* 194 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export   = __webpack_require__(0)
@@ -15390,7 +12691,7 @@ var $export   = __webpack_require__(0)
 $export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', {parseInt: $parseInt});
 
 /***/ }),
-/* 195 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15509,7 +12810,7 @@ $export($export.P + $export.F * (!!$toFixed && (
 });
 
 /***/ }),
-/* 196 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15533,7 +12834,7 @@ $export($export.P + $export.F * ($fails(function(){
 });
 
 /***/ }),
-/* 197 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.1 Object.assign(target, source)
@@ -15542,7 +12843,7 @@ var $export = __webpack_require__(0);
 $export($export.S + $export.F, 'Object', {assign: __webpack_require__(102)});
 
 /***/ }),
-/* 198 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0)
@@ -15550,7 +12851,7 @@ var $export = __webpack_require__(0)
 $export($export.S, 'Object', {create: __webpack_require__(35)});
 
 /***/ }),
-/* 199 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -15558,7 +12859,7 @@ var $export = __webpack_require__(0);
 $export($export.S + $export.F * !__webpack_require__(6), 'Object', {defineProperties: __webpack_require__(103)});
 
 /***/ }),
-/* 200 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -15566,7 +12867,7 @@ var $export = __webpack_require__(0);
 $export($export.S + $export.F * !__webpack_require__(6), 'Object', {defineProperty: __webpack_require__(7).f});
 
 /***/ }),
-/* 201 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.5 Object.freeze(O)
@@ -15580,11 +12881,11 @@ __webpack_require__(23)('freeze', function($freeze){
 });
 
 /***/ }),
-/* 202 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-var toIObject                 = __webpack_require__(16)
+var toIObject                 = __webpack_require__(15)
   , $getOwnPropertyDescriptor = __webpack_require__(17).f;
 
 __webpack_require__(23)('getOwnPropertyDescriptor', function(){
@@ -15594,7 +12895,7 @@ __webpack_require__(23)('getOwnPropertyDescriptor', function(){
 });
 
 /***/ }),
-/* 203 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 Object.getOwnPropertyNames(O)
@@ -15603,7 +12904,7 @@ __webpack_require__(23)('getOwnPropertyNames', function(){
 });
 
 /***/ }),
-/* 204 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 Object.getPrototypeOf(O)
@@ -15617,7 +12918,7 @@ __webpack_require__(23)('getPrototypeOf', function(){
 });
 
 /***/ }),
-/* 205 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.11 Object.isExtensible(O)
@@ -15630,7 +12931,7 @@ __webpack_require__(23)('isExtensible', function($isExtensible){
 });
 
 /***/ }),
-/* 206 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.12 Object.isFrozen(O)
@@ -15643,7 +12944,7 @@ __webpack_require__(23)('isFrozen', function($isFrozen){
 });
 
 /***/ }),
-/* 207 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.13 Object.isSealed(O)
@@ -15656,7 +12957,7 @@ __webpack_require__(23)('isSealed', function($isSealed){
 });
 
 /***/ }),
-/* 208 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.10 Object.is(value1, value2)
@@ -15664,7 +12965,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Object', {is: __webpack_require__(110)});
 
 /***/ }),
-/* 209 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 Object.keys(O)
@@ -15678,7 +12979,7 @@ __webpack_require__(23)('keys', function(){
 });
 
 /***/ }),
-/* 210 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.15 Object.preventExtensions(O)
@@ -15692,7 +12993,7 @@ __webpack_require__(23)('preventExtensions', function($preventExtensions){
 });
 
 /***/ }),
-/* 211 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.17 Object.seal(O)
@@ -15706,7 +13007,7 @@ __webpack_require__(23)('seal', function($seal){
 });
 
 /***/ }),
-/* 212 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
@@ -15714,7 +13015,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Object', {setPrototypeOf: __webpack_require__(76).set});
 
 /***/ }),
-/* 213 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15724,13 +13025,13 @@ var classof = __webpack_require__(47)
   , test    = {};
 test[__webpack_require__(5)('toStringTag')] = 'z';
 if(test + '' != '[object z]'){
-  __webpack_require__(14)(Object.prototype, 'toString', function toString(){
+  __webpack_require__(13)(Object.prototype, 'toString', function toString(){
     return '[object ' + classof(this) + ']';
   }, true);
 }
 
 /***/ }),
-/* 214 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export     = __webpack_require__(0)
@@ -15739,7 +13040,7 @@ var $export     = __webpack_require__(0)
 $export($export.G + $export.F * (parseFloat != $parseFloat), {parseFloat: $parseFloat});
 
 /***/ }),
-/* 215 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export   = __webpack_require__(0)
@@ -15748,7 +13049,7 @@ var $export   = __webpack_require__(0)
 $export($export.G + $export.F * (parseInt != $parseInt), {parseInt: $parseInt});
 
 /***/ }),
-/* 216 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15759,7 +13060,7 @@ var LIBRARY            = __webpack_require__(34)
   , classof            = __webpack_require__(47)
   , $export            = __webpack_require__(0)
   , isObject           = __webpack_require__(4)
-  , aFunction          = __webpack_require__(12)
+  , aFunction          = __webpack_require__(11)
   , anInstance         = __webpack_require__(33)
   , forOf              = __webpack_require__(43)
   , speciesConstructor = __webpack_require__(78)
@@ -16053,12 +13354,12 @@ $export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(57)(function
 });
 
 /***/ }),
-/* 217 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.1 Reflect.apply(target, thisArgument, argumentsList)
 var $export   = __webpack_require__(0)
-  , aFunction = __webpack_require__(12)
+  , aFunction = __webpack_require__(11)
   , anObject  = __webpack_require__(1)
   , rApply    = (__webpack_require__(2).Reflect || {}).apply
   , fApply    = Function.apply;
@@ -16074,13 +13375,13 @@ $export($export.S + $export.F * !__webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 218 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
 var $export    = __webpack_require__(0)
   , create     = __webpack_require__(35)
-  , aFunction  = __webpack_require__(12)
+  , aFunction  = __webpack_require__(11)
   , anObject   = __webpack_require__(1)
   , isObject   = __webpack_require__(4)
   , fails      = __webpack_require__(3)
@@ -16126,7 +13427,7 @@ $export($export.S + $export.F * (NEW_TARGET_BUG || ARGS_BUG), 'Reflect', {
 });
 
 /***/ }),
-/* 219 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.3 Reflect.defineProperty(target, propertyKey, attributes)
@@ -16153,7 +13454,7 @@ $export($export.S + $export.F * __webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 220 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.4 Reflect.deleteProperty(target, propertyKey)
@@ -16169,7 +13470,7 @@ $export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 221 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16201,7 +13502,7 @@ $export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 222 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.7 Reflect.getOwnPropertyDescriptor(target, propertyKey)
@@ -16216,7 +13517,7 @@ $export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 223 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.8 Reflect.getPrototypeOf(target)
@@ -16231,7 +13532,7 @@ $export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 224 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.6 Reflect.get(target, propertyKey [, receiver])
@@ -16257,7 +13558,7 @@ function get(target, propertyKey/*, receiver*/){
 $export($export.S, 'Reflect', {get: get});
 
 /***/ }),
-/* 225 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.9 Reflect.has(target, propertyKey)
@@ -16270,7 +13571,7 @@ $export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 226 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.10 Reflect.isExtensible(target)
@@ -16286,7 +13587,7 @@ $export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 227 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.11 Reflect.ownKeys(target)
@@ -16295,7 +13596,7 @@ var $export = __webpack_require__(0);
 $export($export.S, 'Reflect', {ownKeys: __webpack_require__(107)});
 
 /***/ }),
-/* 228 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.12 Reflect.preventExtensions(target)
@@ -16316,7 +13617,7 @@ $export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 229 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.14 Reflect.setPrototypeOf(target, proto)
@@ -16336,7 +13637,7 @@ if(setProto)$export($export.S, 'Reflect', {
 });
 
 /***/ }),
-/* 230 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.13 Reflect.set(target, propertyKey, V [, receiver])
@@ -16372,7 +13673,7 @@ function set(target, propertyKey, V/*, receiver*/){
 $export($export.S, 'Reflect', {set: set});
 
 /***/ }),
-/* 231 */
+/* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global            = __webpack_require__(2)
@@ -16414,13 +13715,13 @@ if(__webpack_require__(6) && (!CORRECT_NEW || __webpack_require__(3)(function(){
   for(var keys = gOPN(Base), i = 0; keys.length > i; )proxy(keys[i++]);
   proto.constructor = $RegExp;
   $RegExp.prototype = proto;
-  __webpack_require__(14)(global, 'RegExp', $RegExp);
+  __webpack_require__(13)(global, 'RegExp', $RegExp);
 }
 
 __webpack_require__(39)('RegExp');
 
 /***/ }),
-/* 232 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@match logic
@@ -16435,7 +13736,7 @@ __webpack_require__(53)('match', 1, function(defined, MATCH, $match){
 });
 
 /***/ }),
-/* 233 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@replace logic
@@ -16452,7 +13753,7 @@ __webpack_require__(53)('replace', 2, function(defined, REPLACE, $replace){
 });
 
 /***/ }),
-/* 234 */
+/* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@search logic
@@ -16467,7 +13768,7 @@ __webpack_require__(53)('search', 1, function(defined, SEARCH, $search){
 });
 
 /***/ }),
-/* 235 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@split logic
@@ -16542,7 +13843,7 @@ __webpack_require__(53)('split', 2, function(defined, SPLIT, $split){
 });
 
 /***/ }),
-/* 236 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16555,7 +13856,7 @@ var anObject    = __webpack_require__(1)
   , $toString   = /./[TO_STRING];
 
 var define = function(fn){
-  __webpack_require__(14)(RegExp.prototype, TO_STRING, fn, true);
+  __webpack_require__(13)(RegExp.prototype, TO_STRING, fn, true);
 };
 
 // 21.2.5.14 RegExp.prototype.toString()
@@ -16573,15 +13874,28 @@ if(__webpack_require__(3)(function(){ return $toString.call({source: 'a', flags:
 }
 
 /***/ }),
-/* 237 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // B.2.3.2 String.prototype.anchor(name)
-__webpack_require__(15)('anchor', function(createHTML){
+__webpack_require__(14)('anchor', function(createHTML){
   return function anchor(name){
     return createHTML(this, 'a', 'name', name);
+  }
+});
+
+/***/ }),
+/* 237 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// B.2.3.3 String.prototype.big()
+__webpack_require__(14)('big', function(createHTML){
+  return function big(){
+    return createHTML(this, 'big', '', '');
   }
 });
 
@@ -16591,10 +13905,10 @@ __webpack_require__(15)('anchor', function(createHTML){
 
 "use strict";
 
-// B.2.3.3 String.prototype.big()
-__webpack_require__(15)('big', function(createHTML){
-  return function big(){
-    return createHTML(this, 'big', '', '');
+// B.2.3.4 String.prototype.blink()
+__webpack_require__(14)('blink', function(createHTML){
+  return function blink(){
+    return createHTML(this, 'blink', '', '');
   }
 });
 
@@ -16604,28 +13918,15 @@ __webpack_require__(15)('big', function(createHTML){
 
 "use strict";
 
-// B.2.3.4 String.prototype.blink()
-__webpack_require__(15)('blink', function(createHTML){
-  return function blink(){
-    return createHTML(this, 'blink', '', '');
-  }
-});
-
-/***/ }),
-/* 240 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 // B.2.3.5 String.prototype.bold()
-__webpack_require__(15)('bold', function(createHTML){
+__webpack_require__(14)('bold', function(createHTML){
   return function bold(){
     return createHTML(this, 'b', '', '');
   }
 });
 
 /***/ }),
-/* 241 */
+/* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16640,7 +13941,7 @@ $export($export.P, 'String', {
 });
 
 /***/ }),
-/* 242 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16666,15 +13967,28 @@ $export($export.P + $export.F * __webpack_require__(66)(ENDS_WITH), 'String', {
 });
 
 /***/ }),
-/* 243 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // B.2.3.6 String.prototype.fixed()
-__webpack_require__(15)('fixed', function(createHTML){
+__webpack_require__(14)('fixed', function(createHTML){
   return function fixed(){
     return createHTML(this, 'tt', '', '');
+  }
+});
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// B.2.3.7 String.prototype.fontcolor(color)
+__webpack_require__(14)('fontcolor', function(createHTML){
+  return function fontcolor(color){
+    return createHTML(this, 'font', 'color', color);
   }
 });
 
@@ -16684,28 +13998,15 @@ __webpack_require__(15)('fixed', function(createHTML){
 
 "use strict";
 
-// B.2.3.7 String.prototype.fontcolor(color)
-__webpack_require__(15)('fontcolor', function(createHTML){
-  return function fontcolor(color){
-    return createHTML(this, 'font', 'color', color);
-  }
-});
-
-/***/ }),
-/* 245 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 // B.2.3.8 String.prototype.fontsize(size)
-__webpack_require__(15)('fontsize', function(createHTML){
+__webpack_require__(14)('fontsize', function(createHTML){
   return function fontsize(size){
     return createHTML(this, 'font', 'size', size);
   }
 });
 
 /***/ }),
-/* 246 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export        = __webpack_require__(0)
@@ -16733,7 +14034,7 @@ $export($export.S + $export.F * (!!$fromCodePoint && $fromCodePoint.length != 1)
 });
 
 /***/ }),
-/* 247 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16751,20 +14052,20 @@ $export($export.P + $export.F * __webpack_require__(66)(INCLUDES), 'String', {
 });
 
 /***/ }),
-/* 248 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // B.2.3.9 String.prototype.italics()
-__webpack_require__(15)('italics', function(createHTML){
+__webpack_require__(14)('italics', function(createHTML){
   return function italics(){
     return createHTML(this, 'i', '', '');
   }
 });
 
 /***/ }),
-/* 249 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16787,24 +14088,24 @@ __webpack_require__(72)(String, 'String', function(iterated){
 });
 
 /***/ }),
-/* 250 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // B.2.3.10 String.prototype.link(url)
-__webpack_require__(15)('link', function(createHTML){
+__webpack_require__(14)('link', function(createHTML){
   return function link(url){
     return createHTML(this, 'a', 'href', url);
   }
 });
 
 /***/ }),
-/* 251 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export   = __webpack_require__(0)
-  , toIObject = __webpack_require__(16)
+  , toIObject = __webpack_require__(15)
   , toLength  = __webpack_require__(8);
 
 $export($export.S, 'String', {
@@ -16823,7 +14124,7 @@ $export($export.S, 'String', {
 });
 
 /***/ }),
-/* 252 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -16834,20 +14135,20 @@ $export($export.P, 'String', {
 });
 
 /***/ }),
-/* 253 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // B.2.3.11 String.prototype.small()
-__webpack_require__(15)('small', function(createHTML){
+__webpack_require__(14)('small', function(createHTML){
   return function small(){
     return createHTML(this, 'small', '', '');
   }
 });
 
 /***/ }),
-/* 254 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16871,15 +14172,28 @@ $export($export.P + $export.F * __webpack_require__(66)(STARTS_WITH), 'String', 
 });
 
 /***/ }),
-/* 255 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // B.2.3.12 String.prototype.strike()
-__webpack_require__(15)('strike', function(createHTML){
+__webpack_require__(14)('strike', function(createHTML){
   return function strike(){
     return createHTML(this, 'strike', '', '');
+  }
+});
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// B.2.3.13 String.prototype.sub()
+__webpack_require__(14)('sub', function(createHTML){
+  return function sub(){
+    return createHTML(this, 'sub', '', '');
   }
 });
 
@@ -16889,28 +14203,15 @@ __webpack_require__(15)('strike', function(createHTML){
 
 "use strict";
 
-// B.2.3.13 String.prototype.sub()
-__webpack_require__(15)('sub', function(createHTML){
-  return function sub(){
-    return createHTML(this, 'sub', '', '');
-  }
-});
-
-/***/ }),
-/* 257 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 // B.2.3.14 String.prototype.sup()
-__webpack_require__(15)('sup', function(createHTML){
+__webpack_require__(14)('sup', function(createHTML){
   return function sup(){
     return createHTML(this, 'sup', '', '');
   }
 });
 
 /***/ }),
-/* 258 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16923,7 +14224,7 @@ __webpack_require__(46)('trim', function($trim){
 });
 
 /***/ }),
-/* 259 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16933,7 +14234,7 @@ var global         = __webpack_require__(2)
   , has            = __webpack_require__(10)
   , DESCRIPTORS    = __webpack_require__(6)
   , $export        = __webpack_require__(0)
-  , redefine       = __webpack_require__(14)
+  , redefine       = __webpack_require__(13)
   , META           = __webpack_require__(30).KEY
   , $fails         = __webpack_require__(3)
   , shared         = __webpack_require__(60)
@@ -16942,11 +14243,11 @@ var global         = __webpack_require__(2)
   , wks            = __webpack_require__(5)
   , wksExt         = __webpack_require__(112)
   , wksDefine      = __webpack_require__(85)
-  , keyOf          = __webpack_require__(135)
-  , enumKeys       = __webpack_require__(134)
+  , keyOf          = __webpack_require__(134)
+  , enumKeys       = __webpack_require__(133)
   , isArray        = __webpack_require__(70)
   , anObject       = __webpack_require__(1)
-  , toIObject      = __webpack_require__(16)
+  , toIObject      = __webpack_require__(15)
   , toPrimitive    = __webpack_require__(24)
   , createDesc     = __webpack_require__(31)
   , _create        = __webpack_require__(35)
@@ -17155,7 +14456,7 @@ $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
 });
 
 // 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(13)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(12)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 // 19.4.3.5 Symbol.prototype[@@toStringTag]
 setToStringTag($Symbol, 'Symbol');
 // 20.2.1.9 Math[@@toStringTag]
@@ -17164,7 +14465,7 @@ setToStringTag(Math, 'Math', true);
 setToStringTag(global.JSON, 'JSON', true);
 
 /***/ }),
-/* 260 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17216,7 +14517,7 @@ $export($export.P + $export.U + $export.F * __webpack_require__(3)(function(){
 __webpack_require__(39)(ARRAY_BUFFER);
 
 /***/ }),
-/* 261 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -17225,7 +14526,7 @@ $export($export.G + $export.W + $export.F * !__webpack_require__(61).ABV, {
 });
 
 /***/ }),
-/* 262 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Float32', 4, function(init){
@@ -17235,7 +14536,7 @@ __webpack_require__(28)('Float32', 4, function(init){
 });
 
 /***/ }),
-/* 263 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Float64', 8, function(init){
@@ -17245,7 +14546,7 @@ __webpack_require__(28)('Float64', 8, function(init){
 });
 
 /***/ }),
-/* 264 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Int16', 2, function(init){
@@ -17255,7 +14556,7 @@ __webpack_require__(28)('Int16', 2, function(init){
 });
 
 /***/ }),
-/* 265 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Int32', 4, function(init){
@@ -17265,7 +14566,7 @@ __webpack_require__(28)('Int32', 4, function(init){
 });
 
 /***/ }),
-/* 266 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Int8', 1, function(init){
@@ -17275,7 +14576,7 @@ __webpack_require__(28)('Int8', 1, function(init){
 });
 
 /***/ }),
-/* 267 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Uint16', 2, function(init){
@@ -17285,7 +14586,7 @@ __webpack_require__(28)('Uint16', 2, function(init){
 });
 
 /***/ }),
-/* 268 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Uint32', 4, function(init){
@@ -17295,7 +14596,7 @@ __webpack_require__(28)('Uint32', 4, function(init){
 });
 
 /***/ }),
-/* 269 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Uint8', 1, function(init){
@@ -17305,7 +14606,7 @@ __webpack_require__(28)('Uint8', 1, function(init){
 });
 
 /***/ }),
-/* 270 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(28)('Uint8', 1, function(init){
@@ -17315,7 +14616,7 @@ __webpack_require__(28)('Uint8', 1, function(init){
 }, true);
 
 /***/ }),
-/* 271 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17333,7 +14634,7 @@ __webpack_require__(52)('WeakSet', function(get){
 }, weak, false, true);
 
 /***/ }),
-/* 272 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17351,7 +14652,7 @@ $export($export.P, 'Array', {
 __webpack_require__(42)('includes');
 
 /***/ }),
-/* 273 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#510-globalasap-for-enqueuing-a-microtask
@@ -17368,7 +14669,7 @@ $export($export.G, {
 });
 
 /***/ }),
-/* 274 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/ljharb/proposal-is-error
@@ -17382,7 +14683,7 @@ $export($export.S, 'Error', {
 });
 
 /***/ }),
-/* 275 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
@@ -17391,7 +14692,7 @@ var $export  = __webpack_require__(0);
 $export($export.P + $export.R, 'Map', {toJSON: __webpack_require__(95)('Map')});
 
 /***/ }),
-/* 276 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
@@ -17407,7 +14708,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 277 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
@@ -17428,7 +14729,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 278 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
@@ -17444,7 +14745,7 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 279 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
@@ -17465,14 +14766,14 @@ $export($export.S, 'Math', {
 });
 
 /***/ }),
-/* 280 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export         = __webpack_require__(0)
   , toObject        = __webpack_require__(9)
-  , aFunction       = __webpack_require__(12)
+  , aFunction       = __webpack_require__(11)
   , $defineProperty = __webpack_require__(7);
 
 // B.2.2.2 Object.prototype.__defineGetter__(P, getter)
@@ -17483,14 +14784,14 @@ __webpack_require__(6) && $export($export.P + __webpack_require__(58), 'Object',
 });
 
 /***/ }),
-/* 281 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export         = __webpack_require__(0)
   , toObject        = __webpack_require__(9)
-  , aFunction       = __webpack_require__(12)
+  , aFunction       = __webpack_require__(11)
   , $defineProperty = __webpack_require__(7);
 
 // B.2.2.3 Object.prototype.__defineSetter__(P, setter)
@@ -17501,7 +14802,7 @@ __webpack_require__(6) && $export($export.P + __webpack_require__(58), 'Object',
 });
 
 /***/ }),
-/* 282 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-object-values-entries
@@ -17515,13 +14816,13 @@ $export($export.S, 'Object', {
 });
 
 /***/ }),
-/* 283 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-object-getownpropertydescriptors
 var $export        = __webpack_require__(0)
   , ownKeys        = __webpack_require__(107)
-  , toIObject      = __webpack_require__(16)
+  , toIObject      = __webpack_require__(15)
   , gOPD           = __webpack_require__(17)
   , createProperty = __webpack_require__(63);
 
@@ -17539,7 +14840,7 @@ $export($export.S, 'Object', {
 });
 
 /***/ }),
-/* 284 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17563,7 +14864,7 @@ __webpack_require__(6) && $export($export.P + __webpack_require__(58), 'Object',
 });
 
 /***/ }),
-/* 285 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17587,7 +14888,7 @@ __webpack_require__(6) && $export($export.P + __webpack_require__(58), 'Object',
 });
 
 /***/ }),
-/* 286 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-object-values-entries
@@ -17601,7 +14902,7 @@ $export($export.S, 'Object', {
 });
 
 /***/ }),
-/* 287 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17612,11 +14913,11 @@ var $export     = __webpack_require__(0)
   , core        = __webpack_require__(25)
   , microtask   = __webpack_require__(75)()
   , OBSERVABLE  = __webpack_require__(5)('observable')
-  , aFunction   = __webpack_require__(12)
+  , aFunction   = __webpack_require__(11)
   , anObject    = __webpack_require__(1)
   , anInstance  = __webpack_require__(33)
   , redefineAll = __webpack_require__(38)
-  , hide        = __webpack_require__(13)
+  , hide        = __webpack_require__(12)
   , forOf       = __webpack_require__(43)
   , RETURN      = forOf.RETURN;
 
@@ -17806,7 +15107,7 @@ $export($export.G, {Observable: $Observable});
 __webpack_require__(39)('Observable');
 
 /***/ }),
-/* 288 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata                  = __webpack_require__(27)
@@ -17819,7 +15120,7 @@ metadata.exp({defineMetadata: function defineMetadata(metadataKey, metadataValue
 }});
 
 /***/ }),
-/* 289 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata               = __webpack_require__(27)
@@ -17839,7 +15140,7 @@ metadata.exp({deleteMetadata: function deleteMetadata(metadataKey, target /*, ta
 }});
 
 /***/ }),
-/* 290 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Set                     = __webpack_require__(115)
@@ -17863,7 +15164,7 @@ metadata.exp({getMetadataKeys: function getMetadataKeys(target /*, targetKey */)
 }});
 
 /***/ }),
-/* 291 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata               = __webpack_require__(27)
@@ -17885,7 +15186,7 @@ metadata.exp({getMetadata: function getMetadata(metadataKey, target /*, targetKe
 }});
 
 /***/ }),
-/* 292 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata                = __webpack_require__(27)
@@ -17898,7 +15199,7 @@ metadata.exp({getOwnMetadataKeys: function getOwnMetadataKeys(target /*, targetK
 }});
 
 /***/ }),
-/* 293 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata               = __webpack_require__(27)
@@ -17912,7 +15213,7 @@ metadata.exp({getOwnMetadata: function getOwnMetadata(metadataKey, target /*, ta
 }});
 
 /***/ }),
-/* 294 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata               = __webpack_require__(27)
@@ -17933,7 +15234,7 @@ metadata.exp({hasMetadata: function hasMetadata(metadataKey, target /*, targetKe
 }});
 
 /***/ }),
-/* 295 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata               = __webpack_require__(27)
@@ -17947,12 +15248,12 @@ metadata.exp({hasOwnMetadata: function hasOwnMetadata(metadataKey, target /*, ta
 }});
 
 /***/ }),
-/* 296 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var metadata                  = __webpack_require__(27)
   , anObject                  = __webpack_require__(1)
-  , aFunction                 = __webpack_require__(12)
+  , aFunction                 = __webpack_require__(11)
   , toMetaKey                 = metadata.key
   , ordinaryDefineOwnMetadata = metadata.set;
 
@@ -17967,7 +15268,7 @@ metadata.exp({metadata: function metadata(metadataKey, metadataValue){
 }});
 
 /***/ }),
-/* 297 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
@@ -17976,7 +15277,7 @@ var $export  = __webpack_require__(0);
 $export($export.P + $export.R, 'Set', {toJSON: __webpack_require__(95)('Set')});
 
 /***/ }),
-/* 298 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17992,7 +15293,7 @@ $export($export.P, 'String', {
 });
 
 /***/ }),
-/* 299 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18028,7 +15329,7 @@ $export($export.P, 'String', {
 });
 
 /***/ }),
-/* 300 */
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18044,7 +15345,7 @@ $export($export.P, 'String', {
 });
 
 /***/ }),
-/* 301 */
+/* 300 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18060,7 +15361,7 @@ $export($export.P, 'String', {
 });
 
 /***/ }),
-/* 302 */
+/* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18073,7 +15374,7 @@ __webpack_require__(46)('trimLeft', function($trim){
 }, 'trimStart');
 
 /***/ }),
-/* 303 */
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18086,19 +15387,19 @@ __webpack_require__(46)('trimRight', function($trim){
 }, 'trimEnd');
 
 /***/ }),
-/* 304 */
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(85)('asyncIterator');
 
 /***/ }),
-/* 305 */
+/* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(85)('observable');
 
 /***/ }),
-/* 306 */
+/* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/ljharb/proposal-global
@@ -18107,13 +15408,13 @@ var $export = __webpack_require__(0);
 $export($export.S, 'System', {global: __webpack_require__(2)});
 
 /***/ }),
-/* 307 */
+/* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $iterators    = __webpack_require__(87)
-  , redefine      = __webpack_require__(14)
+  , redefine      = __webpack_require__(13)
   , global        = __webpack_require__(2)
-  , hide          = __webpack_require__(13)
+  , hide          = __webpack_require__(12)
   , Iterators     = __webpack_require__(44)
   , wks           = __webpack_require__(5)
   , ITERATOR      = wks('iterator')
@@ -18134,7 +15435,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 }
 
 /***/ }),
-/* 308 */
+/* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0)
@@ -18145,14 +15446,14 @@ $export($export.G + $export.B, {
 });
 
 /***/ }),
-/* 309 */
+/* 308 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // ie9- setTimeout & setInterval additional parameters fix
 var global     = __webpack_require__(2)
   , $export    = __webpack_require__(0)
   , invoke     = __webpack_require__(55)
-  , partial    = __webpack_require__(136)
+  , partial    = __webpack_require__(135)
   , navigator  = global.navigator
   , MSIE       = !!navigator && /MSIE .\./.test(navigator.userAgent); // <- dirty ie9- check
 var wrap = function(set){
@@ -18170,35 +15471,36 @@ $export($export.G + $export.B + $export.F * MSIE, {
 });
 
 /***/ }),
-/* 310 */
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(259);
-__webpack_require__(198);
-__webpack_require__(200);
-__webpack_require__(199);
-__webpack_require__(202);
-__webpack_require__(204);
-__webpack_require__(209);
-__webpack_require__(203);
-__webpack_require__(201);
-__webpack_require__(211);
-__webpack_require__(210);
-__webpack_require__(206);
-__webpack_require__(207);
-__webpack_require__(205);
+__webpack_require__(258);
 __webpack_require__(197);
+__webpack_require__(199);
+__webpack_require__(198);
+__webpack_require__(201);
+__webpack_require__(203);
 __webpack_require__(208);
-__webpack_require__(212);
-__webpack_require__(213);
-__webpack_require__(165);
-__webpack_require__(167);
-__webpack_require__(166);
-__webpack_require__(215);
-__webpack_require__(214);
-__webpack_require__(185);
-__webpack_require__(195);
+__webpack_require__(202);
+__webpack_require__(200);
+__webpack_require__(210);
+__webpack_require__(209);
+__webpack_require__(205);
+__webpack_require__(206);
+__webpack_require__(204);
 __webpack_require__(196);
+__webpack_require__(207);
+__webpack_require__(211);
+__webpack_require__(212);
+__webpack_require__(164);
+__webpack_require__(166);
+__webpack_require__(165);
+__webpack_require__(214);
+__webpack_require__(213);
+__webpack_require__(184);
+__webpack_require__(194);
+__webpack_require__(195);
+__webpack_require__(185);
 __webpack_require__(186);
 __webpack_require__(187);
 __webpack_require__(188);
@@ -18207,7 +15509,7 @@ __webpack_require__(190);
 __webpack_require__(191);
 __webpack_require__(192);
 __webpack_require__(193);
-__webpack_require__(194);
+__webpack_require__(167);
 __webpack_require__(168);
 __webpack_require__(169);
 __webpack_require__(170);
@@ -18224,134 +15526,133 @@ __webpack_require__(180);
 __webpack_require__(181);
 __webpack_require__(182);
 __webpack_require__(183);
-__webpack_require__(184);
+__webpack_require__(245);
+__webpack_require__(250);
+__webpack_require__(257);
+__webpack_require__(248);
+__webpack_require__(240);
+__webpack_require__(241);
 __webpack_require__(246);
 __webpack_require__(251);
-__webpack_require__(258);
-__webpack_require__(249);
-__webpack_require__(241);
-__webpack_require__(242);
-__webpack_require__(247);
-__webpack_require__(252);
-__webpack_require__(254);
+__webpack_require__(253);
+__webpack_require__(236);
 __webpack_require__(237);
 __webpack_require__(238);
 __webpack_require__(239);
-__webpack_require__(240);
+__webpack_require__(242);
 __webpack_require__(243);
 __webpack_require__(244);
-__webpack_require__(245);
-__webpack_require__(248);
-__webpack_require__(250);
-__webpack_require__(253);
+__webpack_require__(247);
+__webpack_require__(249);
+__webpack_require__(252);
+__webpack_require__(254);
 __webpack_require__(255);
 __webpack_require__(256);
-__webpack_require__(257);
-__webpack_require__(160);
-__webpack_require__(162);
+__webpack_require__(159);
 __webpack_require__(161);
-__webpack_require__(164);
+__webpack_require__(160);
 __webpack_require__(163);
-__webpack_require__(149);
-__webpack_require__(147);
-__webpack_require__(153);
-__webpack_require__(150);
-__webpack_require__(156);
-__webpack_require__(158);
+__webpack_require__(162);
+__webpack_require__(148);
 __webpack_require__(146);
 __webpack_require__(152);
-__webpack_require__(143);
-__webpack_require__(157);
-__webpack_require__(141);
+__webpack_require__(149);
 __webpack_require__(155);
-__webpack_require__(154);
-__webpack_require__(148);
-__webpack_require__(151);
-__webpack_require__(140);
-__webpack_require__(142);
+__webpack_require__(157);
 __webpack_require__(145);
+__webpack_require__(151);
+__webpack_require__(142);
+__webpack_require__(156);
+__webpack_require__(140);
+__webpack_require__(154);
+__webpack_require__(153);
+__webpack_require__(147);
+__webpack_require__(150);
+__webpack_require__(139);
+__webpack_require__(141);
 __webpack_require__(144);
-__webpack_require__(159);
+__webpack_require__(143);
+__webpack_require__(158);
 __webpack_require__(87);
-__webpack_require__(231);
-__webpack_require__(236);
+__webpack_require__(230);
+__webpack_require__(235);
 __webpack_require__(114);
+__webpack_require__(231);
 __webpack_require__(232);
 __webpack_require__(233);
 __webpack_require__(234);
-__webpack_require__(235);
-__webpack_require__(216);
+__webpack_require__(215);
 __webpack_require__(113);
 __webpack_require__(115);
 __webpack_require__(116);
-__webpack_require__(271);
-__webpack_require__(260);
-__webpack_require__(261);
-__webpack_require__(266);
-__webpack_require__(269);
 __webpack_require__(270);
-__webpack_require__(264);
-__webpack_require__(267);
+__webpack_require__(259);
+__webpack_require__(260);
 __webpack_require__(265);
 __webpack_require__(268);
-__webpack_require__(262);
+__webpack_require__(269);
 __webpack_require__(263);
+__webpack_require__(266);
+__webpack_require__(264);
+__webpack_require__(267);
+__webpack_require__(261);
+__webpack_require__(262);
+__webpack_require__(216);
 __webpack_require__(217);
 __webpack_require__(218);
 __webpack_require__(219);
 __webpack_require__(220);
-__webpack_require__(221);
-__webpack_require__(224);
-__webpack_require__(222);
 __webpack_require__(223);
+__webpack_require__(221);
+__webpack_require__(222);
+__webpack_require__(224);
 __webpack_require__(225);
 __webpack_require__(226);
 __webpack_require__(227);
-__webpack_require__(228);
-__webpack_require__(230);
 __webpack_require__(229);
-__webpack_require__(272);
-__webpack_require__(298);
-__webpack_require__(301);
-__webpack_require__(300);
-__webpack_require__(302);
-__webpack_require__(303);
-__webpack_require__(299);
-__webpack_require__(304);
-__webpack_require__(305);
-__webpack_require__(283);
-__webpack_require__(286);
-__webpack_require__(282);
-__webpack_require__(280);
-__webpack_require__(281);
-__webpack_require__(284);
-__webpack_require__(285);
-__webpack_require__(275);
+__webpack_require__(228);
+__webpack_require__(271);
 __webpack_require__(297);
-__webpack_require__(306);
+__webpack_require__(300);
+__webpack_require__(299);
+__webpack_require__(301);
+__webpack_require__(302);
+__webpack_require__(298);
+__webpack_require__(303);
+__webpack_require__(304);
+__webpack_require__(282);
+__webpack_require__(285);
+__webpack_require__(281);
+__webpack_require__(279);
+__webpack_require__(280);
+__webpack_require__(283);
+__webpack_require__(284);
 __webpack_require__(274);
+__webpack_require__(296);
+__webpack_require__(305);
+__webpack_require__(273);
+__webpack_require__(275);
+__webpack_require__(277);
 __webpack_require__(276);
 __webpack_require__(278);
-__webpack_require__(277);
-__webpack_require__(279);
+__webpack_require__(287);
 __webpack_require__(288);
-__webpack_require__(289);
-__webpack_require__(291);
 __webpack_require__(290);
-__webpack_require__(293);
+__webpack_require__(289);
 __webpack_require__(292);
+__webpack_require__(291);
+__webpack_require__(293);
 __webpack_require__(294);
 __webpack_require__(295);
-__webpack_require__(296);
-__webpack_require__(273);
-__webpack_require__(287);
-__webpack_require__(309);
+__webpack_require__(272);
+__webpack_require__(286);
 __webpack_require__(308);
 __webpack_require__(307);
+__webpack_require__(306);
 module.exports = __webpack_require__(25);
 
 /***/ }),
-/* 311 */
+/* 310 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18373,7 +15674,7 @@ var base = _interopRequireWildcard(_handlebarsBase);
 // Each of these augment the Handlebars object. No need to setup here.
 // (This is done to easily share code between commonjs and browse envs)
 
-var _handlebarsSafeString = __webpack_require__(325);
+var _handlebarsSafeString = __webpack_require__(324);
 
 var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
@@ -18385,11 +15686,11 @@ var _handlebarsUtils = __webpack_require__(29);
 
 var Utils = _interopRequireWildcard(_handlebarsUtils);
 
-var _handlebarsRuntime = __webpack_require__(324);
+var _handlebarsRuntime = __webpack_require__(323);
 
 var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-var _handlebarsNoConflict = __webpack_require__(323);
+var _handlebarsNoConflict = __webpack_require__(322);
 
 var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
@@ -18424,7 +15725,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 312 */
+/* 311 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18436,7 +15737,7 @@ exports.registerDefaultDecorators = registerDefaultDecorators;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _decoratorsInline = __webpack_require__(313);
+var _decoratorsInline = __webpack_require__(312);
 
 var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 
@@ -18447,7 +15748,7 @@ function registerDefaultDecorators(instance) {
 
 
 /***/ }),
-/* 313 */
+/* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18483,7 +15784,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 314 */
+/* 313 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18495,31 +15796,31 @@ exports.registerDefaultHelpers = registerDefaultHelpers;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _helpersBlockHelperMissing = __webpack_require__(315);
+var _helpersBlockHelperMissing = __webpack_require__(314);
 
 var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 
-var _helpersEach = __webpack_require__(316);
+var _helpersEach = __webpack_require__(315);
 
 var _helpersEach2 = _interopRequireDefault(_helpersEach);
 
-var _helpersHelperMissing = __webpack_require__(317);
+var _helpersHelperMissing = __webpack_require__(316);
 
 var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 
-var _helpersIf = __webpack_require__(318);
+var _helpersIf = __webpack_require__(317);
 
 var _helpersIf2 = _interopRequireDefault(_helpersIf);
 
-var _helpersLog = __webpack_require__(319);
+var _helpersLog = __webpack_require__(318);
 
 var _helpersLog2 = _interopRequireDefault(_helpersLog);
 
-var _helpersLookup = __webpack_require__(320);
+var _helpersLookup = __webpack_require__(319);
 
 var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 
-var _helpersWith = __webpack_require__(321);
+var _helpersWith = __webpack_require__(320);
 
 var _helpersWith2 = _interopRequireDefault(_helpersWith);
 
@@ -18536,7 +15837,7 @@ function registerDefaultHelpers(instance) {
 
 
 /***/ }),
-/* 315 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18582,7 +15883,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 316 */
+/* 315 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18683,7 +15984,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 317 */
+/* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18715,7 +16016,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 318 */
+/* 317 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18751,7 +16052,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 319 */
+/* 318 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18784,7 +16085,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 320 */
+/* 319 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18803,7 +16104,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 321 */
+/* 320 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18843,7 +16144,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 322 */
+/* 321 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18897,7 +16198,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 323 */
+/* 322 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18925,7 +16226,7 @@ module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(88)))
 
 /***/ }),
-/* 324 */
+/* 323 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19239,7 +16540,7 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
 
 
 /***/ }),
-/* 325 */
+/* 324 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19261,16 +16562,16 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 326 */
+/* 325 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
-module.exports = __webpack_require__(311)['default'];
+module.exports = __webpack_require__(310)['default'];
 
 
 /***/ }),
-/* 327 */
+/* 326 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -20013,7 +17314,7 @@ module.exports = __webpack_require__(311)['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(88)))
 
 /***/ }),
-/* 328 */
+/* 327 */
 /***/ (function(module, exports) {
 
 if(typeof window != 'undefined'){
@@ -20037,10 +17338,10 @@ if(typeof window != 'undefined'){
 
 
 /***/ }),
-/* 329 */
+/* 328 */
 /***/ (function(module, exports, __webpack_require__) {
 
-this["Mura"]=__webpack_require__(11);
+this["Mura"]=__webpack_require__(16);
 this["Mura"]["templates"] = this["Mura"]["templates"] || {};
 
 this["Mura"]["templates"]["checkbox"] = this.Mura.Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
@@ -20667,11 +17968,11 @@ this["Mura"]["templates"]["view"] = this.Mura.Handlebars.template({"1":function(
 },"useData":true});
 
 /***/ }),
-/* 330 */
+/* 329 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-Mura=__webpack_require__(11);
+Mura=__webpack_require__(16);
 
 __webpack_require__(124);
 __webpack_require__(125);
@@ -20680,13 +17981,11 @@ __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
 __webpack_require__(122);
-__webpack_require__(128);
-__webpack_require__(123);
 __webpack_require__(127);
+__webpack_require__(123);
+__webpack_require__(126);
 
 if(typeof window != 'undefined'){
-
-  window.Shadowbox=__webpack_require__(126);
 
   window.m=Mura;
   window.mura=Mura;
