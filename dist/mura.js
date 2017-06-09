@@ -7086,7 +7086,6 @@ Mura.Core=core;
 
 
 var Mura=__webpack_require__(16);
-root=this;
 
 Mura.DOMSelection = Mura.Core.extend(
   /** @lends Mura.DOMSelection.prototype */
@@ -8252,7 +8251,7 @@ Mura.DOMSelection = Mura.Core.extend(
           var el = this.selection[0];
           //var type=el.constructor.name.toLowerCase();
 
-          if (el === root) {
+          if (el === window) {
               return innerHeight
           } else if (el === document) {
               var body = document.body;
@@ -8291,7 +8290,7 @@ Mura.DOMSelection = Mura.Core.extend(
           var el = this.selection[0];
           //var type=el.constructor.name.toLowerCase();
 
-          if (el === root) {
+          if (el === window) {
               return innerWidth
           } else if (el === document) {
               var body = document.body;
