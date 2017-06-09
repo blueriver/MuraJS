@@ -1,5 +1,5 @@
 
-var Mura=require('core/core');
+var Mura=require('./core');
 
 Mura.DisplayObject.Form=Mura.UI.extend({
 context:{},

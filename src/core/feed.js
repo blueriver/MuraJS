@@ -1,5 +1,5 @@
 
-var Mura=require('core/core');
+var Mura=require('./core');
 
 /**
  * Creates a new Mura.Feed

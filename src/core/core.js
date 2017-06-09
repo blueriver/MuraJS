@@ -1,6 +1,6 @@
 
 require("babel-polyfill");
-require("core/polyfill");
+require("./polyfill");
 
 (function(root){
 /**

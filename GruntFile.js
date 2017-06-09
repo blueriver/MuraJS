@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                 {
                       from: 'this["Mura"] = this["Mura"] || {};',
                       to: function () {
-                        return 'this["Mura"]=require("core/core");';
+                        return 'this["Mura"]=require("./core");';
                       }
                 },
                 {

@@ -1,5 +1,5 @@
 
-var Mura=require('core/core');
+var Mura=require('./core');
 var Handlebars=require('handlebars/runtime');
 Mura.Handlebars=Handlebars.create();
 Mura.templatesLoaded=false;
@@ -30,4 +30,4 @@ Mura.templates['embed']=function(context){
   return context.source;
 }
 
-require('core/templates.handlebars');
+require('./templates.handlebars');
