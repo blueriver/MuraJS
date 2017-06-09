@@ -12,7 +12,7 @@ if (env === 'build') {
 }
 
 module.exports = {
-  entry: './src/mura.js',
+  entry: './src/index.js',
   devtool: 'source-map',
   output: {
     filename: outputFile,

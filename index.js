@@ -1,1 +1,1 @@
-module.exports = require('./src/mura');
+module.exports = require('./src/index');
