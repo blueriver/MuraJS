@@ -1,4 +1,4 @@
-if(typeof window != 'core/mura'){
+if(typeof window != 'undefined'){
 
   window.Element && function(ElementPrototype) {
     ElementPrototype.matchesSelector = ElementPrototype.matchesSelector ||

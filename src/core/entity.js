@@ -1,5 +1,5 @@
 
-var Mura=require('core/mura');
+var Mura=require('core/core');
 /**
 * Creates a new Mura.Entity
 * @class {class} Mura.Entity

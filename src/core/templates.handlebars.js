@@ -1,4 +1,4 @@
-this["Mura"]=require("core/mura");
+this["Mura"]=require("core/core");
 this["Mura"]["templates"] = this["Mura"]["templates"] || {};
 
 this["Mura"]["templates"]["checkbox"] = this.Mura.Handlebars.template({"1":function(container,depth0,helpers,partials,data) {

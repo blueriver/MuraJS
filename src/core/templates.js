@@ -1,6 +1,5 @@
 
-var Mura=require('core/mura');
-
+var Mura=require('core/core');
 var Handlebars=require('handlebars/runtime');
 Mura.Handlebars=Handlebars.create();
 Mura.templatesLoaded=false;

@@ -23,7 +23,7 @@
  * @version     SVN: $Id: shadowbox.js 75 2008-02-21 16:51:29Z mjijackson $
  */
 
- var Mura =require("core/mura");
+ var Mura =require("core/core");
 
  if(typeof Mura == 'undefined'){
      throw 'Unable to load Shadowbox, Mura library not found.';

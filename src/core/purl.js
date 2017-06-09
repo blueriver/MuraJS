@@ -5,7 +5,7 @@
  * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
  */
 
-var Mura=require("core/mura");
+var Mura=require("core/core");
 
 var tag2attr = {
         a       : 'href',

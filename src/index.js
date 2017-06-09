@@ -1,8 +1,8 @@
 
-Mura=require('core/mura');
+Mura=require('core/core');
 
 require('core/loader.js');
-require('core/core.js');
+require('core/object.js');
 require('core/cache.js');
 require('core/domselection.js');
 require('core/entity.js');

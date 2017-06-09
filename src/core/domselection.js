@@ -1,5 +1,5 @@
 
-var Mura=require('core/mura');
+var Mura=require('core/core');
 
 Mura.DOMSelection = Mura.Core.extend(
   /** @lends Mura.DOMSelection.prototype */
