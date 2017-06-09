@@ -2986,8 +2986,6 @@ __webpack_require__(130);
       var rendered = !rerender && !(obj.hasClass('mura-async-object') ||
           obj.data('render') == 'client' || obj.data('async'));
 
-      //alert(obj.data('object') + ":" + obj.hasClass('mura-async-object') + ":" + isScrolledIntoView(el))
-
       queue = (queue == null || rendered) ? false : queue;
 
       if (document.createEvent && queue && !isScrolledIntoView(el)) {
@@ -20691,18 +20689,6 @@ if(typeof window != 'undefined'){
       return !!nodes[i];
     }
   }(Element.prototype);
-
-  function ready(event) {
-    if (ready.interval && this.document.body) {
-      ready.interval = clearInterval(ready.interval);
-
-      document.dispatchEvent(new CustomEvent("DOMContentLoaded"));
-    }
-  }
-
-  ready.interval = setInterval(ready, 1);
-
-  window.addEventListener("load", ready);
 
 }
 

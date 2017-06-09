@@ -66,18 +66,6 @@ if(typeof window != 'undefined'){
     }
   }(Element.prototype);
 
-  function ready(event) {
-    if (ready.interval && this.document.body) {
-      ready.interval = clearInterval(ready.interval);
-
-      document.dispatchEvent(new CustomEvent("DOMContentLoaded"));
-    }
-  }
-
-  ready.interval = setInterval(ready, 1);
-
-  window.addEventListener("load", ready);
-
 }
 
 module.exports=Mura;

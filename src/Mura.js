@@ -2647,8 +2647,6 @@ require("babel-polyfill");
       var rendered = !rerender && !(obj.hasClass('mura-async-object') ||
           obj.data('render') == 'client' || obj.data('async'));
 
-      //alert(obj.data('object') + ":" + obj.hasClass('mura-async-object') + ":" + isScrolledIntoView(el))
-
       queue = (queue == null || rendered) ? false : queue;
 
       if (document.createEvent && queue && !isScrolledIntoView(el)) {
