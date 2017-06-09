@@ -2176,7 +2176,7 @@ __webpack_require__(130);
   }
 
   function isScrolledIntoView(el) {
-      if (!root || root.innerHeight) {
+      if (!window || window.innerHeight) {
           true;
       }
 
@@ -2187,7 +2187,7 @@ __webpack_require__(130);
           return true;
       }
 
-      var isVisible = elemTop < root.innerHeight && elemBottom >= 0;
+      var isVisible = elemTop < window.innerHeight && elemBottom >= 0;
       return isVisible;
 
   }
@@ -2207,6 +2207,7 @@ __webpack_require__(130);
       '<div class="frontEndToolsModal mura"><span class="mura-edit-icon"></span></div>';
 
   function processMarkup(scope) {
+
       return new Promise(function(resolve, reject) {
           if (!(scope instanceof root.Mura.DOMSelection)) {
               scope = select(scope);
@@ -2984,6 +2985,8 @@ __webpack_require__(130);
       var self = el;
       var rendered = !rerender && !(obj.hasClass('mura-async-object') ||
           obj.data('render') == 'client' || obj.data('async'));
+
+      //alert(obj.data('object') + ":" + obj.hasClass('mura-async-object') + ":" + isScrolledIntoView(el))
 
       queue = (queue == null || rendered) ? false : queue;
 
@@ -20625,12 +20628,6 @@ module.exports = exports['default'];
 
 Mura=__webpack_require__(16);
 
-/*
-mura = Mura
-m = Mura;
-Mura.displayObject = Mura.DisplayObject;
-validateForm = Mura.validateForm;
-*/
 __webpack_require__(126);
 __webpack_require__(120);
 __webpack_require__(119);
@@ -20640,9 +20637,6 @@ __webpack_require__(123);
 __webpack_require__(124);
 __webpack_require__(129);
 __webpack_require__(125);
-
-//require('shadowbox');
-//require('templates');
 
 var Handlebars=__webpack_require__(118);
 Mura.Handlebars=Handlebars.create();

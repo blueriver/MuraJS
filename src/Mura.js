@@ -1837,7 +1837,7 @@ require("babel-polyfill");
   }
 
   function isScrolledIntoView(el) {
-      if (!root || root.innerHeight) {
+      if (!window || window.innerHeight) {
           true;
       }
 
@@ -1848,7 +1848,7 @@ require("babel-polyfill");
           return true;
       }
 
-      var isVisible = elemTop < root.innerHeight && elemBottom >= 0;
+      var isVisible = elemTop < window.innerHeight && elemBottom >= 0;
       return isVisible;
 
   }
@@ -1868,6 +1868,7 @@ require("babel-polyfill");
       '<div class="frontEndToolsModal mura"><span class="mura-edit-icon"></span></div>';
 
   function processMarkup(scope) {
+
       return new Promise(function(resolve, reject) {
           if (!(scope instanceof root.Mura.DOMSelection)) {
               scope = select(scope);
@@ -2645,6 +2646,8 @@ require("babel-polyfill");
       var self = el;
       var rendered = !rerender && !(obj.hasClass('mura-async-object') ||
           obj.data('render') == 'client' || obj.data('async'));
+
+      //alert(obj.data('object') + ":" + obj.hasClass('mura-async-object') + ":" + isScrolledIntoView(el))
 
       queue = (queue == null || rendered) ? false : queue;
 
