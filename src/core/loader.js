@@ -1,6 +1,6 @@
 
 
-var Mura=require('Mura');
+var Mura=require('core/mura');
 
 //https://github.com/malko/l.js
 /*

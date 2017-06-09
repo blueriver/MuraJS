@@ -1,5 +1,5 @@
 
-var Mura=require('Mura');
+var Mura=require('core/mura');
 
 function core(){
 	this.init.apply(this,arguments);
