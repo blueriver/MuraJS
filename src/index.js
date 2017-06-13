@@ -2,9 +2,13 @@
 Mura=require('./core/core');
 
 require('./core/object.js');
+require('./core/request.js');
+require('./core/RequestContext.js');
 require('./core/cache.js');
 require('./core/entity.js');
 require('./core/feed.js');
+
+Mura._requestcontext=new Mura.RequestContext();
 
 if(!Mura.isInNode()){
   require('./core/loader.js');

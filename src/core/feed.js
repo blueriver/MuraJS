@@ -287,11 +287,9 @@ Mura.Feed = Mura.Core.extend(
 		sort: function(property, direction) {
 			direction = direction || 'asc';
 			if (direction == 'desc') {
-				this.queryString += '&sort' + encodeURIComponent('[' + this.propIndex + ']') + '=' +
-					encodeURIComponent('-' + property);
+				this.queryString += '&sort' + encodeURIComponent('[' + this.propIndex + ']') + '=' + encodeURIComponent('-' + property);
 			} else {
-				this.queryString += '&sort' +encodeURIComponent('[' + this.propIndex + ']') + '=' +
-					encodeURIComponent(property);
+				this.queryString += '&sort' +encodeURIComponent('[' + this.propIndex + ']') + '=' + encodeURIComponent(property);
 			}
 			this.propIndex++;
 			return this;
@@ -347,8 +345,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}              Self
 		 */
 		showExcludeSearch: function(showExcludeSearch) {
-			this.queryString += '&showExcludeSearch=' + encodeURIComponent(
-				showExcludeSearch);
+			this.queryString += '&showExcludeSearch=' + encodeURIComponent(showExcludeSearch);
 			return this;
 		},
 
@@ -359,8 +356,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}              Self
 		 */
 		includeHomepage: function(includeHomepage) {
-			this.queryString += '&includehomepage=' + encodeURIComponent(
-				includeHomepage);
+			this.queryString += '&includehomepage=' + encodeURIComponent(includeHomepage);
 			return this;
 		},
 
@@ -371,8 +367,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}              Self
 		 */
 		innerJoin: function(relatedEntity) {
-			this.queryString += '&innerJoin' + encodeURIComponent('[' + this.propIndex + ']') + '=' +
-				encodeURIComponent(relatedEntity);
+			this.queryString += '&innerJoin' + encodeURIComponent('[' + this.propIndex + ']') + '=' +	encodeURIComponent(relatedEntity);
 			this.propIndex++;
 			return this;
 		},
@@ -384,8 +379,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}              Self
 		 */
 		leftJoin: function(relatedEntity) {
-			this.queryString += '&leftJoin' + encodeURIComponent('[' + this.propIndex + ']') + '=' +
-				encodeURIComponent(relatedEntity);
+			this.queryString += '&leftJoin' + encodeURIComponent('[' + this.propIndex + ']') + '=' + encodeURIComponent(relatedEntity);
 			this.propIndex++;
 			return this;
 		},
@@ -403,13 +397,13 @@ Mura.Feed = Mura.Core.extend(
 				} else {
 					var apiEndpoint = Mura.apiEndpoint + '/';
 				}
-				Mura.ajax({
+				self.RequestContext.request({
 					type: 'get',
 					url: apiEndpoint + self.queryString,
 					success: function(resp) {
 
 						var returnObj = new Mura.EntityCollection(resp.data);
-
+								returnObj.RequestContext=this.RequestContext;
 						if (typeof resolve == 'function') {
 							resolve(returnObj);
 						}

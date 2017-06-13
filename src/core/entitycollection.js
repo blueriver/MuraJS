@@ -132,12 +132,13 @@ Mura.EntityCollection=Mura.Entity.extend(
           }
 
 		var collection=new Mura.EntityCollection(newProps);
+        collection.RequestContext=this.RequestContext;
 		return collection.set('items',this.properties.items.filter( function(item,idx){
 			return fn.call(item,item,idx);
 		}));
 	},
 
-      /**
+   /**
 	 * map - Returns new Array returned from map function
 	 *
 	 * @param  {function} fn Filter function
@@ -149,20 +150,21 @@ Mura.EntityCollection=Mura.Entity.extend(
 		});
 	},
 
-      /**
+   /**
 	 * reduce - Returns value from  reduce function
 	 *
 	 * @param  {function} fn Reduce function
-       * @param  {any} initialValue Starting accumulator value
+   * @param  {any} initialValue Starting accumulator value
 	 * @return {accumulator}
 	 */
 	reduce:function(fn,initialValue){
-          initialValue=initialValue||0;
-		return this.properties.items.reduce(
-              function(accumulator,item,idx,array){
-  				return fn.call(item,accumulator,item,idx,array);
-  			},
-              initialValue
-          );
+     initialValue=initialValue||0;
+
+     return this.properties.items.reduce(
+            function(accumulator,item,idx,array){
+    				return fn.call(item,accumulator,item,idx,array);
+    			},
+          initialValue
+      );
 	}
 });

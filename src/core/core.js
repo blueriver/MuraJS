@@ -18,40 +18,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function login(username, password, siteid) {
-      siteid = siteid || Mura.siteid;
-
-      return new Promise(function(resolve, reject) {
-
-          Mura.ajax({
-              type: 'post',
-              url: Mura.apiEndpoint +
-                  '?method=generateCSRFTokens',
-              data: {
-                  siteid: siteid,
-                  context: 'login'
-              },
-              success: function(resp) {
-                  Mura.ajax({
-                      async: true,
-                      type: 'post',
-                      url: Mura.apiEndpoint,
-                      data: {
-                          siteid: siteid,
-                          username: username,
-                          password: password,
-                          method: 'login',
-                          'csrf_token': resp.data.csrf_token,
-                          'csrf_token_expires': resp.data.csrf_token_expires
-                      },
-                      success: function(resp) {
-                          resolve(resp.data);
-                      }
-                  });
-              }
-          });
-
-      });
-
+      return Mura._requestcontext.login(username, password, siteid);
   }
 
 
@@ -63,23 +30,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function logout(siteid) {
-      siteid = siteid || Mura.siteid;
-
-      return new Promise(function(resolve, reject) {
-          Mura.ajax({
-              async: true,
-              type: 'post',
-              url: Mura.apiEndpoint,
-              data: {
-                  siteid: siteid,
-                  method: 'logout'
-              },
-              success: function(resp) {
-                  resolve(resp.data);
-              }
-          });
-      });
-
+      return Mura._requestcontext.logout(siteid);
   }
 
   function escapeHTML(str) {
@@ -233,38 +184,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function renderFilename(filename, params) {
-
-      var query = [];
-      params = params || {};
-      params.filename = params.filename || '';
-      params.siteid = params.siteid || Mura.siteid;
-
-      for (var key in params) {
-          if (key != 'entityname' && key != 'filename' && key !=
-              'siteid' && key != 'method') {
-              query.push(encodeURIComponent(key) + '=' +
-                  encodeURIComponent(params[key]));
-          }
-      }
-
-      return new Promise(function(resolve, reject) {
-          Mura.ajax({
-              async: true,
-              type: 'get',
-              url: Mura.apiEndpoint +
-                  '/content/_path/' + filename + '?' +
-                  query.join('&'),
-              success: function(resp) {
-                  if (typeof resolve ==
-                      'function') {
-                      var item = new Mura.Entity();
-                      item.set(resp.data);
-                      resolve(item);
-                  }
-              }
-          });
-      });
-
+    return Mura._requestcontext.renderFilename(filename, params);
   }
 
   /**
@@ -276,23 +196,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function getEntity(entityname, siteid) {
-      if (typeof entityname == 'string') {
-          var properties = {
-              entityname: entityname
-          };
-          properties.siteid = siteid || Mura.siteid;
-      } else {
-          properties = entityname;
-          properties.entityname = properties.entityname || 'content';
-          properties.siteid = properties.siteid || Mura.siteid;
-      }
-
-      if (Mura.entities[properties.entityname]) {
-          return new Mura.entities[properties.entityname](
-              properties);
-      } else {
-          return new Mura.Entity(properties);
-      }
+      return Mura._requestcontext.getEntity(entityname, siteid);
   }
 
   /**
@@ -303,7 +207,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function getFeed(entityname) {
-      return new Mura.Feed(Mura.siteid, entityname);
+    return Mura._requestcontext.getFeed(Mura.siteid, entityname);
   }
 
   /**
@@ -314,42 +218,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function getCurrentUser(params) {
-      params=params || {};
-      params.fields=params.fields || '';
-      return new Promise(function(resolve, reject) {
-
-          if (Mura.currentUser) {
-              return Mura.currentUser;
-          } else {
-              Mura.ajax({
-                  async: true,
-                  type: 'get',
-                  url: Mura.apiEndpoint +
-                      'findCurrentUser?fields=' + params.fields + '&_cacheid=' +
-                      Math.random(),
-                  success: function(resp) {
-                      if (typeof resolve ==
-                          'function') {
-                          Mura.currentUser =
-                              new Mura.Entity();
-                          Mura.currentUser.set(
-                              resp.data);
-                          resolve(Mura.currentUser);
-                      }
-                  },
-                  success: function(resp) {
-                      if (typeof resolve ==
-                          'function') {
-                          Mura.currentUser =
-                              new Mura.Entity();
-                          Mura.currentUser.set(
-                              resp.data);
-                          resolve(Mura.currentUser);
-                      }
-                  }
-              });
-          }
-      });
+      return Mura._requestcontext.getCurrentUser(params);
   }
 
   /**
@@ -360,31 +229,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function findQuery(params) {
-
-      params = params || {};
-      params.entityname = params.entityname || 'content';
-      params.siteid = params.siteid || Mura.siteid;
-      params.method = params.method || 'findQuery';
-      params['_cacheid'] == Math.random();
-
-      return new Promise(function(resolve, reject) {
-
-          Mura.ajax({
-              type: 'get',
-              url: Mura.apiEndpoint,
-              data: params,
-              success: function(resp) {
-                  var collection = new Mura.EntityCollection(resp.data)
-
-                  if (typeof resolve == 'function') {
-                      resolve(collection);
-                  }
-              },
-              error:function(resp){
-                console.log(resp);
-              }
-          });
-      });
+      return Mura._requestcontext.findQuery(params);
   }
 
   function evalScripts(el) {
@@ -552,21 +397,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function get(url, data) {
-      data = data || {};
-      return new Promise(function(resolve, reject) {
-          return ajax({
-              type: 'get',
-              url: url,
-              data: data,
-              success: function(resp) {
-                  resolve(resp);
-              },
-              error: function(resp) {
-                  reject(resp);
-              }
-          });
-      });
-
+      return Mura._requestcontext.get(url, data);
   }
 
   /**
@@ -578,59 +409,7 @@ module.exports=(function(){
    * @memberof Mura
    */
   function post(url, data) {
-      data = data || {};
-      return new Promise(function(resolve, reject) {
-          return ajax({
-              type: 'post',
-              url: url,
-              data: data,
-              success: function(resp) {
-                  resolve(resp);
-              },
-              error: function(resp) {
-                  reject(resp);
-              }
-          });
-      });
-
-  }
-
-  function isXDomainRequest(url) {
-      function getHostName(url) {
-          var match = url.match(/:\/\/([0-9]?\.)?(.[^/:]+)/i);
-          if (match != null && match.length > 2 && typeof match[2] ===
-              'string' && match[2].length > 0) {
-              return match[2];
-          } else {
-              return null;
-          }
-      }
-
-
-      function getDomain(url) {
-          var hostName = getHostName(url);
-          var domain = hostName;
-
-          if (hostName != null) {
-              var parts = hostName.split('.').reverse();
-
-              if (parts != null && parts.length > 1) {
-                  domain = parts[1] + '.' + parts[0];
-
-                  if (hostName.toLowerCase().indexOf('.co.uk') != -1 &&
-                      parts.length > 2) {
-                      domain = parts[2] + '.' + domain;
-                  }
-              }
-          }
-
-          return domain;
-      }
-
-      var requestDomain = getDomain(url);
-
-      return (requestDomain && requestDomain != location.host);
-
+      return Mura._requestcontext.post(url, data);
   }
 
   /**
@@ -641,247 +420,29 @@ module.exports=(function(){
    * @memberof Mura
    */
   function ajax(params) {
+    return Mura._requestcontext.request(params);
+  }
 
-    if (!('type' in params)) {
-        params.type = 'GET';
-    }
+  /**
+   * getRequestContext - Returns a new Mura.RequestContext;
+   *
+   * @param  {object} request     Siteid
+   * @param  {object} response Entity name
+   * @return {Mura.RequestContext}   Mura.RequestContext
+   * @memberof Mura
+   */
+  function getRequestContext(request,response) {
+    return new Mura.RequestContext(request,response);
+  }
 
-    if (!('success' in params)) {
-        params.success = function() {};
-    }
-
-    if (!('error' in params)) {
-        params.error = function() {};
-    }
-
-    if (!('data' in params)) {
-        params.data = {};
-    }
-
-    if (!('headers' in params)) {
-        params.headers = {};
-    }
-
-    if(isInNode()){
-      nodeRequest(params);
-    } else {
-      browserRequest(params);
-    }
-
-    function browserRequest(params){
-      if (!(typeof FormData != 'undefined' && params.data instanceof FormData)) {
-          params.data = Mura.deepExtend({}, params.data);
-
-          for (var p in params.data) {
-              if (typeof params.data[p] == 'object') {
-                  params.data[p] = JSON.stringify(params.data[p]);
-              }
-          }
-      }
-
-      if (!('xhrFields' in params)) {
-          params.xhrFields = {
-              withCredentials: true
-          };
-      }
-
-      if (!('crossDomain' in params)) {
-          params.crossDomain = true;
-      }
-
-      if (!('async' in params)) {
-          params.async = true;
-      }
-
-      var request = new XMLHttpRequest();
-
-      if (params.crossDomain) {
-          if (!("withCredentials" in request) && typeof XDomainRequest !=
-              "undefined" && isXDomainRequest(params.url)) {
-              // Check if the XMLHttpRequest object has a "withCredentials" property.
-              // "withCredentials" only exists on XMLHTTPRequest2 objects.
-              // Otherwise, check if XDomainRequest.
-              // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-
-              request = new XDomainRequest();
-
-          }
-      }
-
-      request.onreadystatechange = function() {
-          if (request.readyState == 4) {
-              //IE9 doesn't appear to return the request status
-              if (typeof request.status == 'undefined' || (
-                      request.status >= 200 && request.status <
-                      400)) {
-
-                  try {
-                      var data = JSON.parse(request.responseText);
-                  } catch (e) {
-                      var data = request.responseText;
-                  }
-
-                  params.success(data, request);
-              } else {
-                  params.error(request);
-              }
-          }
-      }
-
-      if (params.type.toLowerCase() == 'post') {
-          request.open(params.type.toUpperCase(), params.url, params.async);
-
-          for (var p in params.xhrFields) {
-              if (p in request) {
-                  request[p] = params.xhrFields[p];
-              }
-          }
-
-          for (var h in params.headers) {
-              request.setRequestHeader(p, params.headers[h]);
-          }
-
-          //if(params.data.constructor.name == 'FormData'){
-          if (typeof FormData != 'undefined' && params.data instanceof FormData) {
-              request.send(params.data);
-          } else {
-              request.setRequestHeader('Content-Type',
-                  'application/x-www-form-urlencoded; charset=UTF-8'
-              );
-              var query = [];
-
-              for (var key in params.data) {
-                  query.push($escape(key) + '=' + $escape(params.data[
-                      key]));
-              }
-
-              query = query.join('&');
-
-              setTimeout(function() {
-                  request.send(query);
-              }, 0);
-          }
-      } else {
-          if (params.url.indexOf('?') == -1) {
-              params.url += '?';
-          }
-
-          var query = [];
-
-          for (var key in params.data) {
-              query.push($escape(key) + '=' + $escape(params.data[key]));
-          }
-
-          query = query.join('&');
-
-          request.open(params.type.toUpperCase(), params.url + '&' +
-              query, params.async);
-
-          for (var p in params.xhrFields) {
-              if (p in request) {
-                  request[p] = params.xhrFields[p];
-              }
-          }
-
-          for (var h in params.headers) {
-              request.setRequestHeader(p, params.headers[h]);
-          }
-
-          setTimeout(function() {
-              request.send();
-          }, 0);
-      }
-    }
-
-    function nodeRequest(params){
-
-      function responseHandler(error, httpResponse, body) {
-        /*
-        if(typeof res.headers['set-cookie'] != 'undefined'){
-          var tough = require('tough-cookie');
-          var Cookie = tough.Cookie;
-
-          if (httpResponse.headers['set-cookie'] instanceof Array){
-            req.headers['cookies'] = httpResponse.headers['set-cookie'].map(Cookie.parse);
-          } else {
-              req.headers['cookies'] = [Cookie.parse(httpResponse.headers['set-cookie'])];
-          }
-
-          req.headers['set-cookie']=httpResponse.headers['set-cookie'];
-
-        }*/
-
-        if (typeof error == 'undefined' || ( httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
-
-            try {
-                var data = JSON.parse(body);
-            } catch (e) {
-                var data = body;
-            }
-
-            params.success(data, httpResponse);
-
-        } else if (typeof error == 'undefined') {
-
-            try {
-                var data = JSON.parse(body);
-            } catch (e) {
-                var data = body;
-            }
-
-            params.error(data,httpResponse);
-
-        } else {
-
-            params.error(error);
-
-        }
-
-      }
-
-      /*
-      if(typeof req.headers['cookies'] != 'undefined'){
-        params.headers['cookies']=req.headers['cookies'];
-      }
-      */
-
-      if (params.type.toLowerCase() == 'post') {
-
-          params.headers['Content-Type']='application/x-www-form-urlencoded; charset=UTF-8';
-
-          Mura.request.post(
-            {
-              uri: params.url,
-              formData: params.data,
-              headers: params.headers
-            },
-            responseHandler
-          );
-
-      } else {
-          if (params.url.indexOf('?') == -1) {
-              params.url += '?';
-          }
-
-          var query = [];
-
-          for (var key in params.data) {
-              query.push($escape(key) + '=' + $escape(params.data[key]));
-          }
-
-          query = query.join('&');
-
-
-          Mura.request(
-            {
-              url: params.url
-            },
-            responseHandler
-          );
-
-      }
-    }
-
+  /**
+   * getDefaultRequestContext - Returns the default Mura.RequestContext;
+   *
+   * @return {Mura.RequestContext}   Mura.RequestContext
+   * @memberof Mura
+   */
+  function getDefaultRequestContext() {
+    return  Mura._requestcontext;
   }
 
   /**
@@ -3113,7 +2674,7 @@ module.exports=(function(){
   }
 
   function isInNode(){
-    return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
+    return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]' || typeof document =='undefined';
   }
 
   function init(config) {
@@ -3295,7 +2856,9 @@ module.exports=(function(){
               holdReady: holdReady,
               trackEvent: trackEvent,
               recordEvent: trackEvent,
-              isInNode: isInNode
+              isInNode: isInNode,
+              getRequestContext: getRequestContext,
+              getDefaultRequestContext: getDefaultRequestContext
           }
       );
 
