@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 328);
+/******/ 	return __webpack_require__(__webpack_require__.s = 329);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -376,9 +376,9 @@ module.exports = Object.getPrototypeOf || function(O){
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-
+/* WEBPACK VAR INJECTION */(function(process) {
 __webpack_require__(127);
-__webpack_require__(326);
+__webpack_require__(327);
 
 (function(root){
 /**
@@ -629,7 +629,7 @@ __webpack_require__(326);
           root.Mura.ajax({
               async: true,
               type: 'get',
-              url: root.Mura.apiEndpoint + params.siteid +
+              url: root.Mura.apiEndpoint +
                   '/content/_path/' + filename + '?' +
                   query.join('&'),
               success: function(resp) {
@@ -695,6 +695,7 @@ __webpack_require__(326);
       params=params || {};
       params.fields=params.fields || '';
       return new Promise(function(resolve, reject) {
+
           if (root.Mura.currentUser) {
               return root.Mura.currentUser;
           } else {
@@ -702,8 +703,18 @@ __webpack_require__(326);
                   async: true,
                   type: 'get',
                   url: root.Mura.apiEndpoint +
-                      '/findCurrentUser?fields=' + params.fields + '&_cacheid=' +
+                      'findCurrentUser?fields=' + params.fields + '&_cacheid=' +
                       Math.random(),
+                  success: function(resp) {
+                      if (typeof resolve ==
+                          'function') {
+                          root.Mura.currentUser =
+                              new root.Mura.Entity();
+                          root.Mura.currentUser.set(
+                              resp.data);
+                          resolve(root.Mura.currentUser);
+                      }
+                  },
                   success: function(resp) {
                       if (typeof resolve ==
                           'function') {
@@ -894,15 +905,19 @@ __webpack_require__(326);
 
 
   function readyInternal(fn) {
-      if (document.readyState != 'loading') {
-          //IE set the readyState to interative too early
-          setTimeout(function() {
-              fn(root.Mura);
-          }, 1);
+      if(typeof document != 'undefined'){
+        if (document.readyState != 'loading') {
+            //IE set the readyState to interative too early
+            setTimeout(function() {
+                fn(root.Mura);
+            }, 1);
+        } else {
+            document.addEventListener('DOMContentLoaded', function() {
+                fn(root.Mura);
+            });
+        }
       } else {
-          document.addEventListener('DOMContentLoaded', function() {
-              fn(root.Mura);
-          });
+        fn(root.Mura);
       }
   }
 
@@ -1005,24 +1020,33 @@ __webpack_require__(326);
    */
   function ajax(params) {
 
-      //params=params || {};
+    if (!('type' in params)) {
+        params.type = 'GET';
+    }
 
-      if (!('type' in params)) {
-          params.type = 'GET';
-      }
+    if (!('success' in params)) {
+        params.success = function() {};
+    }
 
-      if (!('success' in params)) {
-          params.success = function() {};
-      }
+    if (!('error' in params)) {
+        params.error = function() {};
+    }
 
-      if (!('error' in params)) {
-          params.error = function() {};
-      }
+    if (!('data' in params)) {
+        params.data = {};
+    }
 
-      if (!('data' in params)) {
-          params.data = {};
-      }
+    if (!('headers' in params)) {
+        params.headers = {};
+    }
 
+    if(isInNode()){
+      nodeRequest(params);
+    } else {
+      browserRequest(params);
+    }
+
+    function browserRequest(params){
       if (!(typeof FormData != 'undefined' && params.data instanceof FormData)) {
           params.data = Mura.deepExtend({}, params.data);
 
@@ -1045,10 +1069,6 @@ __webpack_require__(326);
 
       if (!('async' in params)) {
           params.async = true;
-      }
-
-      if (!('headers' in params)) {
-          params.headers = {};
       }
 
       var request = new XMLHttpRequest();
@@ -1149,6 +1169,66 @@ __webpack_require__(326);
               request.send();
           }, 0);
       }
+    }
+
+    function nodeRequest(params,responseHandler){
+      console.log(params);
+      function responseHandler(error, httpResponse, body) {
+        if (typeof error == 'undefined' || ( httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
+
+            try {
+                var data = JSON.parse(body);
+            } catch (e) {
+                var data = body;
+            }
+            params.success(data, httpResponse);
+        } else {
+
+            try {
+                var data = JSON.parse(body);
+            } catch (e) {
+                var data = body;
+            }
+            params.error(data,httpResponse);
+        }
+      }
+
+      if (params.type.toLowerCase() == 'post') {
+
+          params.headers['Content-Type']='application/x-www-form-urlencoded; charset=UTF-8';
+
+          Mura.request.post(
+            {
+              uri: params.url,
+              formData: params.data,
+              headers: params.headers
+            },
+            responseHandler
+          );
+
+      } else {
+          if (params.url.indexOf('?') == -1) {
+              params.url += '?';
+          }
+
+          var query = [];
+
+          for (var key in params.data) {
+              query.push($escape(key) + '=' + $escape(params.data[key]));
+          }
+
+          query = query.join('&');
+
+
+          root.Mura.request(
+            {
+              url: params.url
+            },
+            responseHandler
+          );
+
+      }
+    }
 
   }
 
@@ -1206,55 +1286,54 @@ __webpack_require__(326);
   }
 
   function trigger(el, eventName, eventDetail) {
+      if(typeof document != 'undefined'){
+        var bubbles = eventName == "change" ? false : true;
 
-      var bubbles = eventName == "change" ? false : true;
+        if (document.createEvent) {
 
-      if (document.createEvent) {
+            if(eventDetail && !isEmptyObject(eventDetail)){
+                var event = document.createEvent('CustomEvent');
+                event.initCustomEvent(eventName, bubbles, true,eventDetail);
+            } else {
 
-          if(eventDetail && !isEmptyObject(eventDetail)){
-              var event = document.createEvent('CustomEvent');
-              event.initCustomEvent(eventName, bubbles, true,eventDetail);
-          } else {
+                var eventClass = "";
 
-              var eventClass = "";
+                switch (eventName) {
+                    case "click":
+                    case "mousedown":
+                    case "mouseup":
+                        eventClass = "MouseEvents";
+                        break;
 
-              switch (eventName) {
-                  case "click":
-                  case "mousedown":
-                  case "mouseup":
-                      eventClass = "MouseEvents";
-                      break;
+                    case "focus":
+                    case "change":
+                    case "blur":
+                    case "select":
+                        eventClass = "HTMLEvents";
+                        break;
 
-                  case "focus":
-                  case "change":
-                  case "blur":
-                  case "select":
-                      eventClass = "HTMLEvents";
-                      break;
+                    default:
+                        eventClass = "Event";
+                        break;
+                }
 
-                  default:
-                      eventClass = "Event";
-                      break;
-              }
+                var event = document.createEvent(eventClass);
+                event.initEvent(eventName, bubbles, true);
+            }
 
-              var event = document.createEvent(eventClass);
-              event.initEvent(eventName, bubbles, true);
-          }
+            event.synthetic = true;
+            el.dispatchEvent(event);
 
-          event.synthetic = true;
-          el.dispatchEvent(event);
-
-      } else {
-          try {
-              document.fireEvent("on" + eventName);
-          } catch (e) {
-              console.warn(
-                  "Event failed to fire due to legacy browser: on" +
-                  eventName);
-          }
-      }
-
-
+        } else {
+            try {
+                document.fireEvent("on" + eventName);
+            } catch (e) {
+                console.warn(
+                    "Event failed to fire due to legacy browser: on" +
+                    eventName);
+            }
+        }
+    }
   };
 
   function off(el, eventName, fn) {
@@ -1268,8 +1347,8 @@ __webpack_require__(326);
           var selection = nodeListToArray(document.querySelectorAll(
               selector));
       } else {
-          if ((typeof StaticNodeList != 'undefined' && selector instanceof StaticNodeList) ||
-              selector instanceof NodeList || selector instanceof HTMLCollection
+          if ( (typeof StaticNodeList != 'undefined' && selector instanceof StaticNodeList) ||
+              (typeof NodeList != 'undefined' && selector instanceof NodeList) || (typeof HTMLCollection != 'undefined' &&  selector instanceof HTMLCollection)
           ) {
               var selection = nodeListToArray(selector);
           } else {
@@ -3186,7 +3265,11 @@ __webpack_require__(326);
 
   function handleHashChange() {
 
-      var hash = location.hash;
+      if(typeof location != 'undefined'){
+        var hash = location.hash;
+      } else {
+        var hash = '';
+      }
 
       if (hash) {
           hash = hash.substring(1);
@@ -3303,6 +3386,11 @@ __webpack_require__(326);
    * @memberof Mura
    */
   function getQueryStringParams(queryString) {
+
+      if(typeof location == 'undefined'){
+        return {};
+      }
+
       queryString = queryString || location.search;
       var params = {};
       var e,
@@ -3378,6 +3466,10 @@ __webpack_require__(326);
       return (hash >>> 0);
   }
 
+  function isInNode(){
+    return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
+  }
+
   function init(config) {
 
       if (config.rootpath) {
@@ -3397,8 +3489,7 @@ __webpack_require__(326);
       }
 
       if (!config.apiEndpoint) {
-          config.apiEndpoint = config.context +
-              '/index.cfm/_api/json/v1/' + config.siteid + '/';
+          config.apiEndpoint = config.context +  '/index.cfm/_api/json/v1/' + config.siteid + '/';
       }
 
       if (!config.pluginspath) {
@@ -3429,8 +3520,7 @@ __webpack_require__(326);
           config.queueObjects = true;
       }
 
-      if (typeof config.rootdocumentdomain != 'undefined' && config.rootdocumentdomain !=
-          '') {
+      if (typeof config.rootdocumentdomain != 'undefined' && config.rootdocumentdomain != '') {
           document.domain = config.rootdocumentdomain;
       }
 
@@ -3440,131 +3530,46 @@ __webpack_require__(326);
 
       Mura(function() {
 
-          var hash = location.hash;
+          if(!isInNode()){
 
-          if (hash) {
-              hash = hash.substring(1);
+            var hash = location.hash;
+
+            if (hash) {
+                hash = hash.substring(1);
+            }
+
+            urlparams = setLowerCaseKeys(getQueryStringParams(location.search));
+
+            if (hashparams.nextnid) {
+                Mura('.mura-async-object[data-nextnid="' +
+                    hashparams.nextnid + '"]').each(
+                    function() {
+                        Mura(this).data(hashparams);
+                    });
+            } else if (hashparams.objectid) {
+                Mura('.mura-async-object[data-nextnid="' +
+                    hashparams.objectid + '"]').each(
+                    function() {
+                        Mura(this).data(hashparams);
+                    });
+            }
+
+            Mura(root).on('hashchange', handleHashChange);
+
+            processMarkup(document);
+
+            Mura(document)
+                .on("keydown", function(event) {
+                    loginCheck(event.which);
+                });
+
+            Mura(document).trigger('muraReady');
           }
-
-          hashparams = setLowerCaseKeys(getQueryStringParams(
-              hash));
-          urlparams = setLowerCaseKeys(getQueryStringParams(
-              location.search));
-
-          if (hashparams.nextnid) {
-              Mura('.mura-async-object[data-nextnid="' +
-                  hashparams.nextnid + '"]').each(
-                  function() {
-                      Mura(this).data(hashparams);
-                  });
-          } else if (hashparams.objectid) {
-              Mura('.mura-async-object[data-nextnid="' +
-                  hashparams.objectid + '"]').each(
-                  function() {
-                      Mura(this).data(hashparams);
-                  });
-          }
-
-          Mura(root).on('hashchange', handleHashChange);
-
-          processMarkup(document);
-
-          Mura(document)
-              .on("keydown", function(event) {
-                  loginCheck(event.which);
-              });
-
-          /*
-          Mura.addEventHandler(
-          	{
-          		asyncObjectRendered:function(event){
-          			alert(this.innerHTML);
-          		}
-          	}
-          );
-
-          Mura('#my-id').addDisplayObject('objectname',{..});
-
-          Mura.login('userame','password')
-          	.then(function(data){
-          		alert(data.success);
-          	});
-
-          Mura.logout())
-          	.then(function(data){
-          		alert('you have logged out!');
-          	});
-
-          Mura.renderFilename('')
-          	.then(function(item){
-          		alert(item.get('title'));
-          	});
-
-          Mura.getEntity('content').loadBy('contentid','00000000000000000000000000000000001')
-          	.then(function(item){
-          		alert(item.get('title'));
-          	});
-
-          Mura.getEntity('content').loadBy('contentid','00000000000000000000000000000000001')
-          	.then(function(item){
-          		item.get('kids').then(function(kids){
-          			alert(kids.get('items').length);
-          		});
-          	});
-
-          Mura.getEntity('content').loadBy('contentid','1C2AD93E-E39C-C758-A005942E1399F4D6')
-          	.then(function(item){
-          		item.get('parent').then(function(parent){
-          			alert(parent.get('title'));
-          		});
-          	});
-
-          Mura.getEntity('content').
-          	.set('parentid''1C2AD93E-E39C-C758-A005942E1399F4D6')
-          	.set('approved',1)
-          	.set('title','test 5')
-          	.save()
-          	.then(function(item){
-          		alert(item.get('title'));
-          	});
-
-          Mura.getEntity('content').
-          	.set(
-          		{
-          			parentid:'1C2AD93E-E39C-C758-A005942E1399F4D6',
-          			approved:1,
-          			title:'test 5'
-          		}
-          	.save()
-          	.then(
-          		function(item){
-          			alert(item.get('title'));
-          		});
-
-          Mura.findQuery({
-          		entityname:'content',
-          		title:'Home'
-          	})
-          	.then(function(collection){
-          		alert(collection.item(0).get('title'));
-          	});
-          */
-
-          Mura(document).trigger('muraReady');
 
       });
 
       readyInternal(initReadyQueue);
-      /*
-      if(typeof window != 'undefined'){
-        window.mura = root.Mura
-        window.m = root.Mura;
-        //window.validateForm = root.Mura.validateForm;
-      }
 
-      root.Mura.displayObject = root.Mura.DisplayObject;
-
-      */
       return root.Mura
   }
 
@@ -3644,7 +3649,8 @@ __webpack_require__(326);
               displayObjectInstances: {},
               holdReady: holdReady,
               trackEvent: trackEvent,
-              recordEvent: trackEvent
+              recordEvent: trackEvent,
+              isInNode: isInNode
           }
       ),
       //these are here for legacy support
@@ -3666,6 +3672,7 @@ module.exports=this.Mura;
  * @namespace  Mura
  */
 
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(325)))
 
 /***/ }),
 /* 19 */
@@ -8591,10 +8598,12 @@ Mura.DOMSelection = Mura.Core.extend(
 
 
 var Mura=__webpack_require__(18);
+
 /**
 * Creates a new Mura.Entity
 * @class {class} Mura.Entity
 */
+
 Mura.Entity = Mura.Core.extend(
 /** @lends Mura.Entity.prototype */
 {
@@ -10935,7 +10944,6 @@ Mura.DisplayObject.form=Mura.DisplayObject.Form;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-
 var Mura=__webpack_require__(18);
 
 //https://github.com/malko/l.js
@@ -11278,7 +11286,7 @@ Mura.templates['embed']=function(context){
   return context.source;
 }
 
-__webpack_require__(327);
+__webpack_require__(328);
 
 
 /***/ }),
@@ -11355,7 +11363,7 @@ Mura.UI=Mura.Core.extend(
 
 __webpack_require__(308);
 
-__webpack_require__(325);
+__webpack_require__(326);
 
 __webpack_require__(128);
 
@@ -16398,6 +16406,196 @@ module.exports = __webpack_require__(309)['default'];
 
 /***/ }),
 /* 325 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 326 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -17140,7 +17338,7 @@ module.exports = __webpack_require__(309)['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(88)))
 
 /***/ }),
-/* 326 */
+/* 327 */
 /***/ (function(module, exports) {
 
 if(typeof window != 'undefined'){
@@ -17164,7 +17362,7 @@ if(typeof window != 'undefined'){
 
 
 /***/ }),
-/* 327 */
+/* 328 */
 /***/ (function(module, exports, __webpack_require__) {
 
 this["Mura"]=__webpack_require__(18);
@@ -17794,27 +17992,28 @@ this["Mura"]["templates"]["view"] = this.Mura.Handlebars.template({"1":function(
 },"useData":true});
 
 /***/ }),
-/* 328 */
+/* 329 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 Mura=__webpack_require__(18);
 
-
 __webpack_require__(124);
 __webpack_require__(118);
-__webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
-__webpack_require__(126);
-__webpack_require__(122);
-__webpack_require__(125);
 
-if(typeof window != 'undefined'){
+if(!Mura.isInNode()){
   __webpack_require__(123);
+  __webpack_require__(119);
+  __webpack_require__(126);
+  __webpack_require__(122);
+  __webpack_require__(125);
+
   window.m=Mura;
   window.mura=Mura;
   window.Mura=Mura;
+
 }
 
 module.exports=Mura;

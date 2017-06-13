@@ -1,9 +1,11 @@
 
 var Mura=require('./core');
+
 /**
 * Creates a new Mura.Entity
 * @class {class} Mura.Entity
 */
+
 Mura.Entity = Mura.Core.extend(
 /** @lends Mura.Entity.prototype */
 {

@@ -2,7 +2,7 @@
 require("babel-polyfill");
 require("./polyfill");
 
-(function(root){
+module.exports=(function(){
 /**
  * Creates a new Mura
  * @class {class} Mura
@@ -18,7 +18,7 @@ require("./polyfill");
    * @memberof Mura
    */
   function login(username, password, siteid) {
-      siteid = siteid || root.Mura.siteid;
+      siteid = siteid || Mura.siteid;
 
       return new Promise(function(resolve, reject) {
 
@@ -31,10 +31,10 @@ require("./polyfill");
                   context: 'login'
               },
               success: function(resp) {
-                  root.Mura.ajax({
+                  Mura.ajax({
                       async: true,
                       type: 'post',
-                      url: root.Mura.apiEndpoint,
+                      url: Mura.apiEndpoint,
                       data: {
                           siteid: siteid,
                           username: username,
@@ -63,13 +63,13 @@ require("./polyfill");
    * @memberof Mura
    */
   function logout(siteid) {
-      siteid = siteid || root.Mura.siteid;
+      siteid = siteid || Mura.siteid;
 
       return new Promise(function(resolve, reject) {
-          root.Mura.ajax({
+          Mura.ajax({
               async: true,
               type: 'post',
-              url: root.Mura.apiEndpoint,
+              url: Mura.apiEndpoint,
               data: {
                   siteid: siteid,
                   method: 'logout'
@@ -237,7 +237,7 @@ require("./polyfill");
       var query = [];
       params = params || {};
       params.filename = params.filename || '';
-      params.siteid = params.siteid || root.Mura.siteid;
+      params.siteid = params.siteid || Mura.siteid;
 
       for (var key in params) {
           if (key != 'entityname' && key != 'filename' && key !=
@@ -248,16 +248,16 @@ require("./polyfill");
       }
 
       return new Promise(function(resolve, reject) {
-          root.Mura.ajax({
+          Mura.ajax({
               async: true,
               type: 'get',
-              url: root.Mura.apiEndpoint + params.siteid +
+              url: Mura.apiEndpoint +
                   '/content/_path/' + filename + '?' +
                   query.join('&'),
               success: function(resp) {
                   if (typeof resolve ==
                       'function') {
-                      var item = new root.Mura.Entity();
+                      var item = new Mura.Entity();
                       item.set(resp.data);
                       resolve(item);
                   }
@@ -280,18 +280,18 @@ require("./polyfill");
           var properties = {
               entityname: entityname
           };
-          properties.siteid = siteid || root.Mura.siteid;
+          properties.siteid = siteid || Mura.siteid;
       } else {
           properties = entityname;
           properties.entityname = properties.entityname || 'content';
-          properties.siteid = properties.siteid || root.Mura.siteid;
+          properties.siteid = properties.siteid || Mura.siteid;
       }
 
-      if (root.Mura.entities[properties.entityname]) {
-          return new root.Mura.entities[properties.entityname](
+      if (Mura.entities[properties.entityname]) {
+          return new Mura.entities[properties.entityname](
               properties);
       } else {
-          return new root.Mura.Entity(properties);
+          return new Mura.Entity(properties);
       }
   }
 
@@ -303,7 +303,7 @@ require("./polyfill");
    * @memberof Mura
    */
   function getFeed(entityname) {
-      return new root.Mura.Feed(Mura.siteid, entityname);
+      return new Mura.Feed(Mura.siteid, entityname);
   }
 
   /**
@@ -317,23 +317,34 @@ require("./polyfill");
       params=params || {};
       params.fields=params.fields || '';
       return new Promise(function(resolve, reject) {
-          if (root.Mura.currentUser) {
-              return root.Mura.currentUser;
+
+          if (Mura.currentUser) {
+              return Mura.currentUser;
           } else {
-              root.Mura.ajax({
+              Mura.ajax({
                   async: true,
                   type: 'get',
-                  url: root.Mura.apiEndpoint +
-                      '/findCurrentUser?fields=' + params.fields + '&_cacheid=' +
+                  url: Mura.apiEndpoint +
+                      'findCurrentUser?fields=' + params.fields + '&_cacheid=' +
                       Math.random(),
                   success: function(resp) {
                       if (typeof resolve ==
                           'function') {
-                          root.Mura.currentUser =
-                              new root.Mura.Entity();
-                          root.Mura.currentUser.set(
+                          Mura.currentUser =
+                              new Mura.Entity();
+                          Mura.currentUser.set(
                               resp.data);
-                          resolve(root.Mura.currentUser);
+                          resolve(Mura.currentUser);
+                      }
+                  },
+                  success: function(resp) {
+                      if (typeof resolve ==
+                          'function') {
+                          Mura.currentUser =
+                              new Mura.Entity();
+                          Mura.currentUser.set(
+                              resp.data);
+                          resolve(Mura.currentUser);
                       }
                   }
               });
@@ -358,12 +369,12 @@ require("./polyfill");
 
       return new Promise(function(resolve, reject) {
 
-          root.Mura.ajax({
+          Mura.ajax({
               type: 'get',
-              url: root.Mura.apiEndpoint,
+              url: Mura.apiEndpoint,
               data: params,
               success: function(resp) {
-                  var collection = new root.Mura.EntityCollection(resp.data)
+                  var collection = new Mura.EntityCollection(resp.data)
 
                   if (typeof resolve == 'function') {
                       resolve(collection);
@@ -516,15 +527,19 @@ require("./polyfill");
 
 
   function readyInternal(fn) {
-      if (document.readyState != 'loading') {
-          //IE set the readyState to interative too early
-          setTimeout(function() {
-              fn(root.Mura);
-          }, 1);
+      if(typeof document != 'undefined'){
+        if (document.readyState != 'loading') {
+            //IE set the readyState to interative too early
+            setTimeout(function() {
+                fn(Mura);
+            }, 1);
+        } else {
+            document.addEventListener('DOMContentLoaded', function() {
+                fn(Mura);
+            });
+        }
       } else {
-          document.addEventListener('DOMContentLoaded', function() {
-              fn(root.Mura);
-          });
+        fn(Mura);
       }
   }
 
@@ -627,24 +642,33 @@ require("./polyfill");
    */
   function ajax(params) {
 
-      //params=params || {};
+    if (!('type' in params)) {
+        params.type = 'GET';
+    }
 
-      if (!('type' in params)) {
-          params.type = 'GET';
-      }
+    if (!('success' in params)) {
+        params.success = function() {};
+    }
 
-      if (!('success' in params)) {
-          params.success = function() {};
-      }
+    if (!('error' in params)) {
+        params.error = function() {};
+    }
 
-      if (!('error' in params)) {
-          params.error = function() {};
-      }
+    if (!('data' in params)) {
+        params.data = {};
+    }
 
-      if (!('data' in params)) {
-          params.data = {};
-      }
+    if (!('headers' in params)) {
+        params.headers = {};
+    }
 
+    if(isInNode()){
+      nodeRequest(params);
+    } else {
+      browserRequest(params);
+    }
+
+    function browserRequest(params){
       if (!(typeof FormData != 'undefined' && params.data instanceof FormData)) {
           params.data = Mura.deepExtend({}, params.data);
 
@@ -667,10 +691,6 @@ require("./polyfill");
 
       if (!('async' in params)) {
           params.async = true;
-      }
-
-      if (!('headers' in params)) {
-          params.headers = {};
       }
 
       var request = new XMLHttpRequest();
@@ -771,6 +791,96 @@ require("./polyfill");
               request.send();
           }, 0);
       }
+    }
+
+    function nodeRequest(params){
+
+      function responseHandler(error, httpResponse, body) {
+        /*
+        if(typeof res.headers['set-cookie'] != 'undefined'){
+          var tough = require('tough-cookie');
+          var Cookie = tough.Cookie;
+
+          if (httpResponse.headers['set-cookie'] instanceof Array){
+            req.headers['cookies'] = httpResponse.headers['set-cookie'].map(Cookie.parse);
+          } else {
+              req.headers['cookies'] = [Cookie.parse(httpResponse.headers['set-cookie'])];
+          }
+
+          req.headers['set-cookie']=httpResponse.headers['set-cookie'];
+
+        }*/
+
+        if (typeof error == 'undefined' || ( httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
+
+            try {
+                var data = JSON.parse(body);
+            } catch (e) {
+                var data = body;
+            }
+
+            params.success(data, httpResponse);
+
+        } else if (typeof error == 'undefined') {
+
+            try {
+                var data = JSON.parse(body);
+            } catch (e) {
+                var data = body;
+            }
+
+            params.error(data,httpResponse);
+
+        } else {
+
+            params.error(error);
+
+        }
+
+      }
+
+      /*
+      if(typeof req.headers['cookies'] != 'undefined'){
+        params.headers['cookies']=req.headers['cookies'];
+      }
+      */
+
+      if (params.type.toLowerCase() == 'post') {
+
+          params.headers['Content-Type']='application/x-www-form-urlencoded; charset=UTF-8';
+
+          Mura.request.post(
+            {
+              uri: params.url,
+              formData: params.data,
+              headers: params.headers
+            },
+            responseHandler
+          );
+
+      } else {
+          if (params.url.indexOf('?') == -1) {
+              params.url += '?';
+          }
+
+          var query = [];
+
+          for (var key in params.data) {
+              query.push($escape(key) + '=' + $escape(params.data[key]));
+          }
+
+          query = query.join('&');
+
+
+          Mura.request(
+            {
+              url: params.url
+            },
+            responseHandler
+          );
+
+      }
+    }
 
   }
 
@@ -828,55 +938,54 @@ require("./polyfill");
   }
 
   function trigger(el, eventName, eventDetail) {
+      if(typeof document != 'undefined'){
+        var bubbles = eventName == "change" ? false : true;
 
-      var bubbles = eventName == "change" ? false : true;
+        if (document.createEvent) {
 
-      if (document.createEvent) {
+            if(eventDetail && !isEmptyObject(eventDetail)){
+                var event = document.createEvent('CustomEvent');
+                event.initCustomEvent(eventName, bubbles, true,eventDetail);
+            } else {
 
-          if(eventDetail && !isEmptyObject(eventDetail)){
-              var event = document.createEvent('CustomEvent');
-              event.initCustomEvent(eventName, bubbles, true,eventDetail);
-          } else {
+                var eventClass = "";
 
-              var eventClass = "";
+                switch (eventName) {
+                    case "click":
+                    case "mousedown":
+                    case "mouseup":
+                        eventClass = "MouseEvents";
+                        break;
 
-              switch (eventName) {
-                  case "click":
-                  case "mousedown":
-                  case "mouseup":
-                      eventClass = "MouseEvents";
-                      break;
+                    case "focus":
+                    case "change":
+                    case "blur":
+                    case "select":
+                        eventClass = "HTMLEvents";
+                        break;
 
-                  case "focus":
-                  case "change":
-                  case "blur":
-                  case "select":
-                      eventClass = "HTMLEvents";
-                      break;
+                    default:
+                        eventClass = "Event";
+                        break;
+                }
 
-                  default:
-                      eventClass = "Event";
-                      break;
-              }
+                var event = document.createEvent(eventClass);
+                event.initEvent(eventName, bubbles, true);
+            }
 
-              var event = document.createEvent(eventClass);
-              event.initEvent(eventName, bubbles, true);
-          }
+            event.synthetic = true;
+            el.dispatchEvent(event);
 
-          event.synthetic = true;
-          el.dispatchEvent(event);
-
-      } else {
-          try {
-              document.fireEvent("on" + eventName);
-          } catch (e) {
-              console.warn(
-                  "Event failed to fire due to legacy browser: on" +
-                  eventName);
-          }
-      }
-
-
+        } else {
+            try {
+                document.fireEvent("on" + eventName);
+            } catch (e) {
+                console.warn(
+                    "Event failed to fire due to legacy browser: on" +
+                    eventName);
+            }
+        }
+    }
   };
 
   function off(el, eventName, fn) {
@@ -890,8 +999,8 @@ require("./polyfill");
           var selection = nodeListToArray(document.querySelectorAll(
               selector));
       } else {
-          if ((typeof StaticNodeList != 'undefined' && selector instanceof StaticNodeList) ||
-              selector instanceof NodeList || selector instanceof HTMLCollection
+          if ( (typeof StaticNodeList != 'undefined' && selector instanceof StaticNodeList) ||
+              (typeof NodeList != 'undefined' && selector instanceof NodeList) || (typeof HTMLCollection != 'undefined' &&  selector instanceof HTMLCollection)
           ) {
               var selection = nodeListToArray(selector);
           } else {
@@ -921,7 +1030,7 @@ require("./polyfill");
   }
 
   function select(selector) {
-      return new root.Mura.DOMSelection(parseSelection(selector),
+      return new Mura.DOMSelection(parseSelection(selector),
           selector);
   }
 
@@ -1166,11 +1275,11 @@ require("./polyfill");
 
   //deprecated
   function addLoadEvent(func) {
-      var oldonload = root.onload;
-      if (typeof root.onload != 'function') {
-          root.onload = func;
+      var oldonload = onload;
+      if (typeof onload != 'function') {
+          onload = func;
       } else {
-          root.onload = function() {
+          onload = function() {
               oldonload();
               func();
           }
@@ -1245,7 +1354,7 @@ require("./polyfill");
   function setHTMLEditor(el) {
 
       function initEditor() {
-          var instance = root.CKEDITOR.instances[el.getAttribute('id')];
+          var instance = CKEDITOR.instances[el.getAttribute('id')];
           var conf = {
               height: 200,
               width: '70%'
@@ -1258,13 +1367,13 @@ require("./polyfill");
               CKEDITOR.remove(instance);
           }
 
-          root.CKEDITOR.replace(el.getAttribute('id'),
+          CKEDITOR.replace(el.getAttribute('id'),
               getHTMLEditorConfig(conf), htmlEditorOnComplete);
       }
 
       function htmlEditorOnComplete(editorInstance) {
           editorInstance.resetDirty();
-          var totalIntances = root.CKEDITOR.instances;
+          var totalIntances = CKEDITOR.instances;
       }
 
       function getHTMLEditorConfig(customConfig) {
@@ -1282,7 +1391,7 @@ require("./polyfill");
       }
 
       loader().loadjs(
-          root.Mura.corepath + '/ckeditor/ckeditor.js',
+          Mura.corepath + '/ckeditor/ckeditor.js',
           function() {
               initEditor();
           }
@@ -1314,20 +1423,20 @@ require("./polyfill");
           if (aux.indexOf('2776') != -1 && location.search.indexOf(
                   "display=login") == -1) {
 
-              if (typeof(root.Mura.loginURL) != "undefined") {
-                  lu = root.Mura.loginURL;
-              } else if (typeof(root.Mura.loginurl) !=
+              if (typeof(Mura.loginURL) != "undefined") {
+                  lu = Mura.loginURL;
+              } else if (typeof(Mura.loginurl) !=
                   "undefined") {
-                  lu = root.Mura.loginurl;
+                  lu = Mura.loginurl;
               } else {
                   lu = "?display=login";
               }
 
-              if (typeof(root.Mura.returnURL) != "undefined") {
-                  ru = root.Mura.returnURL;
-              } else if (typeof(root.Mura.returnurl) !=
+              if (typeof(Mura.returnURL) != "undefined") {
+                  ru = Mura.returnURL;
+              } else if (typeof(Mura.returnurl) !=
                   "undefined") {
-                  ru = root.Mura.returnURL;
+                  ru = Mura.returnURL;
               } else {
                   ru = location.href;
               }
@@ -1432,15 +1541,15 @@ require("./polyfill");
 
   function isDate(dtStr, fldName) {
       var daysInMonth = DaysArray(12);
-      var dtArray = dtStr.split(root.Mura.dtCh);
+      var dtArray = dtStr.split(Mura.dtCh);
 
       if (dtArray.length != 3) {
           //alert("The date format for the "+fldName+" field should be : short")
           return false
       }
-      var strMonth = dtArray[root.Mura.dtFormat[0]];
-      var strDay = dtArray[root.Mura.dtFormat[1]];
-      var strYear = dtArray[root.Mura.dtFormat[2]];
+      var strMonth = dtArray[Mura.dtFormat[0]];
+      var strDay = dtArray[Mura.dtFormat[1]];
+      var strYear = dtArray[Mura.dtFormat[2]];
 
       /*
       if(strYear.length == 2){
@@ -1471,12 +1580,12 @@ require("./polyfill");
           //alert("Please enter a valid day  in the "+fldName+" field")
           return false
       }
-      if (strYear.length != 4 || year == 0 || year < root.Mura.minYear ||
-          year > root.Mura.maxYear) {
-          //alert("Please enter a valid 4 digit year between "+root.Mura.minYear+" and "+root.Mura.maxYear +" in the "+fldName+" field")
+      if (strYear.length != 4 || year == 0 || year < Mura.minYear ||
+          year > Mura.maxYear) {
+          //alert("Please enter a valid 4 digit year between "+Mura.minYear+" and "+Mura.maxYear +" in the "+fldName+" field")
           return false
       }
-      if (isInteger(stripCharsInBag(dtStr, root.Mura.dtCh)) == false) {
+      if (isInteger(stripCharsInBag(dtStr, Mura.dtCh)) == false) {
           //alert("Please enter a valid date in the "+fldName+" field")
           return false
       }
@@ -1779,7 +1888,7 @@ require("./polyfill");
           //console.log(validations);
           ajax({
               type: 'post',
-              url: root.Mura.apiEndpoint + '?method=validate',
+              url: Mura.apiEndpoint + '?method=validate',
               data: {
                   data: encodeURIComponent(JSON.stringify(
                       data)),
@@ -1861,7 +1970,7 @@ require("./polyfill");
    * @memberof Mura
    */
   function loader() {
-      return root.Mura.ljs;
+      return Mura.ljs;
   }
 
 
@@ -1871,7 +1980,7 @@ require("./polyfill");
   function processMarkup(scope) {
 
       return new Promise(function(resolve, reject) {
-          if (!(scope instanceof root.Mura.DOMSelection)) {
+          if (!(scope instanceof Mura.DOMSelection)) {
               scope = select(scope);
           }
 
@@ -1906,7 +2015,7 @@ require("./polyfill");
                           'script')
                       fileref.setAttribute("type",
                           "text/javascript")
-                      fileref.setAttribute("src", root.Mura
+                      fileref.setAttribute("src", Mura
                           .corepath +
                           '/vendor/cfformprotect/js/cffp.js'
                       )
@@ -1982,8 +2091,7 @@ require("./polyfill");
                                                       )
                                                   );
                                           } else {
-                                              root
-                                                  .setTimeout(
+                                              setTimeout(
                                                       function() {
                                                           checkForReCaptcha
                                                               ();
@@ -2037,10 +2145,10 @@ require("./polyfill");
                   }
 
 
-                  if (root.MuraInlineEditor && root.MuraInlineEditor
+                  if (MuraInlineEditor && MuraInlineEditor
                       .checkforImageCroppers) {
                       find("img").each(function() {
-                          root.MuraInlineEditor.checkforImageCroppers(
+                          MuraInlineEditor.checkforImageCroppers(
                               this);
                       });
 
@@ -2066,9 +2174,9 @@ require("./polyfill");
                                       '?') !=
                                   -1 ?
                                   "&muraadminpreview&mobileformat=" +
-                                  root.Mura.mobileformat :
+                                  Mura.mobileformat :
                                   "?muraadminpreview&muraadminpreview&mobileformat=" +
-                                  root.Mura.mobileformat
+                                  Mura.mobileformat
                               );
                               this.setAttribute(
                                   'href', h);
@@ -2119,9 +2227,9 @@ require("./polyfill");
           var checkdata = setLowerCaseKeys(formToObject(frm));
           var keys = deepExtend(setLowerCaseKeys(obj.data()),
               urlparams, {
-                  siteid: root.Mura.siteid,
-                  contentid: root.Mura.contentid,
-                  contenthistid: root.Mura.contenthistid,
+                  siteid: Mura.siteid,
+                  contentid: Mura.contentid,
+                  contenthistid: Mura.contenthistid,
                   nocache: 1
               });
 
@@ -2147,7 +2255,7 @@ require("./polyfill");
           */
 
           var postconfig = {
-              url: root.Mura.apiEndpoint +
+              url: Mura.apiEndpoint +
                   '?method=processAsyncObject',
               type: 'POST',
               data: data,
@@ -2160,9 +2268,9 @@ require("./polyfill");
 
           var data = deepExtend(setLowerCaseKeys(obj.data()),
               urlparams, setLowerCaseKeys(formToObject(frm)), {
-                  siteid: root.Mura.siteid,
-                  contentid: root.Mura.contentid,
-                  contenthistid: root.Mura.contenthistid,
+                  siteid: Mura.siteid,
+                  contentid: Mura.contentid,
+                  contenthistid: Mura.contenthistid,
                   nocache: 1
               });
 
@@ -2186,7 +2294,7 @@ require("./polyfill");
           }
 
           var postconfig = {
-              url: root.Mura.apiEndpoint +
+              url: Mura.apiEndpoint +
                   '?method=processAsyncObject',
               type: 'POST',
               data: data,
@@ -2199,7 +2307,7 @@ require("./polyfill");
       var self = obj.node;
       self.prevInnerHTML = self.innerHTML;
       self.prevData = obj.data();
-      self.innerHTML = root.Mura.preloaderMarkup;
+      self.innerHTML = Mura.preloaderMarkup;
 
       Mura(frm).trigger('formSubmit', data);
 
@@ -2453,9 +2561,9 @@ require("./polyfill");
           } else {
               if (Mura.type == 'Variation') {
                   var objectData = obj.data();
-                  if (root.MuraInlineEditor && (root.MuraInlineEditor
-                          .objectHasConfigurator(obj) || (!root.Mura.layoutmanager &&
-                              root.MuraInlineEditor.objectHasEditor(
+                  if (MuraInlineEditor && (MuraInlineEditor
+                          .objectHasConfigurator(obj) || (!Mura.layoutmanager &&
+                              MuraInlineEditor.objectHasEditor(
                                   objectParams)))) {
                       obj.children('.frontEndToolsModal').remove();
                       obj.prepend(layoutmanagertoolbar);
@@ -2487,15 +2595,10 @@ require("./polyfill");
                       if (region.data('perm')) {
                           var objectData = obj.data();
 
-                          if (root.MuraInlineEditor && (root.MuraInlineEditor
-                                  .objectHasConfigurator(obj) || (!
-                                      root.Mura.layoutmanager && root
-                                      .MuraInlineEditor.objectHasEditor(
-                                          objectData)))) {
+                          if (MuraInlineEditor && (MuraInlineEditor.objectHasConfigurator(obj) || (!Mura.layoutmanager && MuraInlineEditor.objectHasEditor(objectData)))) {
                               obj.children('.frontEndToolsModal').remove();
                               obj.prepend(layoutmanagertoolbar);
-                              MuraInlineEditor.setAnchorSaveChecks(
-                                  obj.node);
+                              MuraInlineEditor.setAnchorSaveChecks(obj.node);
 
                               obj
                                   .addClass('mura-active')
@@ -2742,9 +2845,9 @@ require("./polyfill");
       return new Promise(function(resolve, reject) {
           var data = deepExtend(setLowerCaseKeys(getData(self)),
               urlparams, {
-                  siteid: root.Mura.siteid,
-                  contentid: root.Mura.contentid,
-                  contenthistid: root.Mura.contenthistid
+                  siteid: Mura.siteid,
+                  contentid: Mura.contentid,
+                  contenthistid: Mura.contenthistid
               });
 
           delete data.inited;
@@ -2780,9 +2883,9 @@ require("./polyfill");
                   }
               } else {
                   //console.log(data);
-                  self.innerHTML = root.Mura.preloaderMarkup;
+                  self.innerHTML = Mura.preloaderMarkup;
                   ajax({
-                      url: root.Mura.apiEndpoint +
+                      url: Mura.apiEndpoint +
                           '?method=processAsyncObject',
                       type: 'get',
                       data: data,
@@ -2808,7 +2911,11 @@ require("./polyfill");
 
   function handleHashChange() {
 
-      var hash = location.hash;
+      if(typeof location != 'undefined'){
+        var hash = location.hash;
+      } else {
+        var hash = '';
+      }
 
       if (hash) {
           hash = hash.substring(1);
@@ -2854,11 +2961,11 @@ require("./polyfill");
       muraObject.prototype.handlers = {};
 
       muraObject.reopen = function(subClass) {
-          root.Mura.extend(muraObject.prototype, subClass);
+          Mura.extend(muraObject.prototype, subClass);
       };
 
       muraObject.reopenClass = function(subClass) {
-          root.Mura.extend(muraObject, subClass);
+          Mura.extend(muraObject, subClass);
       };
 
       muraObject.on = function(eventName, fn) {
@@ -2911,7 +3018,7 @@ require("./polyfill");
       }
 
 
-      root.Mura.extend(muraObject.prototype, subClass);
+      Mura.extend(muraObject.prototype, subClass);
 
       return muraObject;
   }
@@ -2925,6 +3032,11 @@ require("./polyfill");
    * @memberof Mura
    */
   function getQueryStringParams(queryString) {
+
+      if(typeof location == 'undefined'){
+        return {};
+      }
+
       queryString = queryString || location.search;
       var params = {};
       var e,
@@ -3000,6 +3112,10 @@ require("./polyfill");
       return (hash >>> 0);
   }
 
+  function isInNode(){
+    return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
+  }
+
   function init(config) {
 
       if (config.rootpath) {
@@ -3019,8 +3135,7 @@ require("./polyfill");
       }
 
       if (!config.apiEndpoint) {
-          config.apiEndpoint = config.context +
-              '/index.cfm/_api/json/v1/' + config.siteid + '/';
+          config.apiEndpoint = config.context +  '/index.cfm/_api/json/v1/' + config.siteid + '/';
       }
 
       if (!config.pluginspath) {
@@ -3051,8 +3166,7 @@ require("./polyfill");
           config.queueObjects = true;
       }
 
-      if (typeof config.rootdocumentdomain != 'undefined' && config.rootdocumentdomain !=
-          '') {
+      if (typeof config.rootdocumentdomain != 'undefined' && config.rootdocumentdomain != '') {
           document.domain = config.rootdocumentdomain;
       }
 
@@ -3062,136 +3176,50 @@ require("./polyfill");
 
       Mura(function() {
 
-          var hash = location.hash;
+          if(!isInNode()){
 
-          if (hash) {
-              hash = hash.substring(1);
+            var hash = location.hash;
+
+            if (hash) {
+                hash = hash.substring(1);
+            }
+
+            urlparams = setLowerCaseKeys(getQueryStringParams(location.search));
+
+            if (hashparams.nextnid) {
+                Mura('.mura-async-object[data-nextnid="' +
+                    hashparams.nextnid + '"]').each(
+                    function() {
+                        Mura(this).data(hashparams);
+                    });
+            } else if (hashparams.objectid) {
+                Mura('.mura-async-object[data-nextnid="' +
+                    hashparams.objectid + '"]').each(
+                    function() {
+                        Mura(this).data(hashparams);
+                    });
+            }
+
+            Mura(root).on('hashchange', handleHashChange);
+
+            processMarkup(document);
+
+            Mura(document)
+                .on("keydown", function(event) {
+                    loginCheck(event.which);
+                });
+
+            Mura(document).trigger('muraReady');
           }
-
-          hashparams = setLowerCaseKeys(getQueryStringParams(
-              hash));
-          urlparams = setLowerCaseKeys(getQueryStringParams(
-              location.search));
-
-          if (hashparams.nextnid) {
-              Mura('.mura-async-object[data-nextnid="' +
-                  hashparams.nextnid + '"]').each(
-                  function() {
-                      Mura(this).data(hashparams);
-                  });
-          } else if (hashparams.objectid) {
-              Mura('.mura-async-object[data-nextnid="' +
-                  hashparams.objectid + '"]').each(
-                  function() {
-                      Mura(this).data(hashparams);
-                  });
-          }
-
-          Mura(root).on('hashchange', handleHashChange);
-
-          processMarkup(document);
-
-          Mura(document)
-              .on("keydown", function(event) {
-                  loginCheck(event.which);
-              });
-
-          /*
-          Mura.addEventHandler(
-          	{
-          		asyncObjectRendered:function(event){
-          			alert(this.innerHTML);
-          		}
-          	}
-          );
-
-          Mura('#my-id').addDisplayObject('objectname',{..});
-
-          Mura.login('userame','password')
-          	.then(function(data){
-          		alert(data.success);
-          	});
-
-          Mura.logout())
-          	.then(function(data){
-          		alert('you have logged out!');
-          	});
-
-          Mura.renderFilename('')
-          	.then(function(item){
-          		alert(item.get('title'));
-          	});
-
-          Mura.getEntity('content').loadBy('contentid','00000000000000000000000000000000001')
-          	.then(function(item){
-          		alert(item.get('title'));
-          	});
-
-          Mura.getEntity('content').loadBy('contentid','00000000000000000000000000000000001')
-          	.then(function(item){
-          		item.get('kids').then(function(kids){
-          			alert(kids.get('items').length);
-          		});
-          	});
-
-          Mura.getEntity('content').loadBy('contentid','1C2AD93E-E39C-C758-A005942E1399F4D6')
-          	.then(function(item){
-          		item.get('parent').then(function(parent){
-          			alert(parent.get('title'));
-          		});
-          	});
-
-          Mura.getEntity('content').
-          	.set('parentid''1C2AD93E-E39C-C758-A005942E1399F4D6')
-          	.set('approved',1)
-          	.set('title','test 5')
-          	.save()
-          	.then(function(item){
-          		alert(item.get('title'));
-          	});
-
-          Mura.getEntity('content').
-          	.set(
-          		{
-          			parentid:'1C2AD93E-E39C-C758-A005942E1399F4D6',
-          			approved:1,
-          			title:'test 5'
-          		}
-          	.save()
-          	.then(
-          		function(item){
-          			alert(item.get('title'));
-          		});
-
-          Mura.findQuery({
-          		entityname:'content',
-          		title:'Home'
-          	})
-          	.then(function(collection){
-          		alert(collection.item(0).get('title'));
-          	});
-          */
-
-          Mura(document).trigger('muraReady');
 
       });
 
       readyInternal(initReadyQueue);
-      /*
-      if(typeof window != 'undefined'){
-        window.mura = root.Mura
-        window.m = root.Mura;
-        //window.validateForm = root.Mura.validateForm;
-      }
 
-      root.Mura.displayObject = root.Mura.DisplayObject;
-
-      */
-      return root.Mura
+      return Mura
   }
 
-  extend(root, {
-      Mura: extend(
+  var Mura=extend(
           function(selector, context) {
               if (typeof selector == 'function') {
                   Mura.ready(selector);
@@ -3266,22 +3294,15 @@ require("./polyfill");
               displayObjectInstances: {},
               holdReady: holdReady,
               trackEvent: trackEvent,
-              recordEvent: trackEvent
+              recordEvent: trackEvent,
+              isInNode: isInNode
           }
-      ),
-      //these are here for legacy support
-      validateForm: validateForm,
-      setHTMLEditor: setHTMLEditor,
-      createCookie: createCookie,
-      readCookie: readCookie,
-      addLoadEvent: addLoadEvent,
-      noSpam: noSpam,
-      initMura: init
-  });
+      );
 
-})(this);
+    return Mura;
 
-module.exports=this.Mura;
+})();
+
 
 /**
  * A namespace.

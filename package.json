@@ -16,17 +16,21 @@
   "author": "Blue River Interactive Group, Inc.",
   "license": "GPL-2.0 with execptions",
   "devDependencies": {
-    "webpack": "^2.6.1",
+    "express": "^4.15.3",
     "grunt": "^0.4.5",
     "grunt-contrib-handlebars": "^1.0.0",
     "grunt-handlebars-compiler": "^0.2.0",
     "grunt-text-replace": "^0.4.0",
-    "handlebars": "^4.0.10"
+    "handlebars": "^4.0.10",
+    "request": "^2.81.0",
+    "webpack": "^2.6.1"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "handlebars": "^4.0.10",
     "install": "^0.10.1",
-    "npm": "^5.0.3"
+    "npm": "^5.0.3",
+    "request": "^2.81.0",
+    "tough-cookie": "^2.3.2"
   }
 }
