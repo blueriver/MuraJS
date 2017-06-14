@@ -1706,10 +1706,10 @@ module.exports=(function(){
                   }
 
 
-                  if (MuraInlineEditor && MuraInlineEditor
+                  if (window.MuraInlineEditor && window.MuraInlineEditor
                       .checkforImageCroppers) {
                       find("img").each(function() {
-                          MuraInlineEditor.checkforImageCroppers(
+                          window.uraInlineEditor.checkforImageCroppers(
                               this);
                       });
 
@@ -2761,7 +2761,7 @@ module.exports=(function(){
                     });
             }
 
-            Mura(root).on('hashchange', handleHashChange);
+            Mura(window).on('hashchange', handleHashChange);
 
             processMarkup(document);
 

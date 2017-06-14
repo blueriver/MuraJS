@@ -88,7 +88,7 @@ Mura.Request=Mura.Core.extend(
           var query = [];
 
           for (var key in params.data) {
-              query.push($escape(key) + '=' + $escape(params.data[key]));
+              query.push(Mura.escape(key) + '=' + Mura.escape(params.data[key]));
           }
 
           query = query.join('&');
@@ -220,9 +220,7 @@ Mura.Request=Mura.Core.extend(
       req.onreadystatechange = function() {
           if (req.readyState == 4) {
               //IE9 doesn't appear to return the request status
-              if (typeof req.status == 'undefined' || (
-                      req.status >= 200 && request.status <
-                      400)) {
+              if (typeof req.status == 'undefined' || (req.status >= 200 && req.status < 400)) {
 
                   try {
                       var data = JSON.parse(req.responseText);
@@ -241,8 +239,8 @@ Mura.Request=Mura.Core.extend(
           req.open(params.type.toUpperCase(), params.url, params.async);
 
           for (var p in params.xhrFields) {
-              if (p in request) {
-                  request[p] = params.xhrFields[p];
+              if (p in req) {
+                  req[p] = params.xhrFields[p];
               }
           }
 
@@ -260,7 +258,7 @@ Mura.Request=Mura.Core.extend(
               var query = [];
 
               for (var key in params.data) {
-                  query.push($escape(key) + '=' + $escape(params.data[
+                  query.push(Mura.escape(key) + '=' + Mura.escape(params.data[
                       key]));
               }
 
@@ -278,7 +276,7 @@ Mura.Request=Mura.Core.extend(
           var query = [];
 
           for (var key in params.data) {
-              query.push($escape(key) + '=' + $escape(params.data[key]));
+              query.push(Mura.escape(key) + '=' + Mura.escape(params.data[key]));
           }
 
           query = query.join('&');
@@ -287,8 +285,8 @@ Mura.Request=Mura.Core.extend(
               query, params.async);
 
           for (var p in params.xhrFields) {
-              if (p in request) {
-                  request[p] = params.xhrFields[p];
+              if (p in req) {
+                  req[p] = params.xhrFields[p];
               }
           }
 
