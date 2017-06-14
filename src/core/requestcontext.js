@@ -16,6 +16,7 @@ Mura.RequestContext=Mura.Core.extend(
     this.requestObject=req;
     this.reponseObject=res;
     this._request=new Mura.Request(req, res);
+    return this;
 	},
 
   /**

@@ -13,7 +13,7 @@ Mura.Request=Mura.Core.extend(
 		 */
 		init: function(req, res) {
       this.requestObject=req;
-      this.reponseObject=res;
+      this.responseObject=res;
       return this;
 		},
 
@@ -55,11 +55,13 @@ Mura.Request=Mura.Core.extend(
     },
     nodeRequest:function(params){
 
-      /*
-      if(typeof req.headers['cookies'] != 'undefined'){
-        params.headers['cookies']=req.headers['cookies'];
+      self=this;
+
+      if(typeof typeof this.requestObject != 'undefined' && typeof this.requestObject.headers['cookie'] != 'undefined'){
+        params.headers['Cookie']=this.requestObject.headers['cookie'];
       }
-      */
+
+      //console.log(params.headers)
 
       if (params.type.toLowerCase() == 'post') {
 
@@ -90,7 +92,8 @@ Mura.Request=Mura.Core.extend(
 
           Mura._request(
             {
-              url: params.url
+              url: params.url,
+              headers:params.headers
             },
             nodeResponseHandler
           );
@@ -98,20 +101,42 @@ Mura.Request=Mura.Core.extend(
       }
 
       function nodeResponseHandler(error, httpResponse, body) {
-        /*
-        if(typeof res.headers['set-cookie'] != 'undefined'){
-          var tough = require('tough-cookie');
-          var Cookie = tough.Cookie;
 
-          if (httpResponse.headers['set-cookie'] instanceof Array){
-            req.headers['cookies'] = httpResponse.headers['set-cookie'].map(Cookie.parse);
-          } else {
-              req.headers['cookies'] = [Cookie.parse(httpResponse.headers['set-cookie'])];
-          }
+          if(typeof self.responseObject != 'undefined' && typeof httpResponse.headers['set-cookie'] != 'undefined'){
 
-          req.headers['set-cookie']=httpResponse.headers['set-cookie'];
+            var existingCookies=((typeof self.requestObject.headers['cookie'] != 'undefined') ? self.requestObject.headers['cookie'] : '').split("; ");
 
-        }*/
+            var newSetCookies=httpResponse.headers['set-cookie'];
+
+            if(!(newSetCookies instanceof Array)){
+              newSetCookies=[newSetCookies];
+            }
+
+            self.responseObject.setHeader('Set-Cookie',newSetCookies);
+
+            var cookieMap={};
+
+            for(var c in existingCookies){
+              var tempCookie=existingCookies[c].split(" ")[0].split("=");
+              cookieMap[tempCookie[0]]=tempCookie[1];
+            }
+
+            for(var c in newSetCookies){
+              var tempCookie=newSetCookies[c].split(" ")[0].split("=");
+              cookieMap[tempCookie[0]]=tempCookie[1];
+            }
+
+            var cookie='';
+
+            for(var c in cookieMap){
+              if(cookieMap.hasOwnProperty(c)){
+                cookie=cookie + c + "=" + cookieMap[c] + "; ";
+              }
+            }
+
+            self.requestObject.headers['Cookie']=cookie;
+
+        }
 
         if (typeof error == 'undefined' || ( httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
 
