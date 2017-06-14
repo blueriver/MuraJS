@@ -141,7 +141,7 @@ Mura.Request=Mura.Core.extend(
               }
             }
 
-            self.requestObject.headers['Cookie']=cookie;
+            self.requestObject.headers['cookie']=cookie;
             //console.log('post:')
             //console.log(self.requestObject.headers['Cookie']);
             //console.log('post cookie');
