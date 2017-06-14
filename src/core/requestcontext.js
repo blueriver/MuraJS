@@ -98,11 +98,11 @@ Mura.RequestContext=Mura.Core.extend(
       if (Mura.entities[properties.entityname]) {
           var entity=new Mura.entities[properties.entityname](
               properties);
-          entity.RequestContext=this;
+          entity._requestcontext=this;
           return entity;
       } else {
           var entity=new Mura.Entity(properties);
-          entity.RequestContext=this;
+          entity._requestcontext=this;
           return this;
       }
   },
@@ -116,7 +116,7 @@ Mura.RequestContext=Mura.Core.extend(
    */
   getFeed:function(entityname) {
       var feed=new Mura.Feed(Mura.siteid, entityname);
-      feed.RequestContext=this;
+      feed._requestcontext=this;
       return feed;
   },
 
@@ -189,7 +189,7 @@ Mura.RequestContext=Mura.Core.extend(
               success: function(resp) {
                   var collection = new Mura.EntityCollection(resp.data)
 
-                  collection.RequestContext=self;
+                  collection._requestcontext=self;
 
                   if (typeof resolve == 'function') {
                       resolve(collection);

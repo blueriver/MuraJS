@@ -132,7 +132,7 @@ Mura.EntityCollection=Mura.Entity.extend(
           }
 
 		var collection=new Mura.EntityCollection(newProps);
-        collection.RequestContext=this.RequestContext;
+        collection._requestcontext=this._requestcontext;
 		return collection.set('items',this.properties.items.filter( function(item,idx){
 			return fn.call(item,item,idx);
 		}));

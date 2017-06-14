@@ -397,13 +397,13 @@ Mura.Feed = Mura.Core.extend(
 				} else {
 					var apiEndpoint = Mura.apiEndpoint + '/';
 				}
-				self.RequestContext.request({
+				self._requestcontext.request({
 					type: 'get',
 					url: apiEndpoint + self.queryString,
 					success: function(resp) {
 
 						var returnObj = new Mura.EntityCollection(resp.data);
-								returnObj.RequestContext=this.RequestContext;
+								returnObj._requestcontext=self._requestcontext;
 						if (typeof resolve == 'function') {
 							resolve(returnObj);
 						}

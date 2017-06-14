@@ -9,7 +9,7 @@ Mura.Request=Mura.Core.extend(
 		 *
 		 * @param  {object} request     Siteid
 		 * @param  {object} response Entity name
-		 * @return {Mura.RequestContext}            Self
+		 * @return {Mura.Request}            Self
 		 */
 		init: function(req, res) {
       this.requestObject=req;
@@ -57,7 +57,7 @@ Mura.Request=Mura.Core.extend(
 
       self=this;
 
-      if(typeof typeof this.requestObject != 'undefined' && typeof this.requestObject.headers['cookie'] != 'undefined'){
+      if(typeof this.requestObject != 'undefined' && typeof this.requestObject.headers['cookie'] != 'undefined'){
         params.headers['Cookie']=this.requestObject.headers['cookie'];
       }
 
