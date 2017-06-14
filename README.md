@@ -39,6 +39,8 @@ define(["mura.js"], function(Mura) {
 
 ## Example usage:
 
+## In Browser
+
 ```
 Mura.init(
   {
@@ -123,4 +125,48 @@ Mura(function(Mura){
     });
 
 });
+```
+
+## In Node
+
+If you want client cookie support you must use a custom a RequestContext
+that contains the current executions request and response objects.
+
+```
+const express = require('express')
+const app = express()
+const Mura=require('../index');
+
+Mura.init({
+  siteid:'default',
+  rootpath:'http://localhost:8080'
+});
+
+app.get('/', function (req, res) {
+
+  Mura.getRequestContext(req, res).renderFilename('about').then(
+    function(content){
+      res.send("<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>")
+    },
+    function(error){
+      console.log(error);
+    }
+  );
+});
+
+app.get('/content', function (req, res) {
+
+  Mura.getRequestContext(req, res)
+    .getFeed('content')
+    .getQuery()
+    .then(function(items){
+        res.send("<br/>content feed:<pre>" + JSON.stringify(items.getAll()) + "</pre>");
+  });
+})
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
+
+
+})
 ```
