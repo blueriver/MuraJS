@@ -59,6 +59,8 @@ Mura.Request=Mura.Core.extend(
 
       if(typeof this.requestObject != 'undefined' && typeof this.requestObject.headers['cookie'] != 'undefined'){
         params.headers['Cookie']=this.requestObject.headers['cookie'];
+        //console.log('pre cookie');
+        //console.log(params.headers['Cookie']);
       }
 
       //console.log('pre:')
@@ -120,25 +122,30 @@ Mura.Request=Mura.Core.extend(
 
             for(var c in existingCookies){
               var tempCookie=existingCookies[c].split(" ")[0].split("=");
-              cookieMap[tempCookie[0]]=tempCookie[1];
+              cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
             }
 
             for(var c in newSetCookies){
               var tempCookie=newSetCookies[c].split(" ")[0].split("=");
-              cookieMap[tempCookie[0]]=tempCookie[1];
+              cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
             }
 
             var cookie='';
 
             for(var c in cookieMap){
               if(cookieMap.hasOwnProperty(c)){
-                cookie=cookie + c + "=" + cookieMap[c] + "; ";
+                if(cookie != ''){
+                  cookie=cookie + "; ";
+                }
+                cookie=cookie + c + "=" + cookieMap[c].split(';')[0]
               }
             }
 
             self.requestObject.headers['Cookie']=cookie;
             //console.log('post:')
             //console.log(self.requestObject.headers['Cookie']);
+            //console.log('post cookie');
+            //console.log(cookie);
 
         }
 
