@@ -120,14 +120,18 @@ Mura.Request=Mura.Core.extend(
 
             var cookieMap={};
 
-            for(var c in existingCookies){
-              var tempCookie=existingCookies[c].split(" ")[0].split("=");
-              cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+            if(existingCookies.length){
+              for(var c in existingCookies){
+                var tempCookie=existingCookies[c].split(" ")[0].split("=");
+                cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+              }
             }
 
-            for(var c in newSetCookies){
-              var tempCookie=newSetCookies[c].split(" ")[0].split("=");
-              cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+            if(newSetCookies.length){
+              for(var c in newSetCookies){
+                var tempCookie=newSetCookies[c].split(" ")[0].split("=");
+                cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+              }
             }
 
             var cookie='';
