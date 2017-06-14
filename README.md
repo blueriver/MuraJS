@@ -129,7 +129,7 @@ Mura(function(Mura){
 
 ## In Node
 
-If you want client cookie support you must use a custom a RequestContext
+If you want client cookie support you must use a custom RequestContext
 that contains the current executions request and response objects.
 
 ```
