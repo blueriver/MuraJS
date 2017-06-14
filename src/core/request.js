@@ -61,8 +61,8 @@ Mura.Request=Mura.Core.extend(
         params.headers['Cookie']=this.requestObject.headers['cookie'];
       }
 
-      console.log('pre:')
-      console.log(params.headers);
+      //console.log('pre:')
+      //console.log(params.headers);
       //console.log(params.headers)
 
       if (params.type.toLowerCase() == 'post') {
@@ -137,8 +137,8 @@ Mura.Request=Mura.Core.extend(
             }
 
             self.requestObject.headers['Cookie']=cookie;
-            console.log('post:')
-            console.log(self.requestObject.headers['Cookie']);
+            //console.log('post:')
+            //console.log(self.requestObject.headers['Cookie']);
 
         }
 
