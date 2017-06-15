@@ -2648,6 +2648,40 @@ module.exports=(function(){
       return -1;
   }
 
+  /**
+   * setRequestHeader - Initialiazes feed
+   *
+   * @param  {string} headerName  Name of header
+   * @param  {string} value Header value
+   * @return {Mura.RequestContext}            Self
+   */
+   function setRequestHeader(headerName,value){
+     Mura.requestHeaders[headerName]=value;
+   }
+
+  /**
+   * getRequestHeader - Returns a request header value
+   *
+   * @param  {string} headerName  Name of header
+   * @return {string} header Value
+   */
+   function getRequestHeader(headerName){
+      if(typeof Mura.requestHeaders[headerName] != 'undefined'){
+        return Mura.requestHeaders[headerName];
+      } else {
+        return null;
+      }
+   }
+
+  /**
+   * getRequestHeaders - Returns a request header value
+   *
+   * @return {object} All Headers
+   */
+   function getRequestHeaders(){
+     return Mura.requestHeaders;
+   }
+
   //http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
 
   /**
@@ -2673,9 +2707,17 @@ module.exports=(function(){
       return (hash >>> 0);
   }
 
+  /**
+   * Returns if the current request s running in Node.js
+  **/
   function isInNode(){
     return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]' || typeof document =='undefined';
   }
+
+  /**
+   * Global Request Headers
+  **/
+  var requestHeaders={};
 
   function init(config) {
 
@@ -2734,6 +2776,10 @@ module.exports=(function(){
       Mura.editing;
 
       extend(Mura, config);
+
+      if(Mura.mode.toLowerString=='rest'){
+          Mura.apiEndpoint=Mura.apiEndpoint.replace('/json/', '/rest/');
+      }
 
       Mura(function() {
 
@@ -2858,7 +2904,12 @@ module.exports=(function(){
               recordEvent: trackEvent,
               isInNode: isInNode,
               getRequestContext: getRequestContext,
-              getDefaultRequestContext: getDefaultRequestContext
+              getDefaultRequestContext: getDefaultRequestContext,
+              requestHeaders:requestHeaders,
+              setRequestHeader:setRequestHeader,
+              getRequestHeader:getRequestHeaders,
+              getRequestHeaders:getRequestHeaders,
+              mode: 'json'
           }
       );
 

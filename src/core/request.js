@@ -11,9 +11,10 @@ Mura.Request=Mura.Core.extend(
 		 * @param  {object} response Entity name
 		 * @return {Mura.Request}            Self
 		 */
-		init: function(req, res) {
-      this.requestObject=req;
-      this.responseObject=res;
+		init: function(request, response, headers) {
+      this.requestObject=request;
+      this.responseObject=response;
+      this.requestHeaders=headers || {};
       return this;
 		},
 
@@ -53,14 +54,63 @@ Mura.Request=Mura.Core.extend(
       }
 
     },
+    setRequestHeader:function(headerName,value){
+      this.requestHeaders[headerName]=value;
+    },
+    getRequestHeader:function(headerName){
+       if(typeof this.requestHeaders[headerName] != 'undefined'){
+         return this.requestHeaders[headerName];
+       } else {
+         return null;
+       }
+    },
+    getRequestHeaders:function(){
+      return this.requestHeaders;
+    },
     nodeRequest:function(params){
 
       self=this;
 
-      if(typeof this.requestObject != 'undefined' && typeof this.requestObject.headers['cookie'] != 'undefined'){
-        params.headers['Cookie']=this.requestObject.headers['cookie'];
-        //console.log('pre cookie');
-        //console.log(params.headers['Cookie']);
+      if(typeof this.requestObject != 'undefined'){
+        if(typeof this.requestObject.headers['cookie'] != 'undefined'){
+          params.headers['Cookie']=this.requestObject.headers['cookie'];
+        }
+        if(typeof this.requestObject.headers['x-client_id'] != 'undefined'){
+          params.headers['X-client_id']=this.requestObject.headers['x-client_id'];
+        }
+        if(typeof this.requestObject.headers['x-client_id'] != 'undefined'){
+          params.headers['X-client_id']=this.requestObject.headers['x-client_id'];
+        }
+        if(typeof this.requestObject.headers['X-client_secret'] != 'undefined'){
+          params.headers['X-client_secret']=this.requestObject.headers['X-client_secret'];
+        }
+        if(typeof this.requestObject.headers['x-client_secret'] != 'undefined'){
+          params.headers['X-client_secret']=this.requestObject.headers['x-client_secret'];
+        }
+        if(typeof this.requestObject.headers['X-access_token'] != 'undefined'){
+          params.headers['X-access_token']=this.requestObject.headers['X-access_token'];
+        }
+        if(typeof this.requestObject.headers['x-access_token'] != 'undefined'){
+          params.headers['X-access_token']=this.requestObject.headers['x-access_token'];
+        }
+        if(typeof this.requestObject.headers['Authorization'] != 'undefined'){
+          params.headers['Authorization']=this.requestObject.headers['Authorization'];
+        }
+        if(typeof this.requestObject.headers['authorization'] != 'undefined'){
+          params.headers['Authorization']=this.requestObject.headers['authorization'];
+        }
+      }
+
+      for(var h in Mura.requestHeaders){
+          if(Mura.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= Mura.requestHeaders[h];
+          }
+      }
+
+      for(var h in this.requestHeaders){
+          if(this.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= this.requestHeaders[h];
+          }
       }
 
       //console.log('pre:')
@@ -92,7 +142,6 @@ Mura.Request=Mura.Core.extend(
           }
 
           query = query.join('&');
-
 
           Mura._request(
             {
@@ -182,6 +231,19 @@ Mura.Request=Mura.Core.extend(
       }
     },
     browserRequest:function(params){
+
+      for(var h in Mura.requestHeaders){
+          if(Mura.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= Mura.requestHeaders[h];
+          }
+      }
+
+      for(var h in this.requestHeaders){
+          if(this.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= this.requestHeaders[h];
+          }
+      }
+
       if (!(typeof FormData != 'undefined' && params.data instanceof FormData)) {
           params.data = Mura.deepExtend({}, params.data);
 

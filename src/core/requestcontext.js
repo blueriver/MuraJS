@@ -12,12 +12,43 @@ Mura.RequestContext=Mura.Core.extend(
 	 * @param  {object} response Entity name
 	 * @return {Mura.RequestContext}            Self
 	 */
-	init: function(req, res) {
-    this.requestObject=req;
-    this.reponseObject=res;
-    this._request=new Mura.Request(req, res);
+	init: function(request, response, requestHeaders) {
+    this.requestObject=request;
+    this.reponseObject=response;
+    this._request=new Mura.Request(request, response, requestHeaders);
     return this;
 	},
+
+  /**
+   * setRequestHeader - Initialiazes feed
+   *
+   * @param  {string} headerName  Name of header
+   * @param  {string} value Header value
+   * @return {Mura.RequestContext}            Self
+   */
+  setRequestHeader:function(headerName,value){
+    this._request.setRequestHeader(headerName,value);
+    return this;
+  },
+
+  /**
+   * getRequestHeader - Returns a request header value
+   *
+   * @param  {string} headerName  Name of header
+   * @return {string} header Value
+   */
+  getRequestHeader:function(headerName){
+    return this._request.getRequestHeader(headerName);
+  },
+
+  /**
+   * getRequestHeaders - Returns a request header value
+   *
+   * @return {object} All Headers
+   */
+  getRequestHeaders:function(){
+    return this._request.getRequestHeaders();
+  },
 
   /**
    * request - Executes a request
@@ -333,6 +364,11 @@ Mura.RequestContext=Mura.Core.extend(
           });
       });
 
-  }
+  },
+
+  /**
+   * Request Headers
+  **/
+  requestHeaders:{}
 
 });
