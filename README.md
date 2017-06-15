@@ -129,6 +129,8 @@ Mura(function(Mura){
 
 ## In Node
 
+### Cookie Based Requests
+
 If you want client cookie support you must use a custom RequestContext
 that contains the current executions request and response objects.
 
@@ -169,4 +171,37 @@ app.listen(3000, function () {
 
 
 })
+```
+
+## REST Based Requests
+
+```
+const express = require('express')
+const app = express()
+const Mura=require('../index');
+
+Mura.init({
+  siteid:'default',
+  rootpath:'http://localhost:8080'
+  mode:'REST',
+});
+
+//Global Request Headers
+Mura.setRequestHeader('Authorization','Bearer: ...');
+
+app.get('/', function (req, res) {
+
+  Mura
+    .getRequestContext(req, res);
+    //Per Execution Request Headers
+    .setRequestHeader('Authorization','Bearer: ...');
+    .renderFilename('about').then(
+    function(content){
+      res.send("<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>")
+    },
+    function(error){
+      console.log(error);
+    }
+  );
+});
 ```

@@ -2884,6 +2884,40 @@ module.exports=(function(){
       return -1;
   }
 
+  /**
+   * setRequestHeader - Initialiazes feed
+   *
+   * @param  {string} headerName  Name of header
+   * @param  {string} value Header value
+   * @return {Mura.RequestContext}            Self
+   */
+   function setRequestHeader(headerName,value){
+     Mura.requestHeaders[headerName]=value;
+   }
+
+  /**
+   * getRequestHeader - Returns a request header value
+   *
+   * @param  {string} headerName  Name of header
+   * @return {string} header Value
+   */
+   function getRequestHeader(headerName){
+      if(typeof Mura.requestHeaders[headerName] != 'undefined'){
+        return Mura.requestHeaders[headerName];
+      } else {
+        return null;
+      }
+   }
+
+  /**
+   * getRequestHeaders - Returns a request header value
+   *
+   * @return {object} All Headers
+   */
+   function getRequestHeaders(){
+     return Mura.requestHeaders;
+   }
+
   //http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
 
   /**
@@ -2909,9 +2943,17 @@ module.exports=(function(){
       return (hash >>> 0);
   }
 
+  /**
+   * Returns if the current request s running in Node.js
+  **/
   function isInNode(){
     return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]' || typeof document =='undefined';
   }
+
+  /**
+   * Global Request Headers
+  **/
+  var requestHeaders={};
 
   function init(config) {
 
@@ -2970,6 +3012,10 @@ module.exports=(function(){
       Mura.editing;
 
       extend(Mura, config);
+
+      if(Mura.mode.toLowerString=='rest'){
+          Mura.apiEndpoint=Mura.apiEndpoint.replace('/json/', '/rest/');
+      }
 
       Mura(function() {
 
@@ -3094,7 +3140,12 @@ module.exports=(function(){
               recordEvent: trackEvent,
               isInNode: isInNode,
               getRequestContext: getRequestContext,
-              getDefaultRequestContext: getDefaultRequestContext
+              getDefaultRequestContext: getDefaultRequestContext,
+              requestHeaders:requestHeaders,
+              setRequestHeader:setRequestHeader,
+              getRequestHeader:getRequestHeaders,
+              getRequestHeaders:getRequestHeaders,
+              mode: 'json'
           }
       );
 
@@ -6520,12 +6571,43 @@ Mura.RequestContext=Mura.Core.extend(
 	 * @param  {object} response Entity name
 	 * @return {Mura.RequestContext}            Self
 	 */
-	init: function(req, res) {
-    this.requestObject=req;
-    this.reponseObject=res;
-    this._request=new Mura.Request(req, res);
+	init: function(request, response, requestHeaders) {
+    this.requestObject=request;
+    this.reponseObject=response;
+    this._request=new Mura.Request(request, response, requestHeaders);
     return this;
 	},
+
+  /**
+   * setRequestHeader - Initialiazes feed
+   *
+   * @param  {string} headerName  Name of header
+   * @param  {string} value Header value
+   * @return {Mura.RequestContext}            Self
+   */
+  setRequestHeader:function(headerName,value){
+    this._request.setRequestHeader(headerName,value);
+    return this;
+  },
+
+  /**
+   * getRequestHeader - Returns a request header value
+   *
+   * @param  {string} headerName  Name of header
+   * @return {string} header Value
+   */
+  getRequestHeader:function(headerName){
+    return this._request.getRequestHeader(headerName);
+  },
+
+  /**
+   * getRequestHeaders - Returns a request header value
+   *
+   * @return {object} All Headers
+   */
+  getRequestHeaders:function(){
+    return this._request.getRequestHeaders();
+  },
 
   /**
    * request - Executes a request
@@ -6841,7 +6923,12 @@ Mura.RequestContext=Mura.Core.extend(
           });
       });
 
-  }
+  },
+
+  /**
+   * Request Headers
+  **/
+  requestHeaders:{}
 
 });
 
@@ -11420,9 +11507,10 @@ Mura.Request=Mura.Core.extend(
 		 * @param  {object} response Entity name
 		 * @return {Mura.Request}            Self
 		 */
-		init: function(req, res) {
-      this.requestObject=req;
-      this.responseObject=res;
+		init: function(request, response, headers) {
+      this.requestObject=request;
+      this.responseObject=response;
+      this.requestHeaders=headers || {};
       return this;
 		},
 
@@ -11462,14 +11550,63 @@ Mura.Request=Mura.Core.extend(
       }
 
     },
+    setRequestHeader:function(headerName,value){
+      this.requestHeaders[headerName]=value;
+    },
+    getRequestHeader:function(headerName){
+       if(typeof this.requestHeaders[headerName] != 'undefined'){
+         return this.requestHeaders[headerName];
+       } else {
+         return null;
+       }
+    },
+    getRequestHeaders:function(){
+      return this.requestHeaders;
+    },
     nodeRequest:function(params){
 
       self=this;
 
-      if(typeof this.requestObject != 'undefined' && typeof this.requestObject.headers['cookie'] != 'undefined'){
-        params.headers['Cookie']=this.requestObject.headers['cookie'];
-        //console.log('pre cookie');
-        //console.log(params.headers['Cookie']);
+      if(typeof this.requestObject != 'undefined'){
+        if(typeof this.requestObject.headers['cookie'] != 'undefined'){
+          params.headers['Cookie']=this.requestObject.headers['cookie'];
+        }
+        if(typeof this.requestObject.headers['x-client_id'] != 'undefined'){
+          params.headers['X-client_id']=this.requestObject.headers['x-client_id'];
+        }
+        if(typeof this.requestObject.headers['x-client_id'] != 'undefined'){
+          params.headers['X-client_id']=this.requestObject.headers['x-client_id'];
+        }
+        if(typeof this.requestObject.headers['X-client_secret'] != 'undefined'){
+          params.headers['X-client_secret']=this.requestObject.headers['X-client_secret'];
+        }
+        if(typeof this.requestObject.headers['x-client_secret'] != 'undefined'){
+          params.headers['X-client_secret']=this.requestObject.headers['x-client_secret'];
+        }
+        if(typeof this.requestObject.headers['X-access_token'] != 'undefined'){
+          params.headers['X-access_token']=this.requestObject.headers['X-access_token'];
+        }
+        if(typeof this.requestObject.headers['x-access_token'] != 'undefined'){
+          params.headers['X-access_token']=this.requestObject.headers['x-access_token'];
+        }
+        if(typeof this.requestObject.headers['Authorization'] != 'undefined'){
+          params.headers['Authorization']=this.requestObject.headers['Authorization'];
+        }
+        if(typeof this.requestObject.headers['authorization'] != 'undefined'){
+          params.headers['Authorization']=this.requestObject.headers['authorization'];
+        }
+      }
+
+      for(var h in Mura.requestHeaders){
+          if(Mura.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= Mura.requestHeaders[h];
+          }
+      }
+
+      for(var h in this.requestHeaders){
+          if(this.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= this.requestHeaders[h];
+          }
       }
 
       //console.log('pre:')
@@ -11502,7 +11639,6 @@ Mura.Request=Mura.Core.extend(
 
           query = query.join('&');
 
-
           Mura._request(
             {
               url: params.url,
@@ -11529,14 +11665,18 @@ Mura.Request=Mura.Core.extend(
 
             var cookieMap={};
 
-            for(var c in existingCookies){
-              var tempCookie=existingCookies[c].split(" ")[0].split("=");
-              cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+            if(existingCookies.length){
+              for(var c in existingCookies){
+                var tempCookie=existingCookies[c].split(" ")[0].split("=");
+                cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+              }
             }
 
-            for(var c in newSetCookies){
-              var tempCookie=newSetCookies[c].split(" ")[0].split("=");
-              cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+            if(newSetCookies.length){
+              for(var c in newSetCookies){
+                var tempCookie=newSetCookies[c].split(" ")[0].split("=");
+                cookieMap[tempCookie[0]]=tempCookie[1].split(';')[0];
+              }
             }
 
             var cookie='';
@@ -11587,6 +11727,19 @@ Mura.Request=Mura.Core.extend(
       }
     },
     browserRequest:function(params){
+
+      for(var h in Mura.requestHeaders){
+          if(Mura.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= Mura.requestHeaders[h];
+          }
+      }
+
+      for(var h in this.requestHeaders){
+          if(this.requestHeaders.hasOwnProperty(h)){
+              params.headers[h]= this.requestHeaders[h];
+          }
+      }
+
       if (!(typeof FormData != 'undefined' && params.data instanceof FormData)) {
           params.data = Mura.deepExtend({}, params.data);
 
