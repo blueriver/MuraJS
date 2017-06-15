@@ -8,7 +8,6 @@ Mura.init({
 });
 
 app.get('/', function (req, res) {
-
   Mura.getRequestContext(req, res).renderFilename('about').then(
     function(content){
       res.send("<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>")
@@ -31,6 +30,4 @@ app.get('/content', function (req, res) {
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
-
-
 })

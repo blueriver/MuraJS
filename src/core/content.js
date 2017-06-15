@@ -2,12 +2,12 @@
 var Mura=require('./core');
 
 /**
-* Creates a new Mura.Entity
-* @class {class} Mura.Entity
+* Creates a new Mura.entities.Content
+* @class {class} Mura.entities.Content
 */
 
 Mura.entities.Content = Mura.Entity.extend(
-/** @lends Mura.Entity.prototype */
+/** @lends Mura.entities.Content.prototype */
 {
   getRelatedContent:function(relatedContentSetName,params){
     return new Promise(function(resolve,
@@ -34,8 +34,7 @@ Mura.entities.Content = Mura.Entity.extend(
                 query.join('&'),
             params: params,
             success: function(resp) {
-                var returnObj = new Mura.EntityCollection(resp.data);
-                    returnObj._requestcontext=self._requestcontext;
+                var returnObj = new Mura.EntityCollection(resp.data,self._requestcontext);
 
                 if (typeof resolve == 'function') {
                     resolve(returnObj);
@@ -46,6 +45,5 @@ Mura.entities.Content = Mura.Entity.extend(
     });
 
   }
-
 
 });

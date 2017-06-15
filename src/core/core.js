@@ -2916,9 +2916,3 @@ module.exports=(function(){
     return Mura;
 
 })();
-
-
-/**
- * A namespace.
- * @namespace  Mura
- */

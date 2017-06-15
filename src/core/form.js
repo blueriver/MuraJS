@@ -1,7 +1,12 @@
 
 var Mura=require('./core');
+/**
+ * Creates a new Mura.DisplayObject.Form
+ * @class {class} Mura.DisplayObject.Form
+ */
 
 Mura.DisplayObject.Form=Mura.UI.extend({
+/** @lends Mura.DisplayObject.Form.prototype */
 context:{},
 ormform: false,
 formJSON:{},

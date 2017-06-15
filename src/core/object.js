@@ -1,10 +1,18 @@
 
 var Mura=require('./core');
 
+/**
+* Creates a new Mura.Core
+* @class {class} Mura.Core
+* @classdesc Abstract class representing a Mura core object.
+*/
+
 function core(){
 	this.init.apply(this,arguments);
 	return this;
 }
+
+/** @lends Mura.Core.prototype */
 
 core.prototype={
 	init:function(){

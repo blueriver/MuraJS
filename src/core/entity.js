@@ -16,7 +16,7 @@ Mura.Entity = Mura.Core.extend(
      * @param  {object} properties Object containing values to set into object
      * @return {void}
      */
-    init: function(properties) {
+    init: function(properties,requestcontext) {
         properties = properties || {};
         properties.entityname = properties.entityname ||
             'content';
@@ -38,9 +38,21 @@ Mura.Entity = Mura.Core.extend(
             this.properties.isdeleted = false;
         }
 
+        this._requestcontext=requestcontext || Mura._requestcontext;
+
         this.cachePut();
     },
 
+    /**
+		 * setRequestContext - Sets the RequestContext
+		 *
+		 * @RequestContext  {Mura.RequestContext} Mura.RequestContext List of fields
+		 * @return {Mura.Feed}        Self
+		 */
+		setRequestContext: function(requestcontext) {
+			this._requestcontext=requestcontext;
+			return this;
+		},
 
     /**
      * exists - Returns if the entity was previously saved
@@ -70,15 +82,13 @@ Mura.Entity = Mura.Core.extend(
 
                 return new Promise(function(resolve,reject) {
                     if ('items' in self.properties[propertyName]) {
-                        var returnObj = new Mura.EntityCollection(self.properties[propertyName]);
-                            returnObj._requestcontext=self._requestcontext;
+                        var returnObj = new Mura.EntityCollection(self.properties[propertyName],self._requestcontext);
+
                     } else {
                         if (Mura.entities[self.properties[propertyName].entityname]) {
-                            var returnObj = new Mura.entities[self.properties[propertyName ].entityname]( obj.properties[propertyName]);
-                                returnObj._requestcontext=self._requestcontext;
+                            var returnObj = new Mura.entities[self.properties[propertyName ].entityname]( obj.properties[propertyName],self._requestcontext);
                         } else {
-                            var returnObj = new Mura.Entity(self.properties[propertyName]);
-                                returnObj._requestcontext=self._requestcontext;
+                            var returnObj = new Mura.Entity(self.properties[propertyName],self._requestcontext);
                         }
                     }
 
@@ -105,17 +115,14 @@ Mura.Entity = Mura.Core.extend(
                             if (
                                 'items' in resp.data
                             ) {
-                                var returnObj = new Mura.EntityCollection(resp.data);
-                                    returnObj._requestcontext=self._requestcontext;
+                                var returnObj = new Mura.EntityCollection(resp.data,self._requestcontext);
                             } else {
                                 if (
                                     Mura.entities[obj.entityname]
                                 ) {
-                                    var returnObj = new Mura.entities[obj.entityname](obj);
-                                        returnObj._requestcontext=self._requestcontext;
+                                    var returnObj = new Mura.entities[obj.entityname](obj,self._requestcontext);
                                 } else {
-                                    var returnObj = new Mura.Entity(resp.data);
-                                        returnObj._requestcontext=self._requestcontext;
+                                    var returnObj = new Mura.Entity(resp.data,self._requestcontext);
                                 }
                             }
 
@@ -532,8 +539,7 @@ Mura.Entity = Mura.Core.extend(
      */
     getFeed: function() {
         var siteid = get('siteid') || Mura.siteid;
-        var feed=new Mura.Feed(this.get('entityName'));
-        feed._requestcontext=this._requestcontext;
+        var feed=this._requestcontext.getFeed(this.get('entityName'));
         return feed;
     },
 

@@ -1,7 +1,13 @@
+
 var Mura=require('./core');
 
+/**
+* Creates a new Mura.Request
+* @class {class} Mura.Request
+*/
+
 Mura.Request=Mura.Core.extend(
-  /** @lends Mura.Ajax.prototype */
+  /** @lends Mura.Request.prototype */
   {
 
     /**
@@ -10,6 +16,7 @@ Mura.Request=Mura.Core.extend(
 		 * @param  {object} request     Siteid
 		 * @param  {object} response Entity name
 		 * @return {Mura.Request}            Self
+     * @constructs
 		 */
 		init: function(request, response, headers) {
       this.requestObject=request;
@@ -119,11 +126,10 @@ Mura.Request=Mura.Core.extend(
 
       if (params.type.toLowerCase() == 'post') {
 
-          params.headers['Content-Type']='application/x-www-form-urlencoded; charset=UTF-8';
-
+          console.log(params.data)
           Mura._request.post(
             {
-              uri: params.url,
+              url: params.url,
               formData: params.data,
               headers: params.headers
             },
@@ -145,7 +151,7 @@ Mura.Request=Mura.Core.extend(
 
           Mura._request(
             {
-              url: params.url,
+              url: params.url + query,
               headers:params.headers
             },
             nodeResponseHandler

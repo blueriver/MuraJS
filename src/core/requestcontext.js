@@ -1,8 +1,13 @@
 
 var Mura=require('./core');
 
+/**
+* Creates a new Mura.RequestContext
+* @class {class} Mura.RequestContext
+*/
+
 Mura.RequestContext=Mura.Core.extend(
-/** @lends Mura.Ajax.prototype */
+/** @lends Mura.RequestContext.prototype */
 {
 
   /**
@@ -11,6 +16,7 @@ Mura.RequestContext=Mura.Core.extend(
 	 * @param  {object} request     Siteid
 	 * @param  {object} response Entity name
 	 * @return {Mura.RequestContext}            Self
+   * @constructs
 	 */
 	init: function(request, response, requestHeaders) {
     this.requestObject=request;
@@ -95,7 +101,7 @@ Mura.RequestContext=Mura.Core.extend(
               success: function(resp) {
                   if (typeof resolve ==
                       'function') {
-                      var item = new Mura.Entity();
+                      var item = new Mura.Entity({},self);
                       item.set(resp.data);
                       resolve(item);
                   }
@@ -125,16 +131,13 @@ Mura.RequestContext=Mura.Core.extend(
           properties.entityname = properties.entityname || 'content';
           properties.siteid = properties.siteid || Mura.siteid;
       }
-
+      
       if (Mura.entities[properties.entityname]) {
-          var entity=new Mura.entities[properties.entityname](
-              properties);
-          entity._requestcontext=this;
+          var entity=new Mura.entities[properties.entityname](properties,this);
           return entity;
       } else {
-          var entity=new Mura.Entity(properties);
-          entity._requestcontext=this;
-          return this;
+          var entity=new Mura.Entity(properties,this);
+          return entity;
       }
   },
 
@@ -146,8 +149,7 @@ Mura.RequestContext=Mura.Core.extend(
    * @memberof Mura
    */
   getFeed:function(entityname) {
-      var feed=new Mura.Feed(Mura.siteid, entityname);
-      feed._requestcontext=this;
+      var feed=new Mura.Feed(Mura.siteid, entityname, this);
       return feed;
   },
 
@@ -218,9 +220,7 @@ Mura.RequestContext=Mura.Core.extend(
               url: Mura.apiEndpoint,
               data: params,
               success: function(resp) {
-                  var collection = new Mura.EntityCollection(resp.data)
-
-                  collection._requestcontext=self;
+                  var collection = new Mura.EntityCollection(resp.data,self)
 
                   if (typeof resolve == 'function') {
                       resolve(collection);

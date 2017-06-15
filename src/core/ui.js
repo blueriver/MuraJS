@@ -2,12 +2,12 @@
 var Mura =require("./core");
 
 /**
- * Creates a new Mura.Entity
+ * Creates a new Mura.UI instance
  * @class {class} Mura.UI
  */
 
 Mura.UI=Mura.Core.extend(
-  /** @lends Mura.Feed.prototype */
+  /** @lends Mura.UI.prototype */
   {
 	rb:{},
 	context:{},

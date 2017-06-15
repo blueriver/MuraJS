@@ -14,19 +14,21 @@ Mura.EntityCollection=Mura.Entity.extend(
 	 *
 	 * @param  {object} properties Object containing values to set into object
 	 * @return {object} Self
+   * @constructs
 	 */
-	init:function(properties){
+	init:function(properties,requestcontext){
 		properties=properties || {};
 		this.set(properties);
+    this._requestcontext=requestcontext || Mura._requestcontext;
 
 		var self=this;
 
 		if(Array.isArray(self.get('items'))){
 			self.set('items',self.get('items').map(function(obj){
 				if(Mura.entities[obj.entityname]){
-					return new Mura.entities[obj.entityname](obj);
+					return new Mura.entities[obj.entityname](obj,self._requestcontext);
 				} else {
-					return new Mura.Entity(obj);
+					return new Mura.Entity(obj,self._requestcontext);
 				}
 			}));
 		}
@@ -34,7 +36,7 @@ Mura.EntityCollection=Mura.Entity.extend(
 		return this;
 	},
 
-      /**
+  /**
 	 * length - Returns length entity collection
 	 *
 	 * @return {number}     integer
@@ -131,8 +133,7 @@ Mura.EntityCollection=Mura.Entity.extend(
               }
           }
 
-		var collection=new Mura.EntityCollection(newProps);
-        collection._requestcontext=this._requestcontext;
+		var collection=new Mura.EntityCollection(newProps,this._requestcontext);
 		return collection.set('items',this.properties.items.filter( function(item,idx){
 			return fn.call(item,item,idx);
 		}));

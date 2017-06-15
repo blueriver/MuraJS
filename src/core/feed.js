@@ -16,10 +16,14 @@ Mura.Feed = Mura.Core.extend(
 		 * @param  {string} siteid     Siteid
 		 * @param  {string} entityname Entity name
 		 * @return {Mura.Feed}            Self
+		 * @constructs
 		 */
-		init: function(siteid, entityname) {
+		init: function(siteid, entityname, requestcontext) {
 			this.queryString = entityname + '/?_cacheid=' + Math.random();
 			this.propIndex = 0;
+
+			this._requestcontext=requestcontext || Mura._requestcontext;
+			
 			return this;
 		},
 
@@ -31,6 +35,17 @@ Mura.Feed = Mura.Core.extend(
 		 */
 		fields: function(fields) {
 			this.queryString += '&fields=' + encodeURIComponent(fields);
+			return this;
+		},
+
+		/**
+		 * setRequestContext - Sets the RequestContext
+		 *
+		 * @RequestContext  {Mura.RequestContext} Mura.RequestContext List of fields
+		 * @return {Mura.Feed}        Self
+		 */
+		setRequestContext: function(RequestContext) {
+			this._requestcontext=RequestContext;
 			return this;
 		},
 
@@ -402,8 +417,8 @@ Mura.Feed = Mura.Core.extend(
 					url: apiEndpoint + self.queryString,
 					success: function(resp) {
 
-						var returnObj = new Mura.EntityCollection(resp.data);
-								returnObj._requestcontext=self._requestcontext;
+						var returnObj = new Mura.EntityCollection(resp.data,self._requestcontext);
+
 						if (typeof resolve == 'function') {
 							resolve(returnObj);
 						}
