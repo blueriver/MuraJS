@@ -4,13 +4,10 @@ var Mura =require("./core");
 /**
  * Creates a new Mura.UI instance
  * @name Mura.UI
+ * @class
  * @extends  Mura.Core
- * @memberof {class} Mura
+ * @memberof Mura
  */
-
- /**
-  * @ignore
-  */
 
 Mura.UI=Mura.Core.extend(
   /** @lends Mura.UI.prototype */

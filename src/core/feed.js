@@ -4,8 +4,12 @@ var Mura=require('./core');
 /**
  * Creates a new Mura.Feed
  * @name  Mura.Feed
+ * @class
  * @extends Mura.Core
- * @memberof {class} Mura
+ * @memberof Mura
+ * @param  {string} siteid     Siteid
+ * @param  {string} entityname Entity name
+ * @return {Mura.Feed}            Self
  */
 
  /**
@@ -15,15 +19,6 @@ var Mura=require('./core');
 Mura.Feed = Mura.Core.extend(
 	/** @lends Mura.Feed.prototype */
 	{
-
-		/**
-		 * init - Initialiazes feed
-		 *
-		 * @param  {string} siteid     Siteid
-		 * @param  {string} entityname Entity name
-		 * @return {Mura.Feed}            Self
-		 * @constructs
-		 */
 		init: function(siteid, entityname, requestcontext) {
 			this.queryString = entityname + '/?_cacheid=' + Math.random();
 			this.propIndex = 0;

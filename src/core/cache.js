@@ -3,20 +3,16 @@ var Mura=require('./core');
 /**
  * Creates a new Mura.Cache
  * @name Mura.Cache
+ * @class
  * @extends Mura.Core
- * @memberof {class} Mura
+ * @memberof  Mura
+ * @return {Mura.Cache}
  */
 
 Mura.Cache=Mura.Core.extend(
   /** @lends Mura.Cache.prototype */
   {
 
-	/**
-	 * init - Initialiazes cache
-	 *
-	 * @return {object}
-   * @constructs
-	 */
 	init:function(){
 		this.cache={};
     return this;

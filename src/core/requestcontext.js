@@ -3,23 +3,18 @@ var Mura=require('./core');
 
 /**
 * Creates a new Mura.RequestContext
-* @name  Mura.RequestContent
+* @name  Mura.RequestContext
+* @class
 * @extends Mura.Core
-* @memberof {class} Mura
+* @memberof Mura
+* @param  {object} request     Siteid
+* @param  {object} response Entity name
+* @return {Mura.RequestContext} s Self
 */
 
 Mura.RequestContext=Mura.Core.extend(
 /** @lends Mura.RequestContext.prototype */
 {
-
-  /**
-	 * init - Initialiazes feed
-	 *
-	 * @param  {object} request     Siteid
-	 * @param  {object} response Entity name
-	 * @return {Mura.RequestContext}            Self
-   * @constructs
-	 */
 	init: function(request, response, requestHeaders) {
     this.requestObject=request;
     this.reponseObject=response;
@@ -32,7 +27,7 @@ Mura.RequestContext=Mura.Core.extend(
    *
    * @param  {string} headerName  Name of header
    * @param  {string} value Header value
-   * @return {Mura.RequestContext}            Self
+   * @return {Mura.RequestContext}  Self
    */
   setRequestHeader:function(headerName,value){
     this._request.setRequestHeader(headerName,value);

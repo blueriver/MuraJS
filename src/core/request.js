@@ -4,22 +4,18 @@ var Mura=require('./core');
 /**
 * Creates a new Mura.Request
 * @name  Mura.Request
+* @class
 * @extends Mura.Core
-* @memberof {class} Mura
+* @memberof Mura
+* @param  {object} request     Siteid
+* @param  {object} response Entity name
+* @param  {object} requestHeaders Optional
+* @return {Mura.Request}  Self
 */
 
 Mura.Request=Mura.Core.extend(
   /** @lends Mura.Request.prototype */
   {
-
-    /**
-		 * init - Initialiazes feed
-		 *
-		 * @param  {object} request     Siteid
-		 * @param  {object} response Entity name
-		 * @return {Mura.Request}            Self
-     * @constructs
-		 */
 		init: function(request, response, headers) {
       this.requestObject=request;
       this.responseObject=response;

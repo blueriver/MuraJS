@@ -4,13 +4,23 @@ var Mura=require('./core');
 /**
 * Creates a new Mura.entities.Content
 * @name Mura.entities.Content
+* @class
 * @extends Mura.Entity
-* @memberof {class} Mura
+* @memberof Mura
+* @param  {object} properties Object containing values to set into object
+* @return {Mura.Entity}
 */
 
 Mura.entities.Content = Mura.Entity.extend(
 /** @lends Mura.entities.Content.prototype */
 {
+  /**
+   * getRelatedContent - Gets related content sets by name
+   *
+   * @param  {string} relatedContentSetName
+   * @param  {object} params
+   * @return {Mura.EntityCollection}
+   */
   getRelatedContent:function(relatedContentSetName,params){
     return new Promise(function(resolve,
         reject) {

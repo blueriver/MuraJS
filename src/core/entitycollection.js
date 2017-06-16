@@ -4,20 +4,17 @@ var Mura=require('./core');
 /**
  * Creates a new Mura.EntityCollection
  * @name  Mura.Entity.EntityCollection
+ * @class
  * @extends Mura.Entity
- * @memberof {class} Mura
+ * @memberof  Mura
+ * @param  {object} properties Object containing values to set into object
+ * @return {Mura.EntityCollection} Self
  */
 
 Mura.EntityCollection=Mura.Entity.extend(
   /** @lends Mura.EntityCollection.prototype */
   {
-      /**
-	 * init - initiliazes instance
-	 *
-	 * @param  {object} properties Object containing values to set into object
-	 * @return {Mura.EntityCollection} Self
-   * @constructs
-	 */
+
 	init:function(properties,requestcontext){
 		properties=properties || {};
 		this.set(properties);

@@ -238,10 +238,11 @@ module.exports = function(it){
 __webpack_require__(131);
 __webpack_require__(331);
 
-
 /**
  * Creates a new Mura
  * @name Mura
+ * @class
+ * @global
  */
 
 var Mura=(function(){
@@ -6561,23 +6562,18 @@ var Mura=__webpack_require__(10);
 
 /**
 * Creates a new Mura.RequestContext
-* @name  Mura.RequestContent
+* @name  Mura.RequestContext
+* @class
 * @extends Mura.Core
-* @memberof {class} Mura
+* @memberof Mura
+* @param  {object} request     Siteid
+* @param  {object} response Entity name
+* @return {Mura.RequestContext} s Self
 */
 
 Mura.RequestContext=Mura.Core.extend(
 /** @lends Mura.RequestContext.prototype */
 {
-
-  /**
-	 * init - Initialiazes feed
-	 *
-	 * @param  {object} request     Siteid
-	 * @param  {object} response Entity name
-	 * @return {Mura.RequestContext}            Self
-   * @constructs
-	 */
 	init: function(request, response, requestHeaders) {
     this.requestObject=request;
     this.reponseObject=response;
@@ -6590,7 +6586,7 @@ Mura.RequestContext=Mura.Core.extend(
    *
    * @param  {string} headerName  Name of header
    * @param  {string} value Header value
-   * @return {Mura.RequestContext}            Self
+   * @return {Mura.RequestContext}  Self
    */
   setRequestHeader:function(headerName,value){
     this._request.setRequestHeader(headerName,value);
@@ -6943,20 +6939,16 @@ var Mura=__webpack_require__(10);
 /**
  * Creates a new Mura.Cache
  * @name Mura.Cache
+ * @class
  * @extends Mura.Core
- * @memberof {class} Mura
+ * @memberof  Mura
+ * @return {Mura.Cache}
  */
 
 Mura.Cache=Mura.Core.extend(
   /** @lends Mura.Cache.prototype */
   {
 
-	/**
-	 * init - Initialiazes cache
-	 *
-	 * @return {object}
-   * @constructs
-	 */
 	init:function(){
 		this.cache={};
     return this;
@@ -7063,13 +7055,23 @@ var Mura=__webpack_require__(10);
 /**
 * Creates a new Mura.entities.Content
 * @name Mura.entities.Content
+* @class
 * @extends Mura.Entity
-* @memberof {class} Mura
+* @memberof Mura
+* @param  {object} properties Object containing values to set into object
+* @return {Mura.Entity}
 */
 
 Mura.entities.Content = Mura.Entity.extend(
 /** @lends Mura.entities.Content.prototype */
 {
+  /**
+   * getRelatedContent - Gets related content sets by name
+   *
+   * @param  {string} relatedContentSetName
+   * @param  {object} params
+   * @return {Mura.EntityCollection}
+   */
   getRelatedContent:function(relatedContentSetName,params){
     return new Promise(function(resolve,
         reject) {
@@ -7120,8 +7122,11 @@ var Mura=__webpack_require__(10);
 /**
  * Creates a new Mura.DOMSelection
  * @name  Mura.DOMSelection
+ * @class
+ * @param  {object} properties Object containing values to set into object
+ * @return {Mura.DOMSelection}
  * @extends Mura.Core
- * @memberof {class} Mura
+ * @memberof Mura
  */
 
  /**
@@ -7132,13 +7137,6 @@ Mura.DOMSelection = Mura.Core.extend(
   /** @lends Mura.DOMSelection.prototype */
   {
 
-      /**
-       * init - initiliazes instance
-       *
-       * @param  {object} properties Object containing values to set into object
-       * @return {object}
-       * @constructs
-       */
       init: function(selection, origSelector) {
           this.selection = selection;
           this.origSelector = origSelector;
@@ -8684,21 +8682,16 @@ var Mura=__webpack_require__(10);
 /**
 * Creates a new Mura.Entity
 * @name  Mura.Entity
+* @class
 * @extends Mura.Core
-* @memberof {class} Mura
+* @memberof Mura
+* @param  {object} properties Object containing values to set into object
+* @return {Mura.Entity}
 */
 
 Mura.Entity = Mura.Core.extend(
 /** @lends Mura.Entity.prototype */
 {
-
-    /**
-     * init - initiliazes instance
-     *
-     * @param  {object} properties Object containing values to set into object
-     * @return {Mura.Entity}
-     * @constructs
-     */
     init: function(properties,requestcontext) {
         properties = properties || {};
         properties.entityname = properties.entityname ||
@@ -9295,20 +9288,17 @@ var Mura=__webpack_require__(10);
 /**
  * Creates a new Mura.EntityCollection
  * @name  Mura.Entity.EntityCollection
+ * @class
  * @extends Mura.Entity
- * @memberof {class} Mura
+ * @memberof  Mura
+ * @param  {object} properties Object containing values to set into object
+ * @return {Mura.EntityCollection} Self
  */
 
 Mura.EntityCollection=Mura.Entity.extend(
   /** @lends Mura.EntityCollection.prototype */
   {
-      /**
-	 * init - initiliazes instance
-	 *
-	 * @param  {object} properties Object containing values to set into object
-	 * @return {Mura.EntityCollection} Self
-   * @constructs
-	 */
+
 	init:function(properties,requestcontext){
 		properties=properties || {};
 		this.set(properties);
@@ -9474,8 +9464,12 @@ var Mura=__webpack_require__(10);
 /**
  * Creates a new Mura.Feed
  * @name  Mura.Feed
+ * @class
  * @extends Mura.Core
- * @memberof {class} Mura
+ * @memberof Mura
+ * @param  {string} siteid     Siteid
+ * @param  {string} entityname Entity name
+ * @return {Mura.Feed}            Self
  */
 
  /**
@@ -9485,15 +9479,6 @@ var Mura=__webpack_require__(10);
 Mura.Feed = Mura.Core.extend(
 	/** @lends Mura.Feed.prototype */
 	{
-
-		/**
-		 * init - Initialiazes feed
-		 *
-		 * @param  {string} siteid     Siteid
-		 * @param  {string} entityname Entity name
-		 * @return {Mura.Feed}            Self
-		 * @constructs
-		 */
 		init: function(siteid, entityname, requestcontext) {
 			this.queryString = entityname + '/?_cacheid=' + Math.random();
 			this.propIndex = 0;
@@ -9926,9 +9911,9 @@ var Mura=__webpack_require__(10);
 /**
  * Creates a new Mura.DisplayObject.Form
  * @name  Mura.DisplayObject.Form
- * @class {class} Mura.DisplayObject.Form
+ * @class
  * @extends Mura.UI
- * @memberof {class} Mura
+ * @memberof  Mura
  */
 
 Mura.DisplayObject.Form=Mura.UI.extend(
@@ -11563,29 +11548,31 @@ var Mura=__webpack_require__(10);
 
 /**
 * Creates a new Mura.Core
-
-* @name  Mura.Core
-* @memberof {class}  Mura
+* @name Mura.Core
+* @class
+* @memberof Mura
+* @param  {object} properties Object containing values to set into object
+* @return {Mura.Core}
 */
-
-/**
- * Core - initiliazes instance
- * @name Mura.Core
- * @param  {object} properties Object containing values to set into object
- * @return {Mura.Core}
- * @constructs
- */
 
 function Core(){
 	this.init.apply(this,arguments);
 	return this;
 }
 
+/** @lends Mura.Core.prototype */
 Core.prototype=
-	/** @lends Mura.Core.prototype */
 	{
 	init:function(){
 	},
+	/**
+	 * trigger - Triggers custom event on Mura objects
+	 *
+	 * @name Mura.Core.trigger
+	 * @function
+	 * @param  {string} eventName  Name of header
+	 * @return {object}  Self
+	 */
 	trigger:function(eventName){
 		eventName=eventName.toLowerCase();
 
@@ -11600,6 +11587,16 @@ Core.prototype=
 	},
 };
 
+/** @lends Mura.Core.prototype */
+
+/**
+ * Extend - Allow the creation of new Mura core classes
+ *
+ * @name Mura.Core.extend
+ * @function
+ * @param  {object} properties  Properties to add to new class prototype
+ * @return {class}  Self
+ */
 Core.extend=function(properties){
 	var self=this;
 	return Mura.extend(Mura.extendClass(self,properties),{extend:self.extend,handlers:[]});
@@ -11618,22 +11615,18 @@ var Mura=__webpack_require__(10);
 /**
 * Creates a new Mura.Request
 * @name  Mura.Request
+* @class
 * @extends Mura.Core
-* @memberof {class} Mura
+* @memberof Mura
+* @param  {object} request     Siteid
+* @param  {object} response Entity name
+* @param  {object} requestHeaders Optional
+* @return {Mura.Request}  Self
 */
 
 Mura.Request=Mura.Core.extend(
   /** @lends Mura.Request.prototype */
   {
-
-    /**
-		 * init - Initialiazes feed
-		 *
-		 * @param  {object} request     Siteid
-		 * @param  {object} response Entity name
-		 * @return {Mura.Request}            Self
-     * @constructs
-		 */
 		init: function(request, response, headers) {
       this.requestObject=request;
       this.responseObject=response;
@@ -12097,13 +12090,10 @@ var Mura =__webpack_require__(10);
 /**
  * Creates a new Mura.UI instance
  * @name Mura.UI
+ * @class
  * @extends  Mura.Core
- * @memberof {class} Mura
+ * @memberof Mura
  */
-
- /**
-  * @ignore
-  */
 
 Mura.UI=Mura.Core.extend(
   /** @lends Mura.UI.prototype */

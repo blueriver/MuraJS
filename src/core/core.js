@@ -2,10 +2,11 @@
 require("babel-polyfill");
 require("./polyfill");
 
-
 /**
  * Creates a new Mura
  * @name Mura
+ * @class
+ * @global
  */
 
 var Mura=(function(){
