@@ -70,7 +70,6 @@ Mura.RequestContext=Mura.Core.extend(
    * @param  {type} filename Mura content filename
    * @param  {type} params Object
    * @return {Promise}
-   * @memberof Mura
    */
   renderFilename:function(filename, params) {
 
@@ -116,7 +115,6 @@ Mura.RequestContext=Mura.Core.extend(
    * @param  {string} entityname Entity Name
    * @param  {string} siteid     Siteid
    * @return {Mura.Entity}
-   * @memberof Mura
    */
   getEntity:function(entityname, siteid) {
       if (typeof entityname == 'string') {
@@ -139,12 +137,39 @@ Mura.RequestContext=Mura.Core.extend(
       }
   },
 
+	/**
+   * declareEntity - Declare Entity with in service factory
+   *
+   * @param  {object} entityConfig Entity config object
+   * @return {Promise}
+   */
+  declareEntity:function(entityConfig) {
+
+      return new Promise(function(resolve, reject) {
+          self.request({
+              async: true,
+              type: 'POST',
+              url: Mura.apiEndpoint,
+							data:{
+								method: 'declareEntity',
+								entityConfig: encodeURIComponent(JSON.stringify(entityConfig))
+							},
+              success: function(resp) {
+                  if (typeof resolve =='function') {
+                      resolve(resp.data);
+                  }
+              }
+            }
+          );
+      });
+
+  },
+
   /**
    * getFeed - Return new instance of Mura.Feed
    *
    * @param  {type} entityname Entity name
    * @return {Mura.Feed}
-   * @memberof Mura
    */
   getFeed:function(entityname) {
       var feed=new Mura.Feed(Mura.siteid, entityname, this);
@@ -156,7 +181,6 @@ Mura.RequestContext=Mura.Core.extend(
    *
    * @param  {object} params Load parameters, fields:listoffields
    * @return {Promise}
-   * @memberof Mura
    */
   getCurrentUser:function(params) {
       var self=this;
@@ -200,7 +224,6 @@ Mura.RequestContext=Mura.Core.extend(
    *
    * @param  {object} params Object of matching params
    * @return {Promise}
-   * @memberof Mura
    */
   findQuery:function(params) {
       var self=this;
@@ -238,7 +261,6 @@ Mura.RequestContext=Mura.Core.extend(
    * @param  {string} password Password
    * @param  {string} siteid   Siteid
    * @return {Promise}
-   * @memberof Mura
    */
   login:function(username, password, siteid) {
       siteid = siteid || Mura.siteid;
@@ -284,7 +306,6 @@ Mura.RequestContext=Mura.Core.extend(
    *
    * @param  {type} siteid Siteid
    * @return {Promise}
-   * @memberof Mura
    */
   logout:function(siteid) {
       siteid = siteid || Mura.siteid;
@@ -314,7 +335,6 @@ Mura.RequestContext=Mura.Core.extend(
    * @param  {url} url  URL
    * @param  {object} data Data to send to url
    * @return {Promise}
-   * @memberof Mura
    */
   get:function(url, data) {
       var self=this;
@@ -342,7 +362,6 @@ Mura.RequestContext=Mura.Core.extend(
    * @param  {url} url  URL
    * @param  {object} data Data to send to url
    * @return {Promise}
-   * @memberof Mura
    */
   post:function(url, data) {
       var self=this;

@@ -180,16 +180,27 @@ var Mura=(function(){
   }
 
   /**
-   * renderFilename - Returns "Rendered" JSON object of content
+   * declareEntity - Declare Entity with in service factory
    *
-   * @param  {type} filename Mura content filename
-   * @param  {type} params Object
+   * @param  {object} entityConfig Entity config object
    * @return {Promise}
    * @memberof {class} Mura
    */
-  function renderFilename(filename, params) {
-    return Mura._requestcontext.renderFilename(filename, params);
+  function declareEntity(entityConfig) {
+    return Mura._requestcontext.declareEntity(entityConfig);
   }
+
+  /**
+   * logout - Logs user out
+   *
+   * @param  {type} siteid Siteid
+   * @return {Promise}
+   * @memberof {class} Mura
+   */
+  function logout(siteid) {
+      return Mura._requestcontext.logout(siteid);
+  }
+
 
   /**
    * getEntity - Returns Mura.Entity instance
