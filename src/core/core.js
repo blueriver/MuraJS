@@ -2,11 +2,14 @@
 require("babel-polyfill");
 require("./polyfill");
 
-module.exports=(function(){
-  /**
-   * Creates a new Mura
-   * @class {class} Mura
-   */
+
+/**
+ * Creates a new Mura
+ * @name Mura
+ */
+
+var Mura=(function(){
+
 
   /**
    * login - Logs user into Mura
@@ -15,7 +18,7 @@ module.exports=(function(){
    * @param  {string} password Password
    * @param  {string} siteid   Siteid
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function login(username, password, siteid) {
       return Mura._requestcontext.login(username, password, siteid);
@@ -27,7 +30,7 @@ module.exports=(function(){
    *
    * @param  {type} siteid Siteid
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function logout(siteid) {
       return Mura._requestcontext.logout(siteid);
@@ -55,7 +58,7 @@ module.exports=(function(){
    *
    * @param  {object} data event data
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function trackEvent(eventData) {
       var data={};
@@ -181,7 +184,7 @@ module.exports=(function(){
    * @param  {type} filename Mura content filename
    * @param  {type} params Object
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function renderFilename(filename, params) {
     return Mura._requestcontext.renderFilename(filename, params);
@@ -193,7 +196,7 @@ module.exports=(function(){
    * @param  {string} entityname Entity Name
    * @param  {string} siteid     Siteid
    * @return {Mura.Entity}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function getEntity(entityname, siteid) {
       return Mura._requestcontext.getEntity(entityname, siteid);
@@ -204,7 +207,7 @@ module.exports=(function(){
    *
    * @param  {type} entityname Entity name
    * @return {Mura.Feed}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function getFeed(entityname) {
     return Mura._requestcontext.getFeed(Mura.siteid, entityname);
@@ -215,7 +218,7 @@ module.exports=(function(){
    *
    * @param  {object} params Load parameters, fields:listoffields
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function getCurrentUser(params) {
       return Mura._requestcontext.getCurrentUser(params);
@@ -226,7 +229,7 @@ module.exports=(function(){
    *
    * @param  {object} params Object of matching params
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function findQuery(params) {
       return Mura._requestcontext.findQuery(params);
@@ -394,7 +397,7 @@ module.exports=(function(){
    * @param  {url} url  URL
    * @param  {object} data Data to send to url
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function get(url, data) {
       return Mura._requestcontext.get(url, data);
@@ -406,7 +409,7 @@ module.exports=(function(){
    * @param  {url} url  URL
    * @param  {object} data Data to send to url
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function post(url, data) {
       return Mura._requestcontext.post(url, data);
@@ -417,7 +420,7 @@ module.exports=(function(){
    *
    * @param  {object} params
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function ajax(params) {
     return Mura._requestcontext.request(params);
@@ -429,7 +432,7 @@ module.exports=(function(){
    * @param  {object} request     Siteid
    * @param  {object} response Entity name
    * @return {Mura.RequestContext}   Mura.RequestContext
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function getRequestContext(request,response) {
     return new Mura.RequestContext(request,response);
@@ -439,7 +442,7 @@ module.exports=(function(){
    * getDefaultRequestContext - Returns the default Mura.RequestContext;
    *
    * @return {Mura.RequestContext}   Mura.RequestContext
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function getDefaultRequestContext() {
     return  Mura._requestcontext;
@@ -452,7 +455,7 @@ module.exports=(function(){
    * @param  {type} client_id     Client ID
    * @param  {type} client_secret Secret Key
    * @return {Promise}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function generateOauthToken(grant_type, client_id, client_secret) {
       return new Promise(function(resolve, reject) {
@@ -629,7 +632,7 @@ module.exports=(function(){
    *
    * @param  {*} val description
    * @return {boolean}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function isNumeric(val) {
       return Number(parseFloat(val)) == val;
@@ -680,7 +683,7 @@ module.exports=(function(){
    *
    * @param  {form} form Form to serialize
    * @return {object}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function formToObject(form) {
       var field, s = {};
@@ -718,7 +721,7 @@ module.exports=(function(){
    * extend - Extends object one level
    *
    * @return {object}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function extend(out) {
       out = out || {};
@@ -741,7 +744,7 @@ module.exports=(function(){
    * extend - Extends object to full depth
    *
    * @return {object}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function deepExtend(out) {
       out = out || {};
@@ -778,7 +781,7 @@ module.exports=(function(){
    * @param  {*} value Value
    * @param  {number} days  Days
    * @return {void}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function createCookie(name, value, days) {
       if (days) {
@@ -794,7 +797,7 @@ module.exports=(function(){
    *
    * @param  {string} name Name
    * @return {*}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function readCookie(name) {
       var nameEQ = name + "=";
@@ -813,7 +816,7 @@ module.exports=(function(){
    *
    * @param  {type} name description
    * @return {type}      description
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function eraseCookie(name) {
       createCookie(name, "", -1);
@@ -857,7 +860,7 @@ module.exports=(function(){
    *
    * @param  {*} value Value
    * @return {boolean}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function isUUID(value) {
       if (
@@ -882,7 +885,7 @@ module.exports=(function(){
    * createUUID - Create UUID
    *
    * @return {string}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function createUUID() {
       var s = [],
@@ -1020,7 +1023,7 @@ module.exports=(function(){
    *
    * @param  {*} s Value to check
    * @return {boolean}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function isInteger(s) {
       var i;
@@ -1159,7 +1162,7 @@ module.exports=(function(){
    *
    * @param  {string} str String to parse for email
    * @return {boolean}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function isEmail(cur) {
       var string1 = cur
@@ -1197,7 +1200,7 @@ module.exports=(function(){
    * @param  {type} frm          Form element to validate
    * @param  {function} customaction Custom action (optional)
    * @return {boolean}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function validateForm(frm, customaction) {
 
@@ -1528,7 +1531,7 @@ module.exports=(function(){
    * loader - Returns Mura.Loader
    *
    * @return {Mura.Loader}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function loader() {
       return Mura.ljs;
@@ -2505,7 +2508,7 @@ module.exports=(function(){
    *
    * @param  {string} str Trims string
    * @return {string}     Trimmed string
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function trim(str) {
       return str.replace(/^\s+|\s+$/gm, '');
@@ -2590,7 +2593,7 @@ module.exports=(function(){
    *
    * @param  {string} queryString Query String
    * @return {object}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function getQueryStringParams(queryString) {
 
@@ -2689,7 +2692,7 @@ module.exports=(function(){
    *
    * @param  {string} s String to hash
    * @return {string}
-   * @memberof Mura
+   * @memberof {class} Mura
    */
   function hashCode(s) {
       var hash = 0,
@@ -2916,3 +2919,5 @@ module.exports=(function(){
     return Mura;
 
 })();
+
+module.exports=Mura;
