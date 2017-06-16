@@ -9,7 +9,8 @@ var Mura=require('./core');
 * @memberof Mura
 * @param  {object} request     Siteid
 * @param  {object} response Entity name
-* @return {Mura.RequestContext} s Self
+* @param  {object} requestHeaders Optional
+* @return {Mura.RequestContext} Self
 */
 
 Mura.RequestContext=Mura.Core.extend(

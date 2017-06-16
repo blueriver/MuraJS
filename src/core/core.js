@@ -430,6 +430,7 @@ var Mura=(function(){
   /**
    * getRequestContext - Returns a new Mura.RequestContext;
    *
+   * @name getRequestContext
    * @param  {object} request     Siteid
    * @param  {object} response Entity name
    * @return {Mura.RequestContext}   Mura.RequestContext
@@ -442,6 +443,7 @@ var Mura=(function(){
   /**
    * getDefaultRequestContext - Returns the default Mura.RequestContext;
    *
+   * @name getDefaultRequestContext
    * @return {Mura.RequestContext}   Mura.RequestContext
    * @memberof {class} Mura
    */
@@ -631,6 +633,7 @@ var Mura=(function(){
   /**
    * isNumeric - Returns if the value is numeric
    *
+   * @name isNumeric
    * @param  {*} val description
    * @return {boolean}
    * @memberof {class} Mura
@@ -682,6 +685,7 @@ var Mura=(function(){
   /**
    * formToObject - Returns if the value is numeric
    *
+   * @name formToObject
    * @param  {form} form Form to serialize
    * @return {object}
    * @memberof {class} Mura
@@ -721,6 +725,7 @@ var Mura=(function(){
   /**
    * extend - Extends object one level
    *
+   * @name extend
    * @return {object}
    * @memberof {class} Mura
    */
@@ -742,8 +747,9 @@ var Mura=(function(){
   };
 
   /**
-   * extend - Extends object to full depth
+   * deepExtend - Extends object to full depth
    *
+   * @name deepExtend
    * @return {object}
    * @memberof {class} Mura
    */
@@ -778,6 +784,7 @@ var Mura=(function(){
   /**
    * createCookie - Creates cookie
    *
+   * @name createCookie
    * @param  {string} name  Name
    * @param  {*} value Value
    * @param  {number} days  Days
@@ -796,6 +803,7 @@ var Mura=(function(){
   /**
    * readCookie - Reads cookie value
    *
+   * @name readCookie
    * @param  {string} name Name
    * @return {*}
    * @memberof {class} Mura
@@ -815,6 +823,7 @@ var Mura=(function(){
   /**
    * eraseCookie - Removes cookie value
    *
+   * @name eraseCookie
    * @param  {type} name description
    * @return {type}      description
    * @memberof {class} Mura
@@ -859,6 +868,7 @@ var Mura=(function(){
   /**
    * isUUID - description
    *
+   * @name isUUID
    * @param  {*} value Value
    * @return {boolean}
    * @memberof {class} Mura
@@ -885,6 +895,7 @@ var Mura=(function(){
   /**
    * createUUID - Create UUID
    *
+   * @name createUUID
    * @return {string}
    * @memberof {class} Mura
    */
@@ -913,8 +924,10 @@ var Mura=(function(){
   /**
    * setHTMLEditor - Set Html Editor
    *
+   * @name setHTMLEditor
    * @param  {dom.element} el Dom Element
    * @return {void}
+   * @memberof {class} Mura
    */
   function setHTMLEditor(el) {
 
@@ -1022,7 +1035,8 @@ var Mura=(function(){
   /**
    * isInteger - Returns if the value is an integer
    *
-   * @param  {*} s Value to check
+   * @name isInteger
+   * @param  {*} Value to check
    * @return {boolean}
    * @memberof {class} Mura
    */
@@ -1104,6 +1118,14 @@ var Mura=(function(){
       return this
   }
 
+  /**
+   * isDate - Returns if the value is a data
+   *
+   * @name isDate
+   * @param  {*}  Value to check
+   * @return {boolean}
+   * @memberof {class} Mura
+   */
   function isDate(dtStr, fldName) {
       var daysInMonth = DaysArray(12);
       var dtArray = dtStr.split(Mura.dtCh);
@@ -1198,6 +1220,7 @@ var Mura=(function(){
   /**
    * validateForm - Validates Mura form
    *
+   * @name validateForm
    * @param  {type} frm          Form element to validate
    * @param  {function} customaction Custom action (optional)
    * @return {boolean}
@@ -1531,6 +1554,7 @@ var Mura=(function(){
   /**
    * loader - Returns Mura.Loader
    *
+   * @name loader
    * @return {Mura.Loader}
    * @memberof {class} Mura
    */
@@ -2592,6 +2616,7 @@ var Mura=(function(){
   /**
    * getQueryStringParams - Returns object of params in string
    *
+   * @name getQueryStringParams
    * @param  {string} queryString Query String
    * @return {object}
    * @memberof {class} Mura
@@ -2624,6 +2649,14 @@ var Mura=(function(){
       return params;
   }
 
+  /**
+   * getHREFParams - Returns object of params in string
+   *
+   * @name getHREFParams
+   * @param  {string} href
+   * @return {object}
+   * @memberof {class} Mura
+   */
   function getHREFParams(href) {
       var a = href.split('?');
 
@@ -2655,9 +2688,11 @@ var Mura=(function(){
   /**
    * setRequestHeader - Initialiazes feed
    *
+   * @name setRequestHeader
    * @param  {string} headerName  Name of header
    * @param  {string} value Header value
-   * @return {Mura.RequestContext}            Self
+   * @return {Mura.RequestContext} Self
+   * @memberof {class} Mura
    */
    function setRequestHeader(headerName,value){
      Mura.requestHeaders[headerName]=value;
@@ -2666,8 +2701,10 @@ var Mura=(function(){
   /**
    * getRequestHeader - Returns a request header value
    *
+   * @name getRequestHeader
    * @param  {string} headerName  Name of header
    * @return {string} header Value
+   * @memberof {class} Mura
    */
    function getRequestHeader(headerName){
       if(typeof Mura.requestHeaders[headerName] != 'undefined'){
@@ -2680,7 +2717,9 @@ var Mura=(function(){
   /**
    * getRequestHeaders - Returns a request header value
    *
+   * @name getRequestHeaders
    * @return {object} All Headers
+   * @memberof {class} Mura
    */
    function getRequestHeaders(){
      return Mura.requestHeaders;
@@ -2691,6 +2730,7 @@ var Mura=(function(){
   /**
    * hashCode - description
    *
+   * @name hashCode
    * @param  {string} s String to hash
    * @return {string}
    * @memberof {class} Mura
