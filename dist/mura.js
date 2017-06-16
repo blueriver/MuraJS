@@ -416,6 +416,18 @@ var Mura=(function(){
   }
 
   /**
+  * renderFilename - Returns "Rendered" JSON object of content
+  *
+  * @param  {type} filename Mura content filename
+  * @param  {type} params Object
+  * @return {Promise}
+  * @memberof {class} Mura
+  */
+  function renderFilename(filename, params) {
+    return Mura._requestcontext.renderFilename(filename, params);
+  }
+
+  /**
    * declareEntity - Declare Entity with in service factory
    *
    * @param  {object} entityConfig Entity config object
@@ -3200,7 +3212,8 @@ var Mura=(function(){
               setRequestHeader:setRequestHeader,
               getRequestHeader:getRequestHeaders,
               getRequestHeaders:getRequestHeaders,
-              mode: 'json'
+              mode: 'json',
+              declareEntity:declareEntity
           }
       );
 
@@ -6702,12 +6715,9 @@ Mura.RequestContext=Mura.Core.extend(
           self.request({
               async: true,
               type: 'get',
-              url: Mura.apiEndpoint +
-                  '/content/_path/' + filename + '?' +
-                  query.join('&'),
+              url: Mura.apiEndpoint + '/content/_path/' + filename + '?' + query.join('&'),
               success: function(resp) {
-                  if (typeof resolve ==
-                      'function') {
+                  if (typeof resolve == 'function') {
                       var item = new Mura.Entity({},self);
                       item.set(resp.data);
                       resolve(item);
@@ -6754,7 +6764,6 @@ Mura.RequestContext=Mura.Core.extend(
    * @return {Promise}
    */
   declareEntity:function(entityConfig) {
-
 		var self=this;
 
 		if(Mura.mode.toLowerCase() == 'rest'){
@@ -6768,22 +6777,23 @@ Mura.RequestContext=Mura.Core.extend(
 							entityConfig: encodeURIComponent(JSON.stringify(entityConfig))
 						},
             success: function(resp) {
-                if (typeof resolve =='function') {
-                    resolve(resp.data);
-                }
+							if (typeof resolve =='function' && typeof resp.data != 'undefined') {
+								resolve(resp.data);
+							} else if (typeof reject =='function' && typeof resp.error != 'undefined') {
+								resolve(resp);
+							} else if (typeof resolve =='function'){
+								resolve(resp);
+							}
             }
           }
         );
 			});
 		} else {
 			return new Promise(function(resolve, reject) {
-					self._requestcontext.request({
-							type: 'post',
+					self.request({
+							type: 'POST',
 							url: Mura.apiEndpoint + '?method=generateCSRFTokens',
-							data: {
-									siteid: self.get('siteid'),
-									context: ''
-							},
+							data: {context: ''},
 							success: function(resp) {
 								self.request({
 										async: true,
@@ -6796,8 +6806,12 @@ Mura.RequestContext=Mura.Core.extend(
 											'csrf_token_expires': resp.data.csrf_token_expires
 										},
 										success: function(resp) {
-												if (typeof resolve =='function') {
-														resolve(resp.data);
+												if (typeof resolve =='function' && typeof resp.data != 'undefined') {
+													resolve(resp.data);
+												} else if (typeof reject =='function' && typeof resp.error != 'undefined') {
+													resolve(resp);
+												} else if (typeof resolve =='function'){
+													resolve(resp);
 												}
 										}
 									}
@@ -11773,7 +11787,6 @@ Mura.Request=Mura.Core.extend(
       } else {
         this.browserRequest(params);
       }
-
     },
     /**
      * setRequestHeader - Initialiazes feed
@@ -11859,7 +11872,6 @@ Mura.Request=Mura.Core.extend(
 
       if (params.type.toLowerCase() == 'post') {
 
-          console.log(params.data)
           Mura._request.post(
             {
               url: params.url,

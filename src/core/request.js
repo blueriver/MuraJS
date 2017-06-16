@@ -56,7 +56,6 @@ Mura.Request=Mura.Core.extend(
       } else {
         this.browserRequest(params);
       }
-
     },
     /**
      * setRequestHeader - Initialiazes feed
@@ -142,7 +141,6 @@ Mura.Request=Mura.Core.extend(
 
       if (params.type.toLowerCase() == 'post') {
 
-          console.log(params.data)
           Mura._request.post(
             {
               url: params.url,
