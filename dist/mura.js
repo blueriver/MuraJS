@@ -9819,13 +9819,24 @@ Mura.Feed = Mura.Core.extend(
 		},
 
 		/**
-		 * showNavOnly - Sets to only return content set to be in nav
+		 * distinct - Sets to select distinct values of select fields
 		 *
-		 * @param  {boolean} showNavOnly Whether to return items that have been excluded from nav
+		 * @param  {boolean} distinct Whether to to select distinct values
 		 * @return {Mura.Feed}              Self
 		 */
-		showNavOnly: function(showNavOnly) {
-			this.queryString += '&showNavOnly=' + encodeURIComponent(showNavOnly);
+		distinct: function(distinct) {
+			this.queryString += '&distinct=' + encodeURIComponent(distinct);
+			return this;
+		},
+
+		/**
+		 * maxItems - Sets max items to return
+		 *
+		 * @param  {number} maxItems Items to return
+		 * @return {Mura.Feed}              Self
+		 */
+		maxItems: function(maxItems) {
+			this.queryString += '&maxItems=' + encodeURIComponent(maxItems);
 			return this;
 		},
 
