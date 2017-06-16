@@ -3,7 +3,9 @@ var Mura=require('./core');
 
 /**
 * Creates a new Mura.entities.Content
-* @class {class} Mura.entities.Content
+* @name Mura.entities.Content
+* @extends Mura.Entity
+* @memberof {class} Mura
 */
 
 Mura.entities.Content = Mura.Entity.extend(

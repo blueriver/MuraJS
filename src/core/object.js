@@ -3,18 +3,27 @@ var Mura=require('./core');
 
 /**
 * Creates a new Mura.Core
-* @class {class} Mura.Core
-* @classdesc Abstract class representing a Mura core object.
+
+* @name  Mura.Core
+* @memberof {class}  Mura
 */
 
-function core(){
+/**
+ * Core - initiliazes instance
+ * @name Mura.Core
+ * @param  {object} properties Object containing values to set into object
+ * @return {Mura.Core}
+ * @constructs
+ */
+
+function Core(){
 	this.init.apply(this,arguments);
 	return this;
 }
 
-/** @lends Mura.Core.prototype */
-
-core.prototype={
+Core.prototype=
+	/** @lends Mura.Core.prototype */
+	{
 	init:function(){
 	},
 	trigger:function(eventName){
@@ -31,9 +40,9 @@ core.prototype={
 	},
 };
 
-core.extend=function(properties){
+Core.extend=function(properties){
 	var self=this;
 	return Mura.extend(Mura.extendClass(self,properties),{extend:self.extend,handlers:[]});
 };
 
-Mura.Core=core;
+Mura.Core=Core;

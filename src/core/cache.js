@@ -1,14 +1,10 @@
 
-/**
- *
- * @module Mura/Core
- */
-
 var Mura=require('./core');
-
 /**
  * Creates a new Mura.Cache
- * @class {class} Mura.Cache
+ * @name Mura.Cache
+ * @extends Mura.Core
+ * @memberof {class} Mura
  */
 
 Mura.Cache=Mura.Core.extend(
@@ -18,11 +14,12 @@ Mura.Cache=Mura.Core.extend(
 	/**
 	 * init - Initialiazes cache
 	 *
-	 * @return {void}
+	 * @return {object}
    * @constructs
 	 */
 	init:function(){
 		this.cache={};
+    return this;
 	},
 
   /**

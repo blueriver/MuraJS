@@ -3,7 +3,9 @@ var Mura=require('./core');
 
 /**
 * Creates a new Mura.Request
-* @class {class} Mura.Request
+* @name  Mura.Request
+* @extends Mura.Core
+* @memberof {class} Mura
 */
 
 Mura.Request=Mura.Core.extend(
@@ -30,7 +32,6 @@ Mura.Request=Mura.Core.extend(
     *
     * @param  {object} params
     * @return {Promise}
-    * @memberof Mura
     */
     execute: function(params) {
 
@@ -61,9 +62,23 @@ Mura.Request=Mura.Core.extend(
       }
 
     },
+    /**
+     * setRequestHeader - Initialiazes feed
+     *
+     * @param  {string} headerName  Name of header
+     * @param  {string} value Header value
+     * @return {Mura.RequestContext}            Self
+     */
     setRequestHeader:function(headerName,value){
       this.requestHeaders[headerName]=value;
+      return this;
     },
+    /**
+     * getRequestHeader - Returns a request header value
+     *
+     * @param  {string} headerName  Name of header
+     * @return {string} header Value
+     */
     getRequestHeader:function(headerName){
        if(typeof this.requestHeaders[headerName] != 'undefined'){
          return this.requestHeaders[headerName];
@@ -71,6 +86,11 @@ Mura.Request=Mura.Core.extend(
          return null;
        }
     },
+    /**
+     * getRequestHeaders - Returns a request header value
+     *
+     * @return {object} All Headers
+     */
     getRequestHeaders:function(){
       return this.requestHeaders;
     },

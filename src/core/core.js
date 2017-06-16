@@ -3,10 +3,10 @@ require("babel-polyfill");
 require("./polyfill");
 
 module.exports=(function(){
-/**
- * Creates a new Mura
- * @class {class} Mura
- */
+  /**
+   * Creates a new Mura
+   * @class {class} Mura
+   */
 
   /**
    * login - Logs user into Mura

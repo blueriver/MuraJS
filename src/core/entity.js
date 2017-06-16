@@ -3,7 +3,9 @@ var Mura=require('./core');
 
 /**
 * Creates a new Mura.Entity
-* @class {class} Mura.Entity
+* @name  Mura.Entity
+* @extends Mura.Core
+* @memberof {class} Mura
 */
 
 Mura.Entity = Mura.Core.extend(
@@ -14,7 +16,8 @@ Mura.Entity = Mura.Core.extend(
      * init - initiliazes instance
      *
      * @param  {object} properties Object containing values to set into object
-     * @return {void}
+     * @return {Mura.Entity}
+     * @constructs
      */
     init: function(properties,requestcontext) {
         properties = properties || {};
@@ -41,6 +44,8 @@ Mura.Entity = Mura.Core.extend(
         this._requestcontext=requestcontext || Mura._requestcontext;
 
         this.cachePut();
+
+        return this;
     },
 
     /**

@@ -3,8 +3,14 @@ var Mura=require('./core');
 
 /**
  * Creates a new Mura.DOMSelection
- * @class {class} Mura.DOMSelection
+ * @name  Mura.DOMSelection
+ * @extends Mura.Core
+ * @memberof {class} Mura
  */
+
+ /**
+  * @ignore
+  */
 
 Mura.DOMSelection = Mura.Core.extend(
   /** @lends Mura.DOMSelection.prototype */
@@ -14,7 +20,7 @@ Mura.DOMSelection = Mura.Core.extend(
        * init - initiliazes instance
        *
        * @param  {object} properties Object containing values to set into object
-       * @return {void}
+       * @return {object}
        * @constructs
        */
       init: function(selection, origSelector) {

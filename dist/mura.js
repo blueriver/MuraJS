@@ -239,10 +239,10 @@ __webpack_require__(131);
 __webpack_require__(331);
 
 module.exports=(function(){
-/**
- * Creates a new Mura
- * @class {class} Mura
- */
+  /**
+   * Creates a new Mura
+   * @class {class} Mura
+   */
 
   /**
    * login - Logs user into Mura
@@ -6556,7 +6556,9 @@ var Mura=__webpack_require__(10);
 
 /**
 * Creates a new Mura.RequestContext
-* @class {class} Mura.RequestContext
+* @name  Mura.RequestContent
+* @extends Mura.Core
+* @memberof {class} Mura
 */
 
 Mura.RequestContext=Mura.Core.extend(
@@ -6684,7 +6686,7 @@ Mura.RequestContext=Mura.Core.extend(
           properties.entityname = properties.entityname || 'content';
           properties.siteid = properties.siteid || Mura.siteid;
       }
-      
+
       if (Mura.entities[properties.entityname]) {
           var entity=new Mura.entities[properties.entityname](properties,this);
           return entity;
@@ -6932,16 +6934,12 @@ Mura.RequestContext=Mura.Core.extend(
 /***/ (function(module, exports, __webpack_require__) {
 
 
-/**
- *
- * @module Mura/Core
- */
-
 var Mura=__webpack_require__(10);
-
 /**
  * Creates a new Mura.Cache
- * @class {class} Mura.Cache
+ * @name Mura.Cache
+ * @extends Mura.Core
+ * @memberof {class} Mura
  */
 
 Mura.Cache=Mura.Core.extend(
@@ -6951,11 +6949,12 @@ Mura.Cache=Mura.Core.extend(
 	/**
 	 * init - Initialiazes cache
 	 *
-	 * @return {void}
+	 * @return {object}
    * @constructs
 	 */
 	init:function(){
 		this.cache={};
+    return this;
 	},
 
   /**
@@ -7058,7 +7057,9 @@ var Mura=__webpack_require__(10);
 
 /**
 * Creates a new Mura.entities.Content
-* @class {class} Mura.entities.Content
+* @name Mura.entities.Content
+* @extends Mura.Entity
+* @memberof {class} Mura
 */
 
 Mura.entities.Content = Mura.Entity.extend(
@@ -7113,8 +7114,14 @@ var Mura=__webpack_require__(10);
 
 /**
  * Creates a new Mura.DOMSelection
- * @class {class} Mura.DOMSelection
+ * @name  Mura.DOMSelection
+ * @extends Mura.Core
+ * @memberof {class} Mura
  */
+
+ /**
+  * @ignore
+  */
 
 Mura.DOMSelection = Mura.Core.extend(
   /** @lends Mura.DOMSelection.prototype */
@@ -7124,7 +7131,7 @@ Mura.DOMSelection = Mura.Core.extend(
        * init - initiliazes instance
        *
        * @param  {object} properties Object containing values to set into object
-       * @return {void}
+       * @return {object}
        * @constructs
        */
       init: function(selection, origSelector) {
@@ -8671,7 +8678,9 @@ var Mura=__webpack_require__(10);
 
 /**
 * Creates a new Mura.Entity
-* @class {class} Mura.Entity
+* @name  Mura.Entity
+* @extends Mura.Core
+* @memberof {class} Mura
 */
 
 Mura.Entity = Mura.Core.extend(
@@ -8682,7 +8691,8 @@ Mura.Entity = Mura.Core.extend(
      * init - initiliazes instance
      *
      * @param  {object} properties Object containing values to set into object
-     * @return {void}
+     * @return {Mura.Entity}
+     * @constructs
      */
     init: function(properties,requestcontext) {
         properties = properties || {};
@@ -8709,6 +8719,8 @@ Mura.Entity = Mura.Core.extend(
         this._requestcontext=requestcontext || Mura._requestcontext;
 
         this.cachePut();
+
+        return this;
     },
 
     /**
@@ -9277,7 +9289,9 @@ var Mura=__webpack_require__(10);
 
 /**
  * Creates a new Mura.EntityCollection
- * @class {class} Mura.EntityCollection
+ * @name  Mura.Entity.EntityCollection
+ * @extends Mura.Entity
+ * @memberof {class} Mura
  */
 
 Mura.EntityCollection=Mura.Entity.extend(
@@ -9287,7 +9301,7 @@ Mura.EntityCollection=Mura.Entity.extend(
 	 * init - initiliazes instance
 	 *
 	 * @param  {object} properties Object containing values to set into object
-	 * @return {object} Self
+	 * @return {Mura.EntityCollection} Self
    * @constructs
 	 */
 	init:function(properties,requestcontext){
@@ -9454,8 +9468,14 @@ var Mura=__webpack_require__(10);
 
 /**
  * Creates a new Mura.Feed
- * @class {class} Mura.Feed
+ * @name  Mura.Feed
+ * @extends Mura.Core
+ * @memberof {class} Mura
  */
+
+ /**
+  * @ignore
+  */
 
 Mura.Feed = Mura.Core.extend(
 	/** @lends Mura.Feed.prototype */
@@ -9474,7 +9494,7 @@ Mura.Feed = Mura.Core.extend(
 			this.propIndex = 0;
 
 			this._requestcontext=requestcontext || Mura._requestcontext;
-			
+
 			return this;
 		},
 
@@ -9889,11 +9909,15 @@ Mura.Feed = Mura.Core.extend(
 var Mura=__webpack_require__(10);
 /**
  * Creates a new Mura.DisplayObject.Form
+ * @name  Mura.DisplayObject.Form
  * @class {class} Mura.DisplayObject.Form
+ * @extends Mura.UI
+ * @memberof {class} Mura
  */
 
-Mura.DisplayObject.Form=Mura.UI.extend({
+Mura.DisplayObject.Form=Mura.UI.extend(
 /** @lends Mura.DisplayObject.Form.prototype */
+{
 context:{},
 ormform: false,
 formJSON:{},
@@ -11523,18 +11547,27 @@ var Mura=__webpack_require__(10);
 
 /**
 * Creates a new Mura.Core
-* @class {class} Mura.Core
-* @classdesc Abstract class representing a Mura core object.
+
+* @name  Mura.Core
+* @memberof {class}  Mura
 */
 
-function core(){
+/**
+ * Core - initiliazes instance
+ * @name Mura.Core
+ * @param  {object} properties Object containing values to set into object
+ * @return {Mura.Core}
+ * @constructs
+ */
+
+function Core(){
 	this.init.apply(this,arguments);
 	return this;
 }
 
-/** @lends Mura.Core.prototype */
-
-core.prototype={
+Core.prototype=
+	/** @lends Mura.Core.prototype */
+	{
 	init:function(){
 	},
 	trigger:function(eventName){
@@ -11551,12 +11584,12 @@ core.prototype={
 	},
 };
 
-core.extend=function(properties){
+Core.extend=function(properties){
 	var self=this;
 	return Mura.extend(Mura.extendClass(self,properties),{extend:self.extend,handlers:[]});
 };
 
-Mura.Core=core;
+Mura.Core=Core;
 
 
 /***/ }),
@@ -11568,7 +11601,9 @@ var Mura=__webpack_require__(10);
 
 /**
 * Creates a new Mura.Request
-* @class {class} Mura.Request
+* @name  Mura.Request
+* @extends Mura.Core
+* @memberof {class} Mura
 */
 
 Mura.Request=Mura.Core.extend(
@@ -11595,7 +11630,6 @@ Mura.Request=Mura.Core.extend(
     *
     * @param  {object} params
     * @return {Promise}
-    * @memberof Mura
     */
     execute: function(params) {
 
@@ -11626,9 +11660,23 @@ Mura.Request=Mura.Core.extend(
       }
 
     },
+    /**
+     * setRequestHeader - Initialiazes feed
+     *
+     * @param  {string} headerName  Name of header
+     * @param  {string} value Header value
+     * @return {Mura.RequestContext}            Self
+     */
     setRequestHeader:function(headerName,value){
       this.requestHeaders[headerName]=value;
+      return this;
     },
+    /**
+     * getRequestHeader - Returns a request header value
+     *
+     * @param  {string} headerName  Name of header
+     * @return {string} header Value
+     */
     getRequestHeader:function(headerName){
        if(typeof this.requestHeaders[headerName] != 'undefined'){
          return this.requestHeaders[headerName];
@@ -11636,6 +11684,11 @@ Mura.Request=Mura.Core.extend(
          return null;
        }
     },
+    /**
+     * getRequestHeaders - Returns a request header value
+     *
+     * @return {object} All Headers
+     */
     getRequestHeaders:function(){
       return this.requestHeaders;
     },
@@ -12027,8 +12080,14 @@ var Mura =__webpack_require__(10);
 
 /**
  * Creates a new Mura.UI instance
- * @class {class} Mura.UI
+ * @name Mura.UI
+ * @extends  Mura.Core
+ * @memberof {class} Mura
  */
+
+ /**
+  * @ignore
+  */
 
 Mura.UI=Mura.Core.extend(
   /** @lends Mura.UI.prototype */

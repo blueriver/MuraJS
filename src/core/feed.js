@@ -3,8 +3,14 @@ var Mura=require('./core');
 
 /**
  * Creates a new Mura.Feed
- * @class {class} Mura.Feed
+ * @name  Mura.Feed
+ * @extends Mura.Core
+ * @memberof {class} Mura
  */
+
+ /**
+  * @ignore
+  */
 
 Mura.Feed = Mura.Core.extend(
 	/** @lends Mura.Feed.prototype */
@@ -23,7 +29,7 @@ Mura.Feed = Mura.Core.extend(
 			this.propIndex = 0;
 
 			this._requestcontext=requestcontext || Mura._requestcontext;
-			
+
 			return this;
 		},
 

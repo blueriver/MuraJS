@@ -3,7 +3,9 @@ var Mura=require('./core');
 
 /**
 * Creates a new Mura.RequestContext
-* @class {class} Mura.RequestContext
+* @name  Mura.RequestContent
+* @extends Mura.Core
+* @memberof {class} Mura
 */
 
 Mura.RequestContext=Mura.Core.extend(
@@ -131,7 +133,7 @@ Mura.RequestContext=Mura.Core.extend(
           properties.entityname = properties.entityname || 'content';
           properties.siteid = properties.siteid || Mura.siteid;
       }
-      
+
       if (Mura.entities[properties.entityname]) {
           var entity=new Mura.entities[properties.entityname](properties,this);
           return entity;
