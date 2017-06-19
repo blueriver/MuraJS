@@ -183,8 +183,8 @@ Mura.Request=Mura.Core.extend(
 
             var newSetCookies=httpResponse.headers['set-cookie'];
 
-            //console.log('response cookies:');
-            //console.log(httpResponse.headers['set-cookie']);
+            console.log('response cookies:');
+            console.log(httpResponse.headers['set-cookie']);
 
             if(!(newSetCookies instanceof Array)){
               newSetCookies=[newSetCookies];
@@ -208,8 +208,8 @@ Mura.Request=Mura.Core.extend(
               }
             }
 
-            //console.log('existing 1:');
-            //console.log(cookieMap);
+            console.log('existing 1:');
+            console.log(cookieMap);
 
             // pull out new cookies
             if(newSetCookies.length){
@@ -224,9 +224,8 @@ Mura.Request=Mura.Core.extend(
               }
             }
 
-            //console.log('existing 2:');
-            //console.log(cookieMap);
-
+            console.log('existing 2:');
+            console.log(cookieMap);
             var cookie='';
 
             // put cookies back in in the same order that they came out
@@ -264,8 +263,8 @@ Mura.Request=Mura.Core.extend(
 
             self.requestObject.headers['cookie']=cookie;
 
-            //console.log('merged cookies:');
-            //console.log(self.requestObject.headers['cookie']);
+            console.log('merged cookies:');
+            console.log(self.requestObject.headers['cookie']);
 
         }
 

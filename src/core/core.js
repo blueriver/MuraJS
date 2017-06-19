@@ -1760,7 +1760,7 @@ var Mura=(function(){
                   if (window.MuraInlineEditor && window.MuraInlineEditor
                       .checkforImageCroppers) {
                       find("img").each(function() {
-                          window.uraInlineEditor.checkforImageCroppers(
+                          window.muraInlineEditor.checkforImageCroppers(
                               this);
                       });
 
