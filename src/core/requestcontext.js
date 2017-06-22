@@ -205,8 +205,9 @@ Mura.RequestContext=Mura.Core.extend(
    * @param  {type} entityname Entity name
    * @return {Mura.Feed}
    */
-  getFeed:function(entityname) {
-      var feed=new Mura.Feed(Mura.siteid, entityname, this);
+  getFeed:function(entityname,siteid) {
+			siteid=siteid || Mura.siteid;
+      var feed=new Mura.Feed(siteid, entityname, this);
       return feed;
   },
 
