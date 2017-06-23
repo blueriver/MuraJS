@@ -365,6 +365,10 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}	Self
 		 */
 		aggregate: function(type,property) {
+			if(type == 'count' && typeof property=='undefined'){
+				property='*';
+			}
+			
 			if(typeof type != 'undefined' && typeof property!='undefined'){
 				this.queryString += '&' + encodeURIComponent( type + '[' + this.propIndex + ']') + '=' + property;
 				this.propIndex++;
