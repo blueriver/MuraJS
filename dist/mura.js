@@ -9933,9 +9933,41 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}              Self
 		 */
 		distinct: function(distinct) {
+			if(typeof distinct=='undefined'){
+				distinct=true;
+			}
 			this.queryString += '&distinct=' + encodeURIComponent(distinct);
 			return this;
 		},
+
+		/**
+		 * aggregate - Define aggregate values that you would like (sum,max,min,cout,avg,groupby)
+		 *
+		 * @param  {string} type Type of aggregation (sum,max,min,cout,avg,groupby)
+		 * @param  {string} property property
+		 * @return {Mura.Feed}	Self
+		 */
+		aggregate: function(type,property) {
+			if(typeof type != 'undefined' && typeof property!='undefined'){
+				this.queryString += '&' + encodeURIComponent( type + '[' + this.propIndex + ']') + '=' + property;
+				this.propIndex++;
+			}
+			return this;
+		},
+
+		/**
+		 * groupBy - Sets property or properties to group by
+		 *
+		 * @param  {string} groupBy
+		 * @return {Mura.Feed}              Self
+		 */
+		 groupBy: function(property) {
+ 			if(typeof property!='undefined'){
+ 				this.queryString += '&' + encodeURIComponent('groupBy[' + this.propIndex + ']') + '=' + property;
+ 				this.propIndex++;
+ 			}
+ 			return this;
+ 		},
 
 		/**
 		 * maxItems - Sets max items to return
