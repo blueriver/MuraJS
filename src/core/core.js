@@ -2990,7 +2990,8 @@ var Mura=(function(){
               getRequestHeader:getRequestHeaders,
               getRequestHeaders:getRequestHeaders,
               mode: 'json',
-              declareEntity:declareEntity
+              declareEntity:declareEntity,
+              undeclareEntity:undeclareEntity
           }
       );
 
