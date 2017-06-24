@@ -199,6 +199,71 @@ Mura.RequestContext=Mura.Core.extend(
 		}
   },
 
+	/**
+   * undeclareEntity - Delete entity class from Mura
+   *
+   * @param  {object} entityName
+   * @return {Promise}
+   */
+  undeclareEntity:function(entityName) {
+		var self=this;
+
+		if(Mura.mode.toLowerCase() == 'rest'){
+			return new Promise(function(resolve, reject) {
+        self.request({
+            async: true,
+            type: 'POST',
+            url: Mura.apiEndpoint,
+						data:{
+							method: 'undeclareEntity',
+							entityConfig: entityName
+						},
+            success: function(resp) {
+							if (typeof resolve =='function' && typeof resp.data != 'undefined') {
+								resolve(resp.data);
+							} else if (typeof reject =='function' && typeof resp.error != 'undefined') {
+								resolve(resp);
+							} else if (typeof resolve =='function'){
+								resolve(resp);
+							}
+            }
+          }
+        );
+			});
+		} else {
+			return new Promise(function(resolve, reject) {
+					self.request({
+							type: 'POST',
+							url: Mura.apiEndpoint + '?method=generateCSRFTokens',
+							data: {context: ''},
+							success: function(resp) {
+								self.request({
+										async: true,
+										type: 'POST',
+										url: Mura.apiEndpoint,
+										data:{
+											method: 'undeclareEntity',
+											entityName: entityName,
+											'csrf_token': resp.data.csrf_token,
+											'csrf_token_expires': resp.data.csrf_token_expires
+										},
+										success: function(resp) {
+												if (typeof resolve =='function' && typeof resp.data != 'undefined') {
+													resolve(resp.data);
+												} else if (typeof reject =='function' && typeof resp.error != 'undefined') {
+													resolve(resp);
+												} else if (typeof resolve =='function'){
+													resolve(resp);
+												}
+										}
+									}
+								);
+							}
+					});
+			});
+		}
+  },
+
   /**
    * getFeed - Return new instance of Mura.Feed
    *

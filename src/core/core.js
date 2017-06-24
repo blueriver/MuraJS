@@ -203,6 +203,17 @@ var Mura=(function(){
   }
 
   /**
+   * undeclareEntity - Deletes entity class from Mura
+   *
+   * @param  {object} entityName
+   * @return {Promise}
+   * @memberof {class} Mura
+   */
+  function undeclareEntity(entityName) {
+    return Mura._requestcontext.undeclareEntity(entityName);
+  }
+
+  /**
    * logout - Logs user out
    *
    * @param  {type} siteid Siteid
