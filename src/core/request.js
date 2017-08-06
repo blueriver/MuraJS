@@ -94,6 +94,7 @@ Mura.Request=Mura.Core.extend(
       self=this;
 
       if(typeof this.requestObject != 'undefined'){
+        params.headers['User-Agent']='MuraJS';
         if(typeof this.requestObject.headers['cookie'] != 'undefined'){
           console.log('pre cookies:');
           console.log(this.requestObject.headers['cookie']);
