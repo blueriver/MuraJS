@@ -31,12 +31,36 @@ renderqueue: 0,
 formInit: false,
 responsemessage: "",
 rb: {
+	generalwrapperclass:"well",
+	generalwrapperbodyclass:"",
+	formwrapperclass: "well",
+	formwrapperbodyclass: "",
+	formfieldwrapperclass: "control-group",
+	formfieldlabelclass:"control-label",
+	formgeneralcontrolclass:"form-control",
+	forminputclass:"form-control",
+	formselectclass:"form-control",
+	formtextareaclass:"form-control",
+	formfileclass:"form-control",
+	formtextblockclass:"form-control",
+	formcheckboxclass:"",
+	formcheckboxlabelclass:"checkbox",
+	formradioclass:"",
+	formradiolabelclass:"radio",
+	formbuttonwrapperclass:"btn-group",
+	formbuttoninnerclass:"",
+	formbuttonclass:"btn btn-default",
+	formrequiredwrapperclass:"",
 	btnsubmitclass:"form-submit",
 	btnsubmitlabel:"Submit",
 	btnnextlabel:"Next",
 	btnbacklabel:"Back",
 	btncancellabel:"Cancel"
 },
+/*init:function(){
+	Mura.extend(this.rb,Mura.rb);
+	return this;
+},*/
 render:function(){
 
 	if(this.context.mode == undefined){
@@ -317,14 +341,14 @@ renderForm: function( ) {
 
 	for(var i = 0;i < fields.length;i++) {
 		var field =  self.formJSON.form.fields[fields[i]];
-		try {
+		//try {
 			if( field.fieldtype.fieldtype != undefined && field.fieldtype.fieldtype != "") {
 				self.renderField(field.fieldtype.fieldtype,field);
 			}
-		} catch(e){
-			console.log('Error rendering form field:');
-			console.log(field);
-		}
+		//} catch(e){
+			//console.log('Error rendering form field:');
+			//console.log(field);
+		//}
 	}
 
 	if(self.ishuman && self.currentpage==(self.formJSON.form.pages.length-1)){
@@ -1300,6 +1324,10 @@ registerHelpers: function() {
 		var escapeExpression=Mura.Handlebars.escapeExpression;
 		var returnString='mura-control-group';
 
+		if(self.rb.formfieldwrapperclass){
+			returnString += ' ' + self.rb.formfieldwrapperclass;
+		}
+
 		if(this.wrappercssclass){
 			returnString += ' ' + escapeExpression(this.wrappercssclass);
 		}
@@ -1309,6 +1337,22 @@ registerHelpers: function() {
 		}
 
 		return returnString;
+	});
+
+	Mura.Handlebars.registerHelper('radioLabelClass',function() {
+		return self.rb.formradiolabelclass;
+	});
+
+	Mura.Handlebars.registerHelper('radioClass',function() {
+		return self.rb.formradioclass;
+	});
+
+	Mura.Handlebars.registerHelper('checkboxLabelClass',function() {
+		return self.rb.formchecklabelclass;
+	});
+
+	Mura.Handlebars.registerHelper('checkboxClass',function() {
+		return self.rb.formcheckboxclass;
 	});
 
 	Mura.Handlebars.registerHelper('formClass',function() {
@@ -1338,9 +1382,29 @@ registerHelpers: function() {
 			returnString += ' id="field-' + escapeExpression(this.name) + '"';
 		}
 
+		returnString += ' class="';
+
 		if(this.cssclass){
-			returnString += ' class="' + escapeExpression(this.cssclass) + '"';
+			returnString += escapeExpression(this.cssclass) + ' ';
 		}
+
+		if(this.fieldtype=='radio' || this.fieldtype=='radio_static'){
+			returnString += self.rb.formradioclass;
+		} else if(this.fieldtype=='checkbox' || this.fieldtype=='checkbox_static'){
+			returnString += self.rb.formcheckboxclass;
+		} else if(this.fieldtype=='file'){
+			returnString += self.rb.formfileclass;
+		} else if(this.fieldtype=='textarea'){
+			returnString += self.rb.formtextareaclass;
+		} else if(this.fieldtype=='dropdown' || this.fieldtype=='dropdown_static'){
+			returnString += self.rb.formselectclass;
+		} else if(this.fieldtype=='textblock'){
+			returnString += self.rb.formtextblockclass;
+		} else {
+			returnString += self.rb.forminputclass;
+		}
+
+		returnString += '"';
 
 		if(this.tooltip){
 			returnString += ' title="' + escapeExpression(this.tooltip) + '"';

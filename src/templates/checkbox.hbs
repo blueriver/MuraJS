@@ -3,8 +3,8 @@
 			<div class="mura-group-label">{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>Required</ins>{{/if}}</div>
 			{{#if summary}}</br>{{/if}}
 			{{#eachCheck dataset.options selected}}
-				<label class="checkbox">
-				<input source="{{../dataset.source}}" type="checkbox" name="{{../name}}" id="field-{{id}}" value="{{id}}" id="{{../name}}-{{id}}" {{#if isselected}}checked='checked'{{/if}}/>
+				<label class="{{{checkboxLabelClass}}}">
+				<input source="{{../dataset.source}}" type="checkbox" name="{{../name}}" class="{{{checkboxClass}}}" id="field-{{id}}" value="{{id}}" id="{{../name}}-{{id}}" {{#if isselected}}checked='checked'{{/if}}/>
 				{{label}}</label>
 			{{/eachCheck}}
 		</div>
