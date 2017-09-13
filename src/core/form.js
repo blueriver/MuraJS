@@ -51,16 +51,15 @@ rb: {
 	formbuttoninnerclass:"",
 	formbuttonclass:"btn btn-default",
 	formrequiredwrapperclass:"",
-	btnsubmitclass:"form-submit",
-	btnsubmitlabel:"Submit",
-	btnnextlabel:"Next",
-	btnbacklabel:"Back",
-	btncancellabel:"Cancel"
+	formbuttomsubmitclass :"form-submit",
+	formbuttonsubmitlabel : "Submit",
+	formbuttonnextclass:"form-nav",
+	formbuttonnextlabel : "Next",
+	formbuttonbackclass:"form-nav",
+	formbuttonbacklabel : "Back",
+	formbuttoncancelclass:"form-cancel btn-primary pull-right",
+	formbuttoncancellabel :"Cancel"
 },
-/*init:function(){
-	Mura.extend(this.rb,Mura.rb);
-	return this;
-},*/
 render:function(){
 
 	if(this.context.mode == undefined){
@@ -367,31 +366,31 @@ renderForm: function( ) {
 
 renderPaging:function() {
 	var self = this;
-	var submitlabel=(typeof self.formJSON.form.formattributes != 'undefined' && typeof self.formJSON.form.formattributes.submitlabel != 'undefined' && self.formJSON.form.formattributes.submitlabel) ? self.formJSON.form.formattributes.submitlabel : self.rb.btnsubmitlabel;
+	var submitlabel=(typeof self.formJSON.form.formattributes != 'undefined' && typeof self.formJSON.form.formattributes.submitlabel != 'undefined' && self.formJSON.form.formattributes.submitlabel) ? self.formJSON.form.formattributes.submitlabel : self.rb.formbuttonsubmitlabel;
 
 	mura(".error-container-" + self.context.objectid,self.context.formEl).empty();
 
 	mura(".paging-container-" + self.context.objectid,self.context.formEl).empty();
 
 	if(self.formJSON.form.pages.length == 1) {
-		mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":self.rb.btnsubmitclass}));
+		mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":self.rb.formbuttomsubmitclass}));
 	}
 	else {
 		if(self.currentpage == 0) {
-			mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:1,label:self.rb.btnnextlabel,"class":"form-nav"}));
+			mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:1,label:self.rb.formbuttonnextlabel,"class":"form-nav"}));
 		} else {
-			mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage-1,label:self.rb.btnbacklabel,"class":'form-nav'}));
+			mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage-1,label:self.rb.formbuttonbacklabel,"class":self.rb.formbuttombackclass}));
 
 			if(self.currentpage+1 < self.formJSON.form.pages.length) {
-				mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.btnnextlabel,"class":'form-nav'}));
+				mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.formbuttonnextlabel,"class":self.rb.formbuttomnextclass}));
 			}
 			else {
-				mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":'form-submit  btn-primary'}));
+				mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":self.rb.formbuttomsubmitclass}));
 			}
 		}
 
 		if(self.backlink != undefined && self.backlink.length)
-			mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.btncancellabel,"class":'form-cancel btn-primary pull-right'}));
+			mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.formbuttoncancellabel,"class":self.rb.formbuttomcancelclass}));
 	}
 
 	mura(".form-submit",self.context.formEl).click( function() {
@@ -1203,6 +1202,8 @@ cleanProps: function( props ) {
 
 registerHelpers: function() {
 	var self = this;
+
+	Mura.extend(self.rb,Mura.rb);
 
 	Mura.Handlebars.registerHelper('eachColRow',function(row, columns, options) {
 		var ret = "";
