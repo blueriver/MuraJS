@@ -37,6 +37,8 @@ rb: {
 	formwrapperbodyclass: "",
 	formfieldwrapperclass: "control-group",
 	formfieldlabelclass:"control-label",
+	formerrorwrapperclass: "",
+	formsuccesswrapperclass: "",
 	formgeneralcontrolclass:"form-control",
 	forminputclass:"form-control",
 	formselectclass:"form-control",
@@ -1335,6 +1337,10 @@ registerHelpers: function() {
 
 		if(this.isrequired){
 			returnString += ' req';
+
+			if(self.rb.formrequiredwrapperclass){
+				returnString += ' ' + self.rb.formrequiredwrapperclass;
+			}
 		}
 
 		return returnString;
@@ -1342,6 +1348,22 @@ registerHelpers: function() {
 
 	Mura.Handlebars.registerHelper('radioLabelClass',function() {
 		return self.rb.formradiolabelclass;
+	});
+
+	Mura.Handlebars.registerHelper('formErrorWrapperClass',function() {
+		if(self.rb.formerrorwrapperclass){
+			return 'mura-response-error' + ' ' + self.rb.formerrorwrapperclass;
+		} else {
+			return 'mura-response-error';
+		}
+	});
+
+	Mura.Handlebars.registerHelper('formSuccessWrapperClass',function() {
+		if(self.rb.formsuccesswrapperclass){
+			return 'mura-response-success' + ' ' + self.rb.formsuccesswrapperclass;
+		} else {
+			return 'mura-response-success';
+		}
 	});
 
 	Mura.Handlebars.registerHelper('radioClass',function() {
