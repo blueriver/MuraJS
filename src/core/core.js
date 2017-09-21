@@ -1833,7 +1833,9 @@ var Mura=(function(){
   function addEventHandler(eventName, fn) {
       if (typeof eventName == 'object') {
           for (var h in eventName) {
-              on(document, h, eventName[h]);
+              if(eventName.hasOwnProperty(h)){
+                on(document, h, eventName[h]);
+              }
           }
       } else {
           on(document, eventName, fn);

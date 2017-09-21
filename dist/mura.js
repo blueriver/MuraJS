@@ -2069,7 +2069,9 @@ var Mura=(function(){
   function addEventHandler(eventName, fn) {
       if (typeof eventName == 'object') {
           for (var h in eventName) {
-              on(document, h, eventName[h]);
+              if(eventName.hasOwnProperty(h)){
+                on(document, h, eventName[h]);
+              }
           }
       } else {
           on(document, eventName, fn);
@@ -7481,6 +7483,32 @@ Mura.DOMSelection = Mura.Core.extend(
                   Mura.processMarkup(el);
               });
           });
+      },
+
+      /**
+       * addEventHandler - Add event event handling object
+       *
+       * @param  {string} selector  Selector (optional: for use with delegated events)
+       * @param  {object} handler        description
+       * @return {Mura.DOMSelection} Self
+       */
+      addEventHandler:function(selector, handler){
+        if (typeof handler == 'undefined') {
+            handler = selector;
+            selector = '';
+        }
+
+        for (var h in handler) {
+            if(eventName.hasOwnProperty(h)){
+              if(typeof selector == 'string' && selector){
+                on(h, selector, handler[h]);
+              } else {
+                on(h,handler[h]);
+              }
+            }
+        }
+
+        return this;
       },
 
       /**
