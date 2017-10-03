@@ -63,7 +63,10 @@ var Mura=(function(){
    */
    function trackEvent(eventData) {
      if(typeof Mura.editing != 'undefined' && Mura.editing){
-       return;
+       return new Promise(function(resolve, reject) {
+           resolve = resolve || function() {};
+           resolve();
+       });
      }
 
      var data={};
@@ -172,7 +175,6 @@ var Mura=(function(){
              });
          }
      } else {
-         Mura.deepExtend(trackingVars,{ga:{}});
          track();
      }
 
@@ -1671,32 +1673,27 @@ var Mura=(function(){
                       'en';
 
                   if (find(".g-recaptcha").length) {
-                      var fileref = document.createElement(
-                          'script')
-                      fileref.setAttribute("type",
-                          "text/javascript")
-                      fileref.setAttribute("src",
-                          "https://www.google.com/recaptcha/api.js?onload=checkForReCaptcha&render=explicit&hl=" +
-                          Mura.reCAPTCHALanguage)
+                      var fileref = document.createElement('script')
+                      fileref.setAttribute("type","text/javascript");
+                      fileref.setAttribute(
+                        "src",
+                        "https://www.google.com/recaptcha/api.js?onload=Mura.checkForReCaptcha&render=explicit&hl=" +  Mura.reCAPTCHALanguage
+                      );
 
-                      document.getElementsByTagName(
-                          "head")[0].appendChild(
-                          fileref)
-
+                      document.getElementsByTagName("head")[0].appendChild(fileref);
                   }
 
                   if (find(".g-recaptcha-container").length) {
                       loader().loadjs(
-                          "https://www.google.com/recaptcha/api.js?onload=checkForReCaptcha&render=explicit&hl=" +
+                          "https://www.google.com/recaptcha/api.js?onload=Mura.checkForReCaptcha&render=explicit&hl=" +
                           Mura.reCAPTCHALanguage,
                           function() {
                               find(
                                   ".g-recaptcha-container"
                               ).each(function(el) {
-                                  var self =
-                                      el;
-                                  var
-                                      checkForReCaptcha =
+                                  var self =  el;
+
+                                  Mura.checkForReCaptcha =
                                       function() {
                                           if (
                                               typeof grecaptcha ==
@@ -1733,16 +1730,14 @@ var Mura=(function(){
                                           } else {
                                               setTimeout(
                                                       function() {
-                                                          checkForReCaptcha
-                                                              ();
+                                                          Mura.checkForReCaptcha();
                                                       },
                                                       10
                                                   );
                                           }
                                       }
 
-                                  checkForReCaptcha
-                                      ();
+                                  Mura.checkForReCaptcha();
 
                               });
                           }

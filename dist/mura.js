@@ -299,7 +299,10 @@ var Mura=(function(){
    */
    function trackEvent(eventData) {
      if(typeof Mura.editing != 'undefined' && Mura.editing){
-       return;
+       return new Promise(function(resolve, reject) {
+           resolve = resolve || function() {};
+           resolve();
+       });
      }
 
      var data={};
@@ -408,7 +411,6 @@ var Mura=(function(){
              });
          }
      } else {
-         Mura.deepExtend(trackingVars,{ga:{}});
          track();
      }
 
@@ -1907,32 +1909,27 @@ var Mura=(function(){
                       'en';
 
                   if (find(".g-recaptcha").length) {
-                      var fileref = document.createElement(
-                          'script')
-                      fileref.setAttribute("type",
-                          "text/javascript")
-                      fileref.setAttribute("src",
-                          "https://www.google.com/recaptcha/api.js?onload=checkForReCaptcha&render=explicit&hl=" +
-                          Mura.reCAPTCHALanguage)
+                      var fileref = document.createElement('script')
+                      fileref.setAttribute("type","text/javascript");
+                      fileref.setAttribute(
+                        "src",
+                        "https://www.google.com/recaptcha/api.js?onload=Mura.checkForReCaptcha&render=explicit&hl=" +  Mura.reCAPTCHALanguage
+                      );
 
-                      document.getElementsByTagName(
-                          "head")[0].appendChild(
-                          fileref)
-
+                      document.getElementsByTagName("head")[0].appendChild(fileref);
                   }
 
                   if (find(".g-recaptcha-container").length) {
                       loader().loadjs(
-                          "https://www.google.com/recaptcha/api.js?onload=checkForReCaptcha&render=explicit&hl=" +
+                          "https://www.google.com/recaptcha/api.js?onload=Mura.checkForReCaptcha&render=explicit&hl=" +
                           Mura.reCAPTCHALanguage,
                           function() {
                               find(
                                   ".g-recaptcha-container"
                               ).each(function(el) {
-                                  var self =
-                                      el;
-                                  var
-                                      checkForReCaptcha =
+                                  var self =  el;
+
+                                  Mura.checkForReCaptcha =
                                       function() {
                                           if (
                                               typeof grecaptcha ==
@@ -1969,16 +1966,14 @@ var Mura=(function(){
                                           } else {
                                               setTimeout(
                                                       function() {
-                                                          checkForReCaptcha
-                                                              ();
+                                                          Mura.checkForReCaptcha();
                                                       },
                                                       10
                                                   );
                                           }
                                       }
 
-                                  checkForReCaptcha
-                                      ();
+                                  Mura.checkForReCaptcha();
 
                               });
                           }
@@ -10967,9 +10962,6 @@ submitForm: function() {
 		.find('form')
 		.trigger('formSubmit');
 
-
-	Mura.trackEvent({category:'Form',action:'Conversion',label:self.context.name,objectid:self.context.objectid});
-
 	if(self.ormform) {
 		//console.log('a!');
 		Mura.getEntity(self.entity)
@@ -11068,16 +11060,30 @@ submitForm: function() {
 					   if(typeof resp.data.errors == 'object' && !Mura.isEmptyObject(resp.data.errors )){
 						   self.showErrors( resp.data.errors );
 							 self.trigger('afterErrorRender');
-					   } else if(typeof resp.data.redirect != 'undefined'){
-						   if(resp.data.redirect && resp.data.redirect != location.href){
-							   location.href=resp.data.redirect;
-						   } else {
-							   location.reload(true);
-						   }
 					   } else {
-						   mura(self.context.formEl).html( Mura.templates['success'](resp.data) );
-							 self.trigger('afterResponseRender');
-					   }
+
+							 mura(self.context.formEl)
+								 .find('form')
+								 .trigger('formSubmitSuccess');
+
+							 Mura.trackEvent({
+								 category:'Form',
+								 action:'Conversion',
+								 label:self.context.name,
+								 objectid:self.context.objectid}
+							 ).then(function(){
+								 if(typeof resp.data.redirect != 'undefined'){
+								   if(resp.data.redirect && resp.data.redirect != location.href){
+									   location.href=resp.data.redirect;
+								   } else {
+									   location.reload(true);
+								   }
+							   } else {
+								   mura(self.context.formEl).html( Mura.templates['success'](resp.data) );
+									 self.trigger('afterResponseRender');
+							   }
+							 });
+					 	}
 				  });
 			}
 		});
@@ -18619,28 +18625,30 @@ this["Mura"]["templates"]["checkbox"] = this.Mura.Handlebars.template({"1":funct
 },"7":function(container,depth0,helpers,partials,data) {
     return "</br>";
 },"9":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.lambda, alias5=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression, alias5=container.lambda;
 
   return "				<label class=\""
     + ((stack1 = ((helper = (helper = helpers.checkboxLabelClass || (depth0 != null ? depth0.checkboxLabelClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxLabelClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + "\" for=\"field-"
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\">\r\n				<input source=\""
-    + alias5(alias4(((stack1 = (depths[1] != null ? depths[1].dataset : depths[1])) != null ? stack1.source : stack1), depth0))
+    + alias4(alias5(((stack1 = (depths[1] != null ? depths[1].dataset : depths[1])) != null ? stack1.source : stack1), depth0))
     + "\" type=\"checkbox\" name=\""
-    + alias5(alias4((depths[1] != null ? depths[1].name : depths[1]), depth0))
+    + alias4(alias5((depths[1] != null ? depths[1].name : depths[1]), depth0))
     + "\" class=\""
     + ((stack1 = ((helper = (helper = helpers.checkboxClass || (depth0 != null ? depth0.checkboxClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\" id=\"field-"
-    + alias5(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" value=\""
-    + alias5(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" id=\""
-    + alias5(alias4((depths[1] != null ? depths[1].name : depths[1]), depth0))
+    + alias4(alias5((depths[1] != null ? depths[1].name : depths[1]), depth0))
     + "-"
-    + alias5(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.isselected : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "/>\r\n				"
-    + alias5(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
     + "</label>\r\n";
 },"10":function(container,depth0,helpers,partials,data) {
     return "checked='checked'";
@@ -18674,25 +18682,27 @@ this["Mura"]["templates"]["checkbox_static"] = this.Mura.Handlebars.template({"1
 },"7":function(container,depth0,helpers,partials,data) {
     return "</br>";
 },"9":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.lambda, alias5=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression, alias5=container.lambda;
 
   return "				<label class=\""
     + ((stack1 = ((helper = (helper = helpers.checkboxLabelClass || (depth0 != null ? depth0.checkboxLabelClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxLabelClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + "\" for=\"field-"
+    + alias4(((helper = (helper = helpers.datarecordid || (depth0 != null ? depth0.datarecordid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"datarecordid","hash":{},"data":data}) : helper)))
     + "\">\r\n				<input type=\"checkbox\" name=\""
-    + alias5(alias4((depths[1] != null ? depths[1].name : depths[1]), depth0))
+    + alias4(alias5((depths[1] != null ? depths[1].name : depths[1]), depth0))
     + "\" class=\""
     + ((stack1 = ((helper = (helper = helpers.checkboxClass || (depth0 != null ? depth0.checkboxClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\" id=\"field-"
-    + alias5(((helper = (helper = helpers.datarecordid || (depth0 != null ? depth0.datarecordid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"datarecordid","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.datarecordid || (depth0 != null ? depth0.datarecordid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"datarecordid","hash":{},"data":data}) : helper)))
     + "\" value=\""
-    + alias5(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper)))
     + "\" id=\""
-    + alias5(alias4((depths[1] != null ? depths[1].name : depths[1]), depth0))
+    + alias4(alias5((depths[1] != null ? depths[1].name : depths[1]), depth0))
     + "\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.isselected : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.selected : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "/>\r\n				"
-    + alias5(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
     + "</label>\r\n";
 },"10":function(container,depth0,helpers,partials,data) {
     return " checked='checked'";
@@ -18929,8 +18939,8 @@ this["Mura"]["templates"]["radio"] = this.Mura.Handlebars.template({"1":function
 },"9":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "				<label for=\""
-    + alias4(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
+  return "				<label for=\"field-"
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" test1=1 class=\""
     + ((stack1 = ((helper = (helper = helpers.radioLabelClass || (depth0 != null ? depth0.radioLabelClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"radioLabelClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\">\n				<input type=\"radio\" name=\""
@@ -18980,8 +18990,8 @@ this["Mura"]["templates"]["radio_static"] = this.Mura.Handlebars.template({"1":f
 },"9":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "				<label for=\""
-    + alias4(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
+  return "				<label for=\"field-"
+    + alias4(((helper = (helper = helpers.datarecordid || (depth0 != null ? depth0.datarecordid : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"datarecordid","hash":{},"data":data}) : helper)))
     + "\" class=\""
     + ((stack1 = ((helper = (helper = helpers.radioLabelClass || (depth0 != null ? depth0.radioLabelClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"radioLabelClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\">\n				<input type=\"radio\" name=\""
