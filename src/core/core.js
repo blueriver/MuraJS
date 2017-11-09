@@ -2744,6 +2744,7 @@ var Mura=(function(){
    */
    function setRequestHeader(headerName,value){
      Mura.requestHeaders[headerName]=value;
+     return this;
    }
 
   /**
@@ -2964,6 +2965,7 @@ var Mura=(function(){
               getData: getData,
               getProps: getProps,
               isEmptyObject: isEmptyObject,
+              isScrolledIntoView: isScrolledIntoView,
               evalScripts: evalScripts,
               validateForm: validateForm,
               escape: $escape,
