@@ -10,8 +10,6 @@ require('./core/content.js');
 require('./core/entitycollection.js');
 require('./core/feed.js');
 
-Mura._requestcontext=new Mura.RequestContext();
-
 if(!Mura.isInNode()){
   require('./core/loader.js');
   require('./core/domselection.js');

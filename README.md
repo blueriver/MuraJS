@@ -135,18 +135,26 @@ If you want client cookie support you must use a custom RequestContext
 that contains the current executions request and response objects.
 
 ```
-const express = require('express')
-const app = express()
-const Mura=require('../index');
-
-Mura.init({
-  siteid:'default',
-  rootpath:'http://localhost:8080'
-});
+const express = require('express');
+const app = express();
+const env = {
+    siteid:'default',
+    rootpath:'http://localhost:8080'
+  };
 
 app.get('/', function (req, res) {
+  let Mura=require('mura.js');
 
-  Mura.getRequestContext(req, res).renderFilename('about').then(
+  Mura.init(Mura.extend(
+    {
+      request:req,
+      response:res
+    },
+    env
+    )
+  );
+
+  Mura.renderFilename('about').then(
     function(content){
       res.send("<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>")
     },
@@ -158,8 +166,18 @@ app.get('/', function (req, res) {
 
 app.get('/content', function (req, res) {
 
-  Mura.getRequestContext(req, res)
-    .getFeed('content')
+  let Mura=require('mura.js');
+
+  Mura.init(Mura.extend(
+    {
+      request:req,
+      response:res
+    },
+    env
+    )
+  );
+
+  Mura.getFeed('content')
     .getQuery()
     .then(function(items){
         res.send("<br/>content feed:<pre>" + JSON.stringify(items.getAll()) + "</pre>");
@@ -168,8 +186,6 @@ app.get('/content', function (req, res) {
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
-
-
 })
 ```
 
@@ -178,24 +194,26 @@ app.listen(3000, function () {
 ```
 const express = require('express')
 const app = express()
-const Mura=require('../index');
-
-Mura.init({
-  siteid:'default',
-  rootpath:'http://localhost:8080'
-  mode:'REST',
-});
-
-//Global Request Headers
-Mura.setRequestHeader('Authorization','Bearer: ...');
+const env = {
+    siteid:'default',
+    rootpath:'http://localhost:8080',
+    mode:'REST'
+  };
 
 app.get('/', function (req, res) {
 
-  Mura
-    .getRequestContext(req, res);
-    //Per Execution Request Headers
-    .setRequestHeader('Authorization','Bearer: ...');
-    .renderFilename('about').then(
+  let Mura=require('../index');
+
+  Mura.init({
+    siteid:'default',
+    rootpath:'http://localhost:8080'
+    mode:'REST'
+  });
+
+  //Per Execution Request Headers
+  Mura.setRequestHeader('Authorization','Bearer: ...');
+
+  Mura .renderFilename('about').then(
     function(content){
       res.send("<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>")
     },

@@ -1,14 +1,23 @@
 const express = require('express')
 const app = express()
-const Mura=require('../index');
-
-Mura.init({
-  siteid:'default',
-  rootpath:'http://localhost:8080'
-});
+const env = {
+    siteid:'default',
+    rootpath:'http://localhost:8080'
+  }
 
 app.get('/', function (req, res) {
-  Mura.getRequestContext(req, res).renderFilename('about').then(
+  let Mura=require('../index');
+
+  Mura.init(Mura.extend(
+    {
+      request:req,
+      response:res
+    },
+    env
+    )
+  );
+
+  Mura.renderFilename('about').then(
     function(content){
       res.send("<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>")
     },
@@ -19,6 +28,17 @@ app.get('/', function (req, res) {
 });
 
 app.get('/content', function (req, res) {
+
+  let Mura=require('../index');
+
+  Mura.init(Mura.extend(
+    {
+      request:req,
+      response:res
+    },
+    env
+    )
+  );
 
   Mura.getRequestContext(req, res)
     .getFeed('content')
