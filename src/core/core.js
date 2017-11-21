@@ -2838,7 +2838,7 @@ var Mura=(function(){
       }
 
       if (!config.corepath) {
-          config.corepath = config.context + '/core/modules/v1';
+          config.corepath = config.context + '/core';
       }
 
       if (!config.jslib) {
