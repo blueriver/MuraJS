@@ -695,6 +695,53 @@ var Mura=(function(){
       return Number(parseFloat(val)) == val;
   }
 
+  /**
+  * buildDisplayRegion - Renders display region data returned from Mura.renderFilename()
+  *
+  * @param  {any} data Region data to build string from
+  * @return {string}
+  */
+  function buildDisplayRegion(data){
+
+    if(typeof data == 'undefined'){
+      return '';
+    }
+
+    var str = data.header;
+
+    str += data.inherited.header;
+
+    if(data.inherited.items.length){
+      for(var i in data.inherited.items){
+        str += data.inherited.items[i].header;
+        if(typeof data.inherited.items[i].html != 'undefined'){
+          str += data.inherited.items[i].html;
+        }
+        str += data.inherited.items[i].footer;
+      }
+    }
+
+    str += data.inherited.footer;
+
+    str += data.local.header;
+
+    if(data.local.items.length){
+      for(var i in data.local.items){
+        str += data.local.items[i].header;
+        if(typeof data.local.items[i].html != 'undefined'){
+          str += data.local.items[i].html;
+        }
+        str += data.local.items[i].footer;
+      }
+    }
+
+    str += data.local.footer;
+
+    str += data.footer;
+
+    return str;
+  }
+
   function parseString(val) {
       if (typeof val == 'string') {
           var lcaseVal = val.toLowerCase();
@@ -3015,7 +3062,8 @@ var Mura=(function(){
               getRequestHeaders:getRequestHeaders,
               mode: 'json',
               declareEntity:declareEntity,
-              undeclareEntity:undeclareEntity
+              undeclareEntity:undeclareEntity,
+              buildDisplayRegion:buildDisplayRegion
           }
       );
 

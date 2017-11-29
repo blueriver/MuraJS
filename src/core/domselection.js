@@ -1576,5 +1576,22 @@ Mura.DOMSelection = Mura.Core.extend(
           this.selection[0].focus();
 
           return this;
-      }
+      },
+
+      /**
+      * processDisplayRegion - Renders and processes the display region data returned from Mura.renderFilename()
+      *
+      * @param  {any} data Region data to render
+      * @return {Promise}
+      */
+      processDisplayRegion:function(data){
+
+        if (typeof data == 'undefined' || !this.selection.length) {
+            return this.processMarkup();
+        }
+
+        this.html(Mura.buildDisplayRegion(data));
+
+        return this.processMarkup();
+     }
   });

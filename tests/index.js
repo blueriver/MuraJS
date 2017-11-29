@@ -19,7 +19,9 @@ app.get('/', function (req, res) {
 
   Mura.renderFilename('about').then(
     function(content){
-      res.send("<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>")
+      let str="<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>";
+      
+      res.send(str);
     },
     function(error){
       console.log(error);

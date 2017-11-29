@@ -9,7 +9,7 @@ Mura CMS is an open source content management system for CFML, created by [Blue 
 ### Browser
 
 ```
-<script src="https://domain.com/core/vendor/mura.js/dist/mura.min.js"></script>
+<script src="https://domain.com/core/modules/v1/core_assets/js/mura.min.js"></script>
 ```
 
 ### Babel
