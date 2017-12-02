@@ -402,7 +402,18 @@ Mura.Feed = Mura.Core.extend(
 		},
 
 		/**
-		 * showExcludeSearch - Sets to include the homepage
+		 * showNavOnly - Sets to include the homepage
+		 *
+		 * @param  {boolean} showNavOnly Whether to return items that have been excluded from search
+		 * @return {Mura.Feed}              Self
+		 */
+		showNavOnly: function(showNavOnly) {
+			this.queryString += '&showNavOnly=' + encodeURIComponent(showNavOnly);
+			return this;
+		},
+
+		/**
+		 * no - Sets to include the homepage
 		 *
 		 * @param  {boolean} showExcludeSearch Whether to return items that have been excluded from search
 		 * @return {Mura.Feed}              Self
