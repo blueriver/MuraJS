@@ -66,43 +66,8 @@ var Mura=require('./core');
 						&& typeof attrs.rel != 'undefined'
 						&& attrs.rel=='preload'
 					){
-					/*
-					Inspired by
-					https://github.com/filamentgroup/loadCSS/blob/master/src/loadCSS.js
-					*/
-
-					var media=attrs.media || 'all';
-					attrs.media='x only';
-					attrs.rel="stylesheet";
-
-					function loadCB(){
-						if( el.addEventListener ){
-							el.removeEventListener( "load", loadCB );
-						}
-						el.media = media || "all";
-					}
-
-					function onloadcssdefined( cb ){
-						var sheets=document.styleSheets;
-						var resolvedHref = attrs.href;
-						var i = sheets.length;
-						while( i-- ){
-							if( sheets[ i ].href === resolvedHref ){
-								return cb();
-							}
-						}
-						setTimeout(function() {
-							onloadcssdefined( cb );
-						});
-					};
-
-					if( el.addEventListener ){
-						el.addEventListener( "load", loadCB);
-					}
-
-					el.onloadcssdefined = onloadcssdefined;
-
-					onloadcssdefined( loadCB );
+					attrs.as = attrs.as || 'style';
+					attrs.onload = attrs.onload || "this.rel='stylesheet'";
 				}
 
 				for( i in attrs ){ attrs[i] && (el[i]=attrs[i]); }
