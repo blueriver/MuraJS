@@ -34,6 +34,12 @@ var Mura=require('./core');
 		, script  = scriptTag.innerHTML.replace(/^\s+|\s+$/g,'')
 	;
 
+	try {
+		var preloadsupport = w.document.createElement( "link" ).relList.supports( "preload" );
+	} catch (e) {
+		var preloadsupport = false;
+	}
+
 	//avoid multiple inclusion to override current loader but allow tag content evaluation
 	if( ! Mura.ljs ){
 		var checkLoaded = scriptTag.src.match(/checkLoaded/)?1:0
@@ -45,8 +51,6 @@ var Mura=require('./core');
 				return parts;
 			}
 			,appendElmt = function(type,attrs,cb){
-
-
 				var el = D.createElement(type), i;
 
 				if( type =='script' && cb ){ //-- this is not intended to be used for link
@@ -66,8 +70,50 @@ var Mura=require('./core');
 						&& typeof attrs.rel != 'undefined'
 						&& attrs.rel=='preload'
 					){
-					attrs.as = attrs.as || 'style';
-					attrs.onload = attrs.onload || "this.rel='stylesheet'";
+
+						/*
+						Inspired by
+						https://github.com/filamentgroup/loadCSS/blob/master/src/loadCSS.js
+						*/
+
+						var media=attrs.media || 'all';
+						attrs.as = attrs.as || 'style';
+
+						if(!preloadsupport){
+							attrs.media='x only';
+							attrs.rel="stylesheet";
+						}
+
+						function loadCB(){
+							if( el.addEventListener ){
+								el.removeEventListener( "load", loadCB );
+							}
+							el.media = media || "all";
+						  el.rel="stylesheet";
+						}
+
+						function onloadcssdefined( cb ){
+							var sheets=document.styleSheets;
+							var resolvedHref = attrs.href;
+							var i = sheets.length;
+							while( i-- ){
+								if( sheets[ i ].href === resolvedHref ){
+									return cb();
+								}
+							}
+							setTimeout(function() {
+								onloadcssdefined( cb );
+							});
+						};
+
+						if( el.addEventListener ){
+							el.addEventListener( "load", loadCB);
+						}
+
+						el.onloadcssdefined = onloadcssdefined;
+
+						onloadcssdefined( loadCB );
+
 				}
 
 				for( i in attrs ){ attrs[i] && (el[i]=attrs[i]); }

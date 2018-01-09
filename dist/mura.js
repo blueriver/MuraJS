@@ -7194,7 +7194,7 @@ Mura.RequestContext=Mura.Core.extend(
               url: Mura.apiEndpoint + '/content/_path/' + filename + '?' + query.join('&'),
               success: function(resp) {
                 if (typeof resolve == 'function') {
-                  var item = new Mura.Entity({},self);
+                  var item = new Mura.entities.Content({},self);
                   item.set(resp.data);
                   resolve(item);
                 }
@@ -7735,6 +7735,28 @@ Mura.entities.Content = Mura.Entity.extend(
 /** @lends Mura.entities.Content.prototype */
 {
   /**
+   * hasParent - Returns true if content has a parent.
+   *
+   * @return {boolean}
+   */
+  hasParent:function(){
+    var parentid=this.get('parentid');
+
+    if(!parentid || ['00000000000000000000000000000000END','00000000000000000000000000000000003','00000000000000000000000000000000004','00000000000000000000000000000000099'].find(function(value){return value===parentid})){
+      return false;
+    } else {
+      return true;
+    }
+  },
+  /**
+   * renderDisplayRegion - Returns a string with display region markup.
+   *
+   * @return {string}
+   */
+  renderDisplayRegion:function(region){
+    return Mura.buildDisplayRegion(this.get('displayregions')[region])
+  },
+  /**
    * getRelatedContent - Gets related content sets by name
    *
    * @param  {string} relatedContentSetName
@@ -7749,7 +7771,7 @@ Mura.entities.Content = Mura.Entity.extend(
         var self=this;
 
         params = params || {};
-        params.siteid = get('siteid') || Mura.siteid;
+        params.siteid = this.get('siteid') || Mura.siteid;
 
         for (var key in params) {
             if (key != 'entityname' && key != 'filename' && key !=
@@ -7762,7 +7784,7 @@ Mura.entities.Content = Mura.Entity.extend(
         self._requestcontext.request({
             type: 'get',
             url: Mura.apiEndpoint +
-                '/content/' + get('contentid') + '/' + relatedContentSetName + '?' +
+                '/content/' + self.get('contentid') + '/' + relatedContentSetName + '?' +
                 query.join('&'),
             params: params,
             success: function(resp) {
@@ -12372,6 +12394,12 @@ var Mura=__webpack_require__(10);
 		, script  = scriptTag.innerHTML.replace(/^\s+|\s+$/g,'')
 	;
 
+	try {
+		var preloadsupport = w.document.createElement( "link" ).relList.supports( "preload" );
+	} catch (e) {
+		var preloadsupport = false;
+	}
+
 	//avoid multiple inclusion to override current loader but allow tag content evaluation
 	if( ! Mura.ljs ){
 		var checkLoaded = scriptTag.src.match(/checkLoaded/)?1:0
@@ -12383,8 +12411,6 @@ var Mura=__webpack_require__(10);
 				return parts;
 			}
 			,appendElmt = function(type,attrs,cb){
-
-
 				var el = D.createElement(type), i;
 
 				if( type =='script' && cb ){ //-- this is not intended to be used for link
@@ -12404,8 +12430,50 @@ var Mura=__webpack_require__(10);
 						&& typeof attrs.rel != 'undefined'
 						&& attrs.rel=='preload'
 					){
-					attrs.as = attrs.as || 'style';
-					attrs.onload = attrs.onload || "this.rel='stylesheet'";
+
+						/*
+						Inspired by
+						https://github.com/filamentgroup/loadCSS/blob/master/src/loadCSS.js
+						*/
+
+						var media=attrs.media || 'all';
+						attrs.as = attrs.as || 'style';
+
+						if(!preloadsupport){
+							attrs.media='x only';
+							attrs.rel="stylesheet";
+						}
+
+						function loadCB(){
+							if( el.addEventListener ){
+								el.removeEventListener( "load", loadCB );
+							}
+							el.media = media || "all";
+						  el.rel="stylesheet";
+						}
+
+						function onloadcssdefined( cb ){
+							var sheets=document.styleSheets;
+							var resolvedHref = attrs.href;
+							var i = sheets.length;
+							while( i-- ){
+								if( sheets[ i ].href === resolvedHref ){
+									return cb();
+								}
+							}
+							setTimeout(function() {
+								onloadcssdefined( cb );
+							});
+						};
+
+						if( el.addEventListener ){
+							el.addEventListener( "load", loadCB);
+						}
+
+						el.onloadcssdefined = onloadcssdefined;
+
+						onloadcssdefined( loadCB );
+
 				}
 
 				for( i in attrs ){ attrs[i] && (el[i]=attrs[i]); }

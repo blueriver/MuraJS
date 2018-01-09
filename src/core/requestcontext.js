@@ -95,7 +95,7 @@ Mura.RequestContext=Mura.Core.extend(
               url: Mura.apiEndpoint + '/content/_path/' + filename + '?' + query.join('&'),
               success: function(resp) {
                 if (typeof resolve == 'function') {
-                  var item = new Mura.Entity({},self);
+                  var item = new Mura.entities.Content({},self);
                   item.set(resp.data);
                   resolve(item);
                 }

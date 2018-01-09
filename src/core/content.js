@@ -15,6 +15,28 @@ Mura.entities.Content = Mura.Entity.extend(
 /** @lends Mura.entities.Content.prototype */
 {
   /**
+   * hasParent - Returns true if content has a parent.
+   *
+   * @return {boolean}
+   */
+  hasParent:function(){
+    var parentid=this.get('parentid');
+
+    if(!parentid || ['00000000000000000000000000000000END','00000000000000000000000000000000003','00000000000000000000000000000000004','00000000000000000000000000000000099'].find(function(value){return value===parentid})){
+      return false;
+    } else {
+      return true;
+    }
+  },
+  /**
+   * renderDisplayRegion - Returns a string with display region markup.
+   *
+   * @return {string}
+   */
+  renderDisplayRegion:function(region){
+    return Mura.buildDisplayRegion(this.get('displayregions')[region])
+  },
+  /**
    * getRelatedContent - Gets related content sets by name
    *
    * @param  {string} relatedContentSetName
@@ -29,7 +51,7 @@ Mura.entities.Content = Mura.Entity.extend(
         var self=this;
 
         params = params || {};
-        params.siteid = get('siteid') || Mura.siteid;
+        params.siteid = this.get('siteid') || Mura.siteid;
 
         for (var key in params) {
             if (key != 'entityname' && key != 'filename' && key !=
@@ -42,7 +64,7 @@ Mura.entities.Content = Mura.Entity.extend(
         self._requestcontext.request({
             type: 'get',
             url: Mura.apiEndpoint +
-                '/content/' + get('contentid') + '/' + relatedContentSetName + '?' +
+                '/content/' + self.get('contentid') + '/' + relatedContentSetName + '?' +
                 query.join('&'),
             params: params,
             success: function(resp) {
