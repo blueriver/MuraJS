@@ -20,7 +20,7 @@ app.get('/', function (req, res) {
   Mura.renderFilename('about').then(
     function(content){
       let str="<br/>rendered content:<pre>" + JSON.stringify(content.getAll()) + "</pre>";
-      
+
       res.send(str);
     },
     function(error){
@@ -42,8 +42,7 @@ app.get('/content', function (req, res) {
     )
   );
 
-  Mura.getRequestContext(req, res)
-    .getFeed('content')
+  Mura.getFeed('content')
     .getQuery()
     .then(function(items){
         res.send("<br/>content feed:<pre>" + JSON.stringify(items.getAll()) + "</pre>");
