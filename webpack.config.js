@@ -11,8 +11,12 @@ if (env === 'build') {
   outputFile = 'mura.js';
 }
 
+plugins.push(
+  new webpack.IgnorePlugin(/request/)
+);
+
 module.exports = {
-  entry: './src/index.js',
+  entry: './index.js',
   devtool: 'source-map',
   output: {
     filename: outputFile,
@@ -23,7 +27,7 @@ module.exports = {
   },
   resolve: {
     modules: [
-      path.resolve('./src'),
+      path.resolve('./'),
       path.resolve('./node_modules')
     ]
   },
