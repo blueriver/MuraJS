@@ -2230,16 +2230,8 @@ var Mura=(function(){
               obj
                   .addClass('mura-active')
                   .hover(
-                      function(e) {
-                          //e.stopPropagation();
-                          Mura('.mura-active-target').removeClass(
-                              'mura-active-target');
-                          Mura(this).addClass('mura-active-target');
-                      },
-                      function(e) {
-                          //e.stopPropagation();
-                          Mura(this).removeClass('mura-active-target');
-                      }
+                    Mura.initDraggableObject_hoverin,
+                    Mura.initDraggableObject_hoverin
                   );
           } else {
               if (Mura.type == 'Variation') {
@@ -2255,18 +2247,8 @@ var Mura=(function(){
                       obj
                           .addClass('mura-active')
                           .hover(
-                              function(e) {
-                                  //e.stopPropagation();
-                                  Mura('.mura-active-target').removeClass(
-                                      'mura-active-target');
-                                  Mura(this).addClass(
-                                      'mura-active-target');
-                              },
-                              function(e) {
-                                  //e.stopPropagation();
-                                  Mura(this).removeClass(
-                                      'mura-active-target');
-                              }
+                              Mura.initDraggableObject_hoverin,
+                              Mura.initDraggableObject_hoverin
                           );
 
                       Mura.initDraggableObject(self);
