@@ -47,6 +47,7 @@ rb: {
 	formtextblockclass:"form-control",
 	formcheckboxclass:"",
 	formcheckboxlabelclass:"checkbox",
+	formcheckboxwrapperclass:"",
 	formradioclass:"",
 	formradiolabelclass:"radio",
 	formbuttonwrapperclass:"btn-group",
@@ -1389,6 +1390,10 @@ registerHelpers: function() {
 
 	Mura.Handlebars.registerHelper('checkboxClass',function() {
 		return self.rb.formcheckboxclass;
+	});
+
+	Mura.Handlebars.registerHelper('checkboxWrapperClass',function() {
+		return self.rb.formcheckboxwrapperclass;
 	});
 
 	Mura.Handlebars.registerHelper('formClass',function() {
