@@ -1697,7 +1697,7 @@ var Mura=(function(){
 
               function() {
                   if (find(
-                          ".cffp_applied  .cffp_mm .cffp_kp"
+                          ".cffp_applied,  .cffp_mm, .cffp_kp"
                       ).length) {
                       var fileref = document.createElement(
                           'script')
@@ -1710,7 +1710,7 @@ var Mura=(function(){
 
                       document.getElementsByTagName(
                           "head")[0].appendChild(
-                          fileref)
+                          fileref )
                   }
               },
 
