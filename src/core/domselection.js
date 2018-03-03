@@ -1584,7 +1584,7 @@ Mura.DOMSelection = Mura.Core.extend(
       * @param  {any} data Region data to render
       * @return {Promise}
       */
-      processDisplayRegion:function(data){
+      processDisplayRegion:function(data,label){
 
         if (typeof data == 'undefined' || !this.selection.length) {
             return this.processMarkup();
@@ -1592,6 +1592,20 @@ Mura.DOMSelection = Mura.Core.extend(
 
         this.html(Mura.buildDisplayRegion(data));
 
+				if(label != 'undefined'){
+					this.find('label.mura-editable-label').html('DISPLAY REGION : ' + data.label);
+				}
+
         return this.processMarkup();
-     }
+     },
+
+		/**
+		 * appendDisplayObject - Appends display object to selected items
+		 *
+		 * @param  {object} data Display objectparams (including object='objectkey')
+		 * @return {Promise}
+		 */
+	 dspObject:function(data){
+			return this.appendDisplayObject(data);
+	 }
   });

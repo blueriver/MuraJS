@@ -37,6 +37,18 @@ Mura.entities.Content = Mura.Entity.extend(
     return Mura.buildDisplayRegion(this.get('displayregions')[region])
   },
   /**
+   * dspRegion - Appends a display region to a element.
+   *
+   * @return {self}
+   */
+  dspRegion:function(selector,region,label){
+		if(Mura.isNumeric(region) && region <= this.get('displayregionnames').length){
+			region=this.get('displayregionnames')[region-1];
+		}
+		Mura(selector).processDisplayRegion(this.get('displayregions')[region],label);
+		return this;
+  },
+  /**
    * getRelatedContent - Gets related content sets by name
    *
    * @param  {string} relatedContentSetName
