@@ -39,10 +39,6 @@ Mura.Request=Mura.Core.extend(
           params.success = function() {};
       }
 
-      if (!('error' in params)) {
-          params.error = function() {};
-      }
-
       if (!('data' in params)) {
           params.data = {};
       }
@@ -284,31 +280,30 @@ Mura.Request=Mura.Core.extend(
         }
 
         if (typeof error == 'undefined' || ( httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
-
             try {
                 var data = JSON.parse(body);
             } catch (e) {
                 var data = body;
             }
-
             params.success(data, httpResponse);
-
         } else if (typeof error == 'undefined') {
-
             try {
-                var data = JSON.parse(body);
+              var data = JSON.parse(body);
             } catch (e) {
-                var data = body;
+              var data = body;
             }
-
-            params.error(data,httpResponse);
-
+						if(typeof params.error == 'function'){
+            	params.error(data,httpResponse);
+						} else {
+							throw data;
+						}
         } else {
-
-            params.error(error);
-
+						if(typeof params.error == 'function'){
+            	params.error(error,httpResponse);
+						} else {
+							throw error;
+						}
         }
-
       }
     },
     browserRequest:function(params){
@@ -377,7 +372,11 @@ Mura.Request=Mura.Core.extend(
 
                   params.success(data, req);
               } else {
-                  params.error(req);
+								if(typeof params.error == 'function'){
+									params.error(req);
+								} else {
+									throw req;
+								}
               }
           }
       }
@@ -397,7 +396,15 @@ Mura.Request=Mura.Core.extend(
 
           //if(params.data.constructor.name == 'FormData'){
           if (typeof FormData != 'undefined' && params.data instanceof FormData) {
-              req.send(params.data);
+						try{
+							req.send(params.data);
+						} catch(e){
+							if(typeof params.error == 'function'){
+								params.error(req,e);
+							} else {
+								throw e;
+							}
+						}
           } else {
               req.setRequestHeader('Content-Type',
                   'application/x-www-form-urlencoded; charset=UTF-8'
@@ -416,7 +423,15 @@ Mura.Request=Mura.Core.extend(
               query = query.join('&');
 
               setTimeout(function() {
-                  req.send(query);
+								try{
+									req.send(query);
+								} catch(e){
+									if(typeof params.error == 'function'){
+										params.error(req,e);
+									} else {
+										throw e;
+									}
+								}
               }, 0);
           }
       } else {
@@ -450,7 +465,15 @@ Mura.Request=Mura.Core.extend(
           }
 
           setTimeout(function() {
-              req.send();
+						try{
+							req.send();
+						} catch(e){
+							if(typeof params.error == 'function'){
+								params.error(req,e);
+							} else {
+								throw e;
+							}
+						}
           }, 0);
       }
     },
