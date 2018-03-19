@@ -333,7 +333,8 @@ Mura.Entity = Mura.Core.extend(
      *
      * @return {Promise}
      */
-    'undeclareEntity': function() {
+    'undeclareEntity': function(deleteSchema) {
+				deleteSchema=deleteSchema || false;
         var self = this;
 
         return new Promise(function(resolve, reject) {
@@ -343,6 +344,7 @@ Mura.Entity = Mura.Core.extend(
                 url: Mura.apiEndpoint,
                 data: {
                         entityname: self.get('entityname'),
+												deleteSchema: deleteSchema,
                         method: 'undeclareEntity',
                         siteid: self.get('siteid'),
                         '_cacheid': Math.random()

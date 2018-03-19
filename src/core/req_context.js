@@ -214,9 +214,9 @@ Mura.RequestContext=Mura.Core.extend(
    * @param  {object} entityName
    * @return {Promise}
    */
-  undeclareEntity:function(entityName) {
+  undeclareEntity:function(entityName,deleteSchema) {
 		var self=this;
-
+		deleteSchema=deleteSchema || false;
 		if(Mura.mode.toLowerCase() == 'rest'){
 			return new Promise(function(resolve, reject) {
         self.request({
@@ -225,7 +225,8 @@ Mura.RequestContext=Mura.Core.extend(
             url: Mura.apiEndpoint,
 						data:{
 							method: 'undeclareEntity',
-							entityConfig: entityName
+							entityName: entityName,
+							deleteSchema : deleteSchema
 						},
             success: function(resp) {
 							if (typeof resolve =='function' && typeof resp.data != 'undefined') {
@@ -253,6 +254,7 @@ Mura.RequestContext=Mura.Core.extend(
 										data:{
 											method: 'undeclareEntity',
 											entityName: entityName,
+											deleteSchema : deleteSchema,
 											'csrf_token': resp.data.csrf_token,
 											'csrf_token_expires': resp.data.csrf_token_expires
 										},

@@ -226,8 +226,9 @@ var Mura=(function(){
    * @return {Promise}
    * @memberof {class} Mura
    */
-  function undeclareEntity(entityName) {
-    return Mura._requestcontext.undeclareEntity(entityName);
+  function undeclareEntity(entityName,deleteSchema) {
+		deleteSchema=deleteSchema || false;
+    return Mura._requestcontext.undeclareEntity(entityName,deleteSchema);
   }
 
   /**
