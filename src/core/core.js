@@ -1904,7 +1904,7 @@ var Mura=(function(){
           frm.submit();
       }
 
-      if (typeof FormData != 'undefined' && frm.getAttribute(
+      if (Mura.formdata  && frm.getAttribute(
               'enctype') == 'multipart/form-data') {
 
           var data = new FormData(frm);
@@ -2898,6 +2898,12 @@ var Mura=(function(){
       if (typeof config.preloaderMarkup == 'undefined') {
           config.preloaderMarkup = '';
       }
+
+			if (typeof config.formdata !='undefined') {
+					config.formdata = config.formdata;
+			} else {
+					config.formdata=(typeof FormData != 'undefined') ? true : false;
+			}
 
       Mura.editing;
 

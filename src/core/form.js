@@ -539,7 +539,7 @@ setDataValues: function() {
 		}
 	}
 
-	if(typeof FormData != 'undefined'){
+	if(Mura.formdata){
 		var frm=document.getElementById('frm' + self.context.objectid);
 		for(var p in currentPage){
 			if(currentPage.hasOwnProperty(p) && typeof self.data[p] != 'undefined'){
@@ -788,7 +788,7 @@ submitForm: function() {
 	else {
 		//console.log('b!');
 
-		if(typeof FormData == 'undefined'){
+		if(!Mura.formdata){
 			var data=Mura.deepExtend({},self.context,self.data);
 			data.saveform=true;
 			data.formid=data.objectid;
@@ -837,7 +837,7 @@ submitForm: function() {
 			data: tokenArgs,
 			success: function(resp) {
 
-				if(typeof FormData == 'undefined'){
+				if(!Mura.formdata){
 					data['csrf_token_expires']=resp.data['csrf_token_expires'];
 					data['csrf_token']=resp.data['csrf_token'];
 				} else {

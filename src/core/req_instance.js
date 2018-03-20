@@ -320,7 +320,7 @@ Mura.Request=Mura.Core.extend(
           }
       }
 
-      if (!(typeof FormData != 'undefined' && params.data instanceof FormData)) {
+      if (!(Mura.formdata && params.data instanceof FormData)) {
           params.data = Mura.deepExtend({}, params.data);
 
           for (var p in params.data) {
@@ -394,11 +394,7 @@ Mura.Request=Mura.Core.extend(
               req.setRequestHeader(p, params.headers[h]);
           }
 
-          //if(params.data.constructor.name == 'FormData'){
-          if (typeof FormData != 'undefined' && params.data instanceof FormData) {
-						req.setRequestHeader('Content-Type',
-								'multipart/form-data; charset=UTF-8'
-						);
+          if (Mura.formdata && params.data instanceof FormData) {
 						try{
 							req.send(params.data);
 						} catch(e){
