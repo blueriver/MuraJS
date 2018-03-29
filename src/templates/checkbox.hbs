@@ -4,9 +4,9 @@
 		{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>Required</ins>{{/if}}</div>
 		{{#if summary}}</br>{{/if}}
 		{{#eachCheck dataset.options selected}}
-			<div{{#if checkboxWrapperClass}} class="{{{checkboxWrapperClass}}}"{{/if}}>
+			<div class="{{{checkboxWrapperClass}}}">
 				<input source="{{../dataset.source}}" class="{{{checkboxClass}}}" type="checkbox" name="{{../name}}" id="field-{{id}}" value="{{id}}" {{#if isselected}}checked='checked'{{/if}}/>
-				<label class="checkbox" class="{{{checkboxLabelClass}}}" for="field-{{id}}">{{label}}</label>
+				<label class="{{{checkboxLabelClass}}}" for="field-{{id}}">{{label}}</label>
 			</div>
 		{{/eachCheck}}
 	</div>

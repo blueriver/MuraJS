@@ -2899,6 +2899,10 @@ var Mura=(function(){
           config.preloaderMarkup = '';
       }
 
+			if (typeof config.rb == 'undefined') {
+          config.rb={};
+      }
+
 			config.formdata=(typeof FormData != 'undefined') ? true : false;
 
       Mura.editing;
@@ -2979,7 +2983,6 @@ var Mura=(function(){
                   }
               }
           }, {
-              rb: {},
               generateOAuthToken: generateOAuthToken,
               entities: {},
               submitForm: submitForm,
