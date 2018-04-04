@@ -120,6 +120,7 @@ Mura(function(Mura){
     .where()
     .prop('title').isEQ('About')
     .andProp('type').isEQ('Page')
+    .getQuery()
     .then(function(collection){
       alert(collection.item(0).get('title'));
     });
