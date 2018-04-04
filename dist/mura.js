@@ -18992,7 +18992,7 @@ Mura.RequestContext=Mura.Core.extend(
 {
 	init: function(request, response, requestHeaders) {
     this.requestObject=request;
-    this.reponseObject=response;
+    this.responseObject=response;
     this._request=new Mura.Request(request, response, requestHeaders);
     return this;
 	},
