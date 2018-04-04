@@ -550,7 +550,11 @@ var Mura=(function(){
               el.addEventListener(
                   eventName,
                   function(event) {
-                      fn.call(el, event);
+										if(typeof fn.call == 'undefined'){
+											fn(event);
+										} else {
+											fn.call(el, event);
+										}
                   },
                   true
               );
@@ -1594,8 +1598,7 @@ var Mura=(function(){
                           $customaction(theForm);
                           return false;
                       } else {
-                          document.createElement('form').submit
-                              .call(theForm);
+                          document.createElement('form').submit.call(theForm);
                       }
                   } else {
                       var msg = '';
@@ -2538,14 +2541,22 @@ var Mura=(function(){
           if (obj.data('object') == 'container') {
               wireUpObject(obj);
               if (typeof resolve == 'function') {
-                  resolve.call(obj.node, obj);
+								if(typeof resolve.call == 'undefined'){
+                  resolve(obj);
+								} else {
+									resolve.call(obj.node, obj);
+								}
               }
           } else {
               if (!obj.data('async') && obj.data('render') ==
                   'client') {
                   wireUpObject(obj);
                   if (typeof resolve == 'function') {
-                      resolve.call(obj.node, obj);
+										if(typeof resolve.call == 'undefined'){
+                      resolve(obj);
+										} else {
+											resolve.call(obj.node, obj);
+										}
                   }
               } else {
                   //console.log(data);
@@ -2558,10 +2569,12 @@ var Mura=(function(){
                       success: function(resp) {
                           handleResponse(obj,
                               resp);
-                          if (typeof resolve ==
-                              'function') {
-                              resolve.call(obj.node,
-                                  obj);
+                          if (typeof resolve =='function') {
+														if(typeof resolve.call == 'undefined'){
+															resolve(obj);
+														} else {
+															resolve.call(obj.node, obj);
+														}
                           }
                       }
                   });

@@ -104,7 +104,11 @@ Mura.EntityCollection=Mura.Entity.extend(
 	 */
 	each:function(fn){
 		this.properties.items.forEach( function(item,idx){
-			fn.call(item,item,idx);
+			if(typeof fn.call == 'undefined'){
+				fn(item,idx);
+			} else {
+				fn.call(item,item,idx);
+			}
 		});
 		return this;
 	},
@@ -127,7 +131,7 @@ Mura.EntityCollection=Mura.Entity.extend(
 	 */
 	sort:function(fn){
 		this.properties.items.sort(fn);
-          return this;
+    return this;
 	},
 
 	/**
@@ -137,17 +141,22 @@ Mura.EntityCollection=Mura.Entity.extend(
 	 * @return {Mura.EntityCollection}
 	 */
 	filter:function(fn){
-          var newProps={};
+	  var newProps={};
 
-          for(var p in this.properties){
-              if(this.properties.hasOwnProperty(p) && p != 'items' && p != 'links'){
-                  newProps[p]=this.properties[p];
-              }
-          }
+	  for(var p in this.properties){
+	      if(this.properties.hasOwnProperty(p) && p != 'items' && p != 'links'){
+	          newProps[p]=this.properties[p];
+	      }
+	  }
 
 		var collection=new Mura.EntityCollection(newProps,this._requestcontext);
+
 		return collection.set('items',this.properties.items.filter( function(item,idx){
-			return fn.call(item,item,idx);
+			if(typeof fn.call == 'undefined'){
+				return fn(item,idx);
+			} else {
+				return fn.call(item,item,idx);
+			}
 		}));
 	},
 
@@ -159,7 +168,11 @@ Mura.EntityCollection=Mura.Entity.extend(
 	 */
 	map:function(fn){
 		return this.properties.items.map( function(item,idx){
-			return fn.call(item,item,idx);
+			if(typeof fn.call == 'undefined'){
+				return fn(item,idx);
+			} else {
+				return fn.call(item,item,idx);
+			}
 		});
 	},
 
@@ -174,10 +187,14 @@ Mura.EntityCollection=Mura.Entity.extend(
      initialValue=initialValue||0;
 
      return this.properties.items.reduce(
-            function(accumulator,item,idx,array){
-    				return fn.call(item,accumulator,item,idx,array);
-    			},
-          initialValue
+        function(accumulator,item,idx,array){
+					if(typeof fn.call == 'undefined'){
+						return fn(accumulator,item,idx,array);
+					} else {
+						return fn.call(item,accumulator,item,idx,array);
+					}
+    		},
+        initialValue
       );
 	}
 });

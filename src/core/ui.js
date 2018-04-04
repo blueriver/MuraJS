@@ -24,17 +24,29 @@ Mura.UI=Mura.Core.extend(
 				if(typeof this.handlers[$eventName] != 'undefined'){
 					var $handlers=this.handlers[$eventName];
 					for(var i=0;i < $handlers.length;i++){
-						$handlers[i].call(this);
+						if(typeof $handlers[i].call == 'undefined'){
+							$handlers[i](this);
+						} else {
+							$handlers[i].call(this,this);
+						}
 					}
 				}
 
 				if(typeof this[eventName] == 'function'){
-					this[eventName].call(this);
+					if(typeof this[eventName].call == 'undefined'){
+						this[eventName](this);
+					} else {
+						this[eventName].call(this,this);
+					}
 				}
 				var fnName='on' + eventName.substring(0,1).toUpperCase() + eventName.substring(1,eventName.length);
 
 				if(typeof this[fnName] == 'function'){
-					this[fnName].call(this);
+					if(typeof this[fnName].call == 'undefined'){
+						this[fnName](this);
+					} else {
+						this[fnName].call(this,this);
+					}
 				}
 			}
 		}

@@ -34,7 +34,12 @@ Core.prototype=
 		if(typeof this.prototype.handlers[eventName] != 'undefined'){
 			var handlers=this.prototype.handlers[eventName];
 			for(var handler in handlers){
-				handler.call(this);
+				if(typeof handler.call == 'undefined'){
+					handler(this);
+				} else {
+					handler.call(this,this);
+				}
+
 			}
 		}
 

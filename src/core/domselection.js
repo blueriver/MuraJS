@@ -67,11 +67,31 @@ Mura.DOMSelection = Mura.Core.extend(
        */
       each: function(fn) {
           this.selection.forEach(function(el, idx, array) {
-              fn.call(el, el, idx, array);
+						if(typeof fn.call == 'undefined'){
+							fn(el, idx, array);
+						} else {
+							fn.call(el, el, idx, array);
+						}
           });
           return this;
       },
 
+			/**
+       * each - Runs function against each item in selection
+       *
+       * @param  {function} fn Method
+       * @return {Mura.DOMSelection} Self
+       */
+      forEach: function(fn) {
+          this.selection.forEach(function(el, idx, array) {
+						if(typeof fn.call == 'undefined'){
+							fn(el, idx, array);
+						} else {
+							fn.call(el, el, idx, array);
+						}
+          });
+          return this;
+      },
 
       /**
        * filter - Creates a new Mura.DomSelection instance contains selection values that pass filter function by returning true
@@ -80,10 +100,12 @@ Mura.DOMSelection = Mura.Core.extend(
        * @return {object}    New Mura.DOMSelection
        */
       filter: function(fn) {
-          return Mura(this.selection.filter(function(el,
-              idx, array) {
-              return fn.call(el, el, idx,
-                  array);
+          return Mura(this.selection.filter(function(el,idx, array) {
+						if(typeof fn.call == 'undefined'){
+							return fn(el, idx,array);
+						} else {
+							return fn.call(el, el, idx,array);
+						}
           }));
       },
 
@@ -94,10 +116,12 @@ Mura.DOMSelection = Mura.Core.extend(
        * @return {object}    New Mura.DOMSelection
        */
       map: function(fn) {
-          return Mura(this.selection.map(function(el, idx,
-              array) {
-              return fn.call(el, el, idx,
-                  array);
+          return Mura(this.selection.map(function(el, idx, array) {
+						if(typeof fn.call == 'undefined'){
+							return fn(el, idx, array);
+						} else {
+							return fn.call(el, el, idx, array);
+						}
           }));
       },
 
@@ -112,8 +136,11 @@ Mura.DOMSelection = Mura.Core.extend(
           initialValue = initialValue || 0;
           return this.selection.reduce(
               function(accumulator, item, idx, array) {
-                  return fn.call(item, accumulator,
-                      item, idx, array);
+								if(typeof fn.call == 'undefined'){
+									return fn(accumulator,item, idx, array);
+								} else {
+									return fn.call(item, accumulator,item, idx, array);
+								}
               },
               initialValue
           );
@@ -200,15 +227,18 @@ Mura.DOMSelection = Mura.Core.extend(
                                       selector
                                   ).each(
                                       function() {
-                                          fn
-                                              .call(
-                                                  this
-                                              );
+																				if(typeof fn.call =='undefined'){
+																					fn(this);
+																				} else {
+																					fn.call(this,this);
+																				}
                                       });
                               } else {
-                                  fn.call(
-                                      this
-                                  );
+																if(typeof fn.call =='undefined'){
+																	fn(this);
+																} else {
+																	fn.call(this,this);
+																}
                               }
                           });
                       },
@@ -232,19 +262,20 @@ Mura.DOMSelection = Mura.Core.extend(
                       function(event) {
                           if (selector) {
                               if (Mura(event.target)
-                                  .is(
-                                      selector
-                                  )) {
-                                  return fn.call(
-                                      event
-                                      .target,
-                                      event
-                                  );
+                                  .is(selector)) {
+																		if(typeof fn.call == 'undefined'){
+																			return fn(event);
+																		} else {
+																			return fn.call(event.target,event);
+																		}
+
                               }
                           } else {
-                              return fn.call(
-                                  self,
-                                  event);
+														if(typeof fn.call == 'undefined'){
+															return fn(event);
+														} else {
+															return fn.call(self,event);
+														}
                           }
 
                       },
