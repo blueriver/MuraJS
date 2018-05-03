@@ -1727,7 +1727,7 @@ var Mura=(function(){
                       fileref.setAttribute("type","text/javascript");
                       fileref.setAttribute(
                         "src",
-                        "https://www.google.com/recaptcha/api.js?onload=Mura.checkForReCaptcha&render=explicit&hl=" +  Mura.reCAPTCHALanguage
+                        "https://www.google.com/recaptcha/api.js?onload=MuraCheckForReCaptcha&render=explicit&hl=" +  Mura.reCAPTCHALanguage
                       );
 
                       document.getElementsByTagName("head")[0].appendChild(fileref);
@@ -1735,7 +1735,7 @@ var Mura=(function(){
 
                   if (find(".g-recaptcha-container").length) {
                       loader().loadjs(
-                          "https://www.google.com/recaptcha/api.js?onload=Mura.checkForReCaptcha&render=explicit&hl=" +
+                          "https://www.google.com/recaptcha/api.js?onload=MuraCheckForReCaptcha&render=explicit&hl=" +
                           Mura.reCAPTCHALanguage,
                           function() {
                               find(
@@ -1743,7 +1743,7 @@ var Mura=(function(){
                               ).each(function(el) {
                                   var self =  el;
 
-                                  Mura.checkForReCaptcha =
+                                  MuraCheckForReCaptcha =
                                       function() {
                                           if (
                                               typeof grecaptcha ==
@@ -1780,14 +1780,14 @@ var Mura=(function(){
                                           } else {
                                               setTimeout(
                                                       function() {
-                                                          Mura.checkForReCaptcha();
+                                                          MuraCheckForReCaptcha();
                                                       },
                                                       10
                                                   );
                                           }
                                       }
 
-                                  Mura.checkForReCaptcha();
+                                  MuraCheckForReCaptcha();
 
                               });
                           }
