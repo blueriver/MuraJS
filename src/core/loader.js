@@ -21,6 +21,8 @@ var Mura=require('./core');
 *            - 2012-04-19 - add addAliases method
 * @note coding style is implied by the target usage of this script not my habbits
 */
+
+if(typeof window.document != 'undefined'){
 	var isA =  function(a,b){ return a instanceof (b || Array);}
 		//-- some minifier optimisation
 		, D = document
@@ -325,3 +327,4 @@ var Mura=require('./core');
 		// eval inside tag code if any
 	}
 	scriptTag.src && script && appendElmt('script', {innerHTML: script});
+}

@@ -1302,7 +1302,7 @@ var Mura=(function(){
   }
 
   function initShadowBox(el) {
-      if(!window){
+      if(typeof window.document == 'undefined'){
         return;
       };
 
@@ -1638,7 +1638,7 @@ var Mura=(function(){
   }
 
   function isScrolledIntoView(el) {
-      if (!window || window.innerHeight) {
+      if (typeof window.document == 'undefined' || window.innerHeight) {
           true;
       }
 
@@ -1828,7 +1828,7 @@ var Mura=(function(){
                   }
 
 
-                  if (window  && window.MuraInlineEditor && window.MuraInlineEditor
+                  if (typeof window.document != 'undefined'  && window.MuraInlineEditor && window.MuraInlineEditor
                       .checkforImageCroppers) {
                       find("img").each(function() {
                           window.muraInlineEditor.checkforImageCroppers(
@@ -2924,7 +2924,7 @@ var Mura=(function(){
           Mura.apiEndpoint=Mura.apiEndpoint.replace('/json/', '/rest/');
       }
 
-      if(isInNode()
+      if(typeof XMLHttpRequest == 'undefined'
         && typeof Mura.request != 'undefined'
         && typeof Mura.response != 'undefined'){
 
@@ -2935,7 +2935,7 @@ var Mura=(function(){
 
       Mura(function() {
 
-          if(!isInNode()){
+          if(typeof window.document != 'undefined'){
 
             var hash = location.hash;
 
@@ -2959,9 +2959,9 @@ var Mura=(function(){
                     });
             }
 
-            if(window){
-              Mura(window).on('hashchange', handleHashChange);
-            }
+
+            Mura(window).on('hashchange', handleHashChange);
+
 
             processMarkup(document);
 

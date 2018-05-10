@@ -1,7 +1,7 @@
 {
   "name": "mura.js",
   "homepage": "http://www.getmura.com",
-  "version": "1.0.56",
+  "version": "1.0.57",
   "description": "Utility for interacting with the Mura JSON/REST API",
   "main": "src/index.js",
   "scripts": {
@@ -32,5 +32,8 @@
     "npm": "^5.0.3",
     "request": "^2.81.0",
     "tough-cookie": "^2.3.2"
-  }
+  },
+	"react-native": {
+	  "request": false
+	}
 }

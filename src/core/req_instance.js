@@ -47,10 +47,10 @@ Mura.Request=Mura.Core.extend(
           params.headers = {};
       }
 
-      if(Mura.isInNode()){
+      if(typeof XMLHttpRequest == 'undefined'){
         this.nodeRequest(params);
       } else {
-        this.browserRequest(params);
+        this.xhrRequest(params);
       }
     },
     /**
@@ -324,7 +324,7 @@ Mura.Request=Mura.Core.extend(
         }
       }
     },
-    browserRequest:function(params){
+    xhrRequest:function(params){
 
       for(var h in Mura.requestHeaders){
           if(Mura.requestHeaders.hasOwnProperty(h)){
