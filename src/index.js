@@ -19,8 +19,7 @@ require('./core/templates');
 if(Mura.isInNode()){
 	Mura._request=require('request');
 } else {
-	require('date-input-polyfill');
-	
+
 	window.m=Mura;
 	window.mura=Mura;
 	window.Mura=Mura;
