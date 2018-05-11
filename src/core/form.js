@@ -1416,6 +1416,14 @@ registerHelpers: function() {
 		return returnString;
 	});
 
+	Mura.Handlebars.registerHelper('textInputTypeValue',function() {
+		if(typeof Mura.useHTML5DateInput != 'undefined' && Mura.useHTML5DateInput && typeof this.validatetype != 'undefined' && this.validatetype.toLowerCase()=='date'){
+			return 'date';
+		} else {
+			return 'text';
+		}
+	});
+
 	Mura.Handlebars.registerHelper('commonInputAttributes',function() {
 		//id, class, title, size
 		var escapeExpression=Mura.Handlebars.escapeExpression;
@@ -1462,6 +1470,10 @@ registerHelpers: function() {
 
 		if(this.size){
 			returnString += ' size="' + escapeExpression(this.size) + '"';
+		}
+
+		if(typeof Mura.useHTML5DateInput != 'undefined' && Mura.useHTML5DateInput && typeof this.validatetype != 'undefined' && this.validatetype.toLowerCase()=='date'){
+			returnString += ' data-date-format="' + Mura.dateformat + '"';
 		}
 
 		return returnString;

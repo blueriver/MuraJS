@@ -528,11 +528,11 @@ Mura.Feed = Mura.Core.extend(
 								resolve(returnObj);
 							}
 						} else if (typeof reject == 'function') {
-								reject(returnObj);
+							reject(resp);
 						}
 					},
 					error:  function(resp) {
-							this.success(resp );
+						this.success(resp );
 					}
 				});
 			});

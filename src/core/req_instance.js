@@ -390,6 +390,10 @@ Mura.Request=Mura.Core.extend(
 
                   params.success(data, req);
               } else {
+								if(typeof req.responseText != 'undefined'){
+									console.log(req.responseText);
+								}
+								
 								if(typeof params.error == 'function'){
 									params.error(req);
 								} else {

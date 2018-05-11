@@ -1,7 +1,7 @@
 {
   "name": "mura.js",
   "homepage": "http://www.getmura.com",
-  "version": "1.0.57",
+  "version": "1.0.58",
   "description": "Utility for interacting with the Mura JSON/REST API",
   "main": "src/index.js",
   "scripts": {
@@ -21,19 +21,18 @@
     "grunt-contrib-handlebars": "^1.0.0",
     "grunt-handlebars-compiler": "^0.2.0",
     "grunt-text-replace": "^0.4.0",
-    "handlebars": "^4.0.10",
-    "request": "^2.81.0",
     "webpack": "^2.6.1"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
-    "handlebars": "^4.0.10",
+    "date-input-polyfill": "^2.14.0",
     "install": "^0.10.1",
-    "npm": "^5.0.3",
+    "npm": "^5.8.0",
+		"handlebars": "^4.0.10",
     "request": "^2.81.0",
     "tough-cookie": "^2.3.2"
   },
-	"react-native": {
-	  "request": false
-	}
+  "react-native": {
+    "request": false
+  }
 }

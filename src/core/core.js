@@ -1223,6 +1223,23 @@ var Mura=(function(){
       return this
   }
 
+	/**
+   * generateDateFormat - dateformt for input type="date"
+   *
+   * @name generateDateFormat
+   * @return {string}
+   */
+	  function generateDateFormat(dtStr, fldName) {
+			var formatArray=['mm','dd','yyyy'];
+
+			return [
+				formatArray[Mura.dtFormat[0]],
+				formatArray[Mura.dtFormat[1]],
+				formatArray[Mura.dtFormat[2]]
+			].join(Mura.dtCh);
+
+		}
+
   /**
    * isDate - Returns if the value is a data
    *
@@ -2914,11 +2931,33 @@ var Mura=(function(){
           config.rb={};
       }
 
+			if (typeof config.dtExample == 'undefined') {
+          config.dtExample="11/10/2018";
+      }
+
+			if (typeof config.dtCh == 'undefined') {
+          config.dtCh="/";
+      }
+
+			if (typeof config.dtFormat == 'undefined') {
+          config.dtFormat=[0,1,2];
+      }
+
+			if (typeof config.dtLocale == 'undefined') {
+          config.dtLocale="en-US";
+      }
+
+			if (typeof config.useHTML5DateInput == 'undefined') {
+          config.useHTML5DateInput=false;
+      }
+
 			config.formdata=(typeof FormData != 'undefined') ? true : false;
 
       Mura.editing;
 
       extend(Mura, config);
+
+			Mura.dateformat=generateDateFormat();
 
       if(Mura.mode.toLowerString=='rest'){
           Mura.apiEndpoint=Mura.apiEndpoint.replace('/json/', '/rest/');
