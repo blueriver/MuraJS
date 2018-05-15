@@ -1,7 +1,7 @@
 <div class="{{{inputWrapperClass}}}" id="field-{{name}}-container">
 	<div class="mura-checkbox-group">
 		<div class="mura-group-label">
-			{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>Required</ins>{{/if}}</div>
+			{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>{{formRequiredLabel}}</ins>{{/if}}</div>
 			{{#if summary}}</br>{{/if}}
 			{{#eachStatic dataset}}
 				<div class="{{{checkboxWrapperClass}}}">

@@ -62,7 +62,8 @@ rb: {
 	formbuttonbackclass:"form-nav",
 	formbuttonbacklabel : "Back",
 	formbuttoncancelclass:"form-cancel btn-primary pull-right",
-	formbuttoncancellabel :"Cancel"
+	formbuttoncancellabel :"Cancel",
+	formrequiredlabel:"Required"
 },
 render:function(){
 
@@ -1403,6 +1404,10 @@ registerHelpers: function() {
 
 	Mura.Handlebars.registerHelper('checkboxWrapperClass',function() {
 		return self.rb.formcheckboxwrapperclass;
+	});
+
+	Mura.Handlebars.registerHelper('formRequiredLabel',function() {
+		return self.rb.formrequiredlabel;
 	});
 
 	Mura.Handlebars.registerHelper('formClass',function() {
