@@ -3040,6 +3040,7 @@ var Mura=(function(){
                   }
               }
           }, {
+							reopen:function(fn){Mura(fn)},
               generateOAuthToken: generateOAuthToken,
               entities: {},
               submitForm: submitForm,

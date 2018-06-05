@@ -14,6 +14,8 @@ require('./core/loader.js');
 require('./core/domselection.js');
 require('./core/ui.js');
 require('./core/form');
+require('./core/text');
+require('./core/embed');
 require('./core/templates');
 
 if(Mura.isInNode()){
