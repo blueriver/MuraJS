@@ -2281,7 +2281,10 @@ var Mura=(function(){
                       Mura.initDraggableObject(self);
                   }
               } else {
-									var lcaseObject=obj.data('object').toLowerCase();
+									var lcaseObject=obj.data('object');
+									if(typeof lcaseObject=='string'){
+										lcaseObject=lcaseObject.toLowerCase();
+									}
                   var region = Mura(self).closest(
                       ".mura-region-local");
                   if (region && region.length) {
