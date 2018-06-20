@@ -1,13 +1,16 @@
 var path = require('path');
 var webpack = require('webpack');
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 var env = process.env.WEBPACK_ENV;
 var plugins = [];
 
 if (env === 'build') {
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
+	mode = 'production';
+	minimize = true;
   outputFile = 'mura.min.js';
 } else {
+	mode = 'development';
+	minimize = false;
   outputFile = 'mura.js';
 }
 
@@ -15,8 +18,19 @@ plugins.push(
   new webpack.IgnorePlugin(/request/)
 );
 
+/*
+plugins.push(
+  new BundleAnalyzerPlugin()
+);
+*/
+
+
 module.exports = {
-  entry: './index.js',
+	mode: mode,
+	optimization: {
+    minimize: minimize
+  },
+  entry: ['babel-polyfill','./index.js'],
   devtool: 'source-map',
   output: {
     filename: outputFile,
