@@ -2941,6 +2941,10 @@ var Mura=(function(){
           config.context = '';
       }
 
+			if (!config.rootpath) {
+          config.rootpath = config.context;
+      }
+
       if (!config.assetpath) {
           config.assetpath = config.context + "/" + config.siteid;
       }
