@@ -3085,6 +3085,8 @@ var Mura=(function(){
 
             processMarkup(document);
 
+						Mura.markupInitted=true;
+
 						if(Mura.cookieConsentEnabled){Mura(function(){Mura('body').appendDisplayObject({object:'cookie_consent',queue:false});});}
 
             Mura(document)

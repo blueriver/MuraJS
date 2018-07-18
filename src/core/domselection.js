@@ -736,13 +736,21 @@ Mura.DOMSelection = Mura.Core.extend(
                       Mura.createUUID()
                   );
 
-                  Mura(this).append(el);
+									var self=this;
 
-                  Mura.processDisplayObject(
-                      el,true,true).then(
-                      resolve, reject
-                  );
+									function watcher(){
+										if(Mura.markupInitted){
+											Mura(self).append(el);
+											Mura.processDisplayObject(
+													el,true,true).then(
+													resolve, reject
+											);
+										} else {
+											setTimeout(watcher);
+										}
+									}
 
+									watcher();
               });
           });
       },
@@ -790,12 +798,21 @@ Mura.DOMSelection = Mura.Core.extend(
                       Mura.createUUID()
                   );
 
-                  Mura(this).prepend(el);
+                  var self=this;
 
-                  Mura.processDisplayObject(
-                      el,true,true).then(
-                      resolve, reject
-                  );
+									function watcher(){
+										if(Mura.markupInitted){
+											Mura(self).append(el);
+											Mura.processDisplayObject(
+													el,true,true).then(
+													resolve, reject
+											);
+										} else {
+											setTimeout(watcher);
+										}
+									}
+
+									watcher();
 
               });
           });

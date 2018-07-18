@@ -3,7 +3,7 @@ var Mura=require('./core');
 
 /**
  * Creates a new Mura.EntityCollection
- * @name  Mura.Entity.EntityCollection
+ * @name  Mura.EntityCollection
  * @class
  * @extends Mura.Entity
  * @memberof  Mura
