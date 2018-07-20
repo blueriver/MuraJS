@@ -51,9 +51,6 @@ var Mura=(function(){
       return child ? child.nodeValue : '';
   };
 
-
-  var trackingMetadata={};
-
   /**
    * trackEvent - This is for Mura Experience Platform. It has no use with Mura standard
    *
@@ -149,8 +146,8 @@ var Mura=(function(){
 
          var trackingID = data.contentid + data.objectid;
 
-         if(typeof trackingMetadata[trackingID] != 'undefined'){
-             Mura.deepExtend(trackingVars,trackingMetadata[trackingID]);
+         if(typeof Mura.trackingMetadata[trackingID] != 'undefined'){
+             Mura.deepExtend(trackingVars,Mura.trackingMetadata[trackingID]);
              trackingVars.eventData=data;
              track();
          } else {
@@ -169,8 +166,8 @@ var Mura=(function(){
                      }
                  }
 
-                 trackingMetadata[trackingID]={};
-                 Mura.deepExtend(trackingMetadata[trackingID],response.data);
+                 Mura.trackingMetadata[trackingID]={};
+                 Mura.deepExtend(Mura.trackingMetadata[trackingID],response.data);
                  track();
              });
          }
@@ -3017,12 +3014,13 @@ var Mura=(function(){
           config.cookieConsentEnabled=false;
       }
 
-
 			config.formdata=(typeof FormData != 'undefined') ? true : false;
 
       Mura.editing;
 
       extend(Mura, config);
+
+			Mura.trackingMetadata={};
 
 			Mura.dateformat=generateDateFormat();
 
