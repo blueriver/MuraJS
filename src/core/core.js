@@ -3051,7 +3051,14 @@ var Mura=(function(){
 
       Mura(function() {
 
-					for(var cmd in holdingPreInitQueue){holdingPreInitQueue[cmd](Mura);}
+					for(var cmd in holdingPreInitQueue){
+						if(typeof holdingPreInitQueue[cmd] == 'function'){
+							holdingPreInitQueue[cmd](Mura);
+						} else {
+							console.log("PreInit queue item not a function");
+							console.log(holdingPreInitQueue[cmd]);
+						}
+					}
 
           if(typeof window.document != 'undefined'){
 
