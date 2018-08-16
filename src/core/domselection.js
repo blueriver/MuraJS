@@ -1098,31 +1098,50 @@ Mura.DOMSelection = Mura.Core.extend(
                   return getComputedStyle(this.selection[
                       0]);
               } catch (e) {
+									console.log(e)
                   return {};
               }
           } else if (typeof ruleName == 'object') {
               this.each(function(el) {
                   try {
                       for (var p in ruleName) {
-                          el.style[p] = ruleName[
-                              p];
+                          el.style[p] = ruleName[p];
                       }
-                  } catch (e) {}
+                  } catch (e) {console.log(e)}
               });
           } else if (typeof value != 'undefined') {
               this.each(function(el) {
                   try {
                       el.style[ruleName] = value;
-                  } catch (e) {}
+                  } catch (e) {console.log(e)}
               });
               return this;
           } else {
               try {
                   return getComputedStyle(this.selection[
                       0])[ruleName];
-              } catch (e) {}
+              } catch (e) {console.log(e)}
           }
       },
+
+			/**
+			 * calculateStyles - Looks at data attrs and sets appropriate styles
+			 *
+			 * @return {object}  Self
+			 */
+			calculateStyles: function() {
+					this.each(function(el) {
+						var obj=Mura(el);
+						obj.removeAttr('style');
+						if(obj.data('bgcolor')){
+							obj.css("background-color",obj.data('bgcolor'));
+						}
+						if(obj.data('bgimage')){
+							obj.css("background-image",'url(' + obj.data('bgimage') + ')');
+						}
+					});
+					return this;
+			},
 
       /**
        * text - Gets or sets the text content of each element in the selection

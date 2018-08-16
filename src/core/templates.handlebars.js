@@ -461,7 +461,7 @@ this["Mura"]["templates"]["success"] = this.Mura.Handlebars.template({"compiler"
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function";
 
   return "<div class=\""
-    + ((stack1 = ((helper = (helper = helpers.formSuccessWrapperClass || (depth0 != null ? depth0.formSuccessWrapperClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"formSuccessWrapperClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = helpers.formResponseWrapperClass || (depth0 != null ? depth0.formResponseWrapperClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"formResponseWrapperClass","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\">"
     + ((stack1 = ((helper = (helper = helpers.responsemessage || (depth0 != null ? depth0.responsemessage : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"responsemessage","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "</div>\n";

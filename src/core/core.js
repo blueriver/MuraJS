@@ -2162,6 +2162,9 @@ var Mura=(function(){
                       obj.data('rendertemplate', context.rendertemplate);
                   }
 
+									obj.css("background-color",obj.data('bgcolor'));
+									obj.css("backgroundImage",'url(' + obj.data('bgimageurl') + ')');
+
                   if (typeof Mura.DisplayObject[template] !=
                       'undefined') {
                       context.html = '';
@@ -2524,6 +2527,8 @@ var Mura=(function(){
       if (!self.getAttribute('data-instanceid')) {
           self.setAttribute('data-instanceid', createUUID());
       }
+
+			obj.calculateStyles(),
 
       //if(obj.data('async')){
       obj.addClass("mura-async-object");
