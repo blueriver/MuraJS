@@ -2246,6 +2246,8 @@ var Mura=(function(){
           }
       }
 
+			obj.calculateDisplayObjectStyles();
+
       //obj.hide().show();
 
       if (Mura.layoutmanager && Mura.editing) {
@@ -2528,8 +2530,6 @@ var Mura=(function(){
           self.setAttribute('data-instanceid', createUUID());
       }
 
-			obj.calculateStyles(),
-
       //if(obj.data('async')){
       obj.addClass("mura-async-object");
       //}
@@ -2546,6 +2546,9 @@ var Mura=(function(){
 
       if (rendered) {
           return new Promise(function(resolve, reject) {
+
+							obj.calculateDisplayObjectStyles();
+
               var forms = obj.find('form');
 
               obj.find('form').each(function() {

@@ -1125,20 +1125,53 @@ Mura.DOMSelection = Mura.Core.extend(
       },
 
 			/**
-			 * calculateStyles - Looks at data attrs and sets appropriate styles
+			 * calculateDisplayObjectStyles - Looks at data attrs and sets appropriate styles
 			 *
 			 * @return {object}  Self
 			 */
-			calculateStyles: function() {
+			calculateDisplayObjectStyles: function() {
 					this.each(function(el) {
 						var obj=Mura(el);
-						obj.removeAttr('style');
-						if(obj.data('bgcolor')){
-							obj.css("background-color",obj.data('bgcolor'));
+
+						if(obj.data('cssid')){
+							obj.attr('id',obj.data('cssid'));
+						} else {
+							obj.removeAttr('id');
 						}
-						if(obj.data('bgimage')){
-							obj.css("background-image",'url(' + obj.data('bgimage') + ')');
+						
+						if(obj.data('cssstyles')){
+							obj.removeAttr('style');
+							obj.css(obj.data('cssstyles'));
 						}
+
+						if(obj.data('metacssclass') || obj.data('metacssid') || obj.data('metacssstyles')){
+							var meta=obj.find('.mura-object-meta').first();
+						}
+						if(obj.data('metacssid')){
+							meta.addClass(obj.data('metacssclass'));
+						}
+						if(obj.data('metacssclass')){
+							meta.addClass(obj.data('metacssclass'));
+						}
+						if(obj.data('metacssstyles')){
+							meta.removeAttr('style');
+							meta.css(obj.data('metacssstyles'));
+						}
+
+						if(obj.data('contentcssclass') || obj.data('contentcssid') ||obj.data('contentcssstyles')){
+							var content=obj.find('.mura-object-content').first();
+						}
+						if(obj.data('contentcssid')){
+							content.addClass(obj.data('contentcssclass'));
+						}
+						if(obj.data('contentcssclass')){
+							content.addClass(obj.data('contentcssclass'));
+						}
+						if(obj.data('contentcssstyles')){
+							content.removeAttr('style');
+							content.css(obj.data('contentcssstyles'));
+						}
+
 					});
 					return this;
 			},
