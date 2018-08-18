@@ -11702,7 +11702,7 @@ Mura.DOMSelection = Mura.Core.extend(
 						} else {
 							obj.removeAttr('id');
 						}
-						
+
 						if(obj.data('cssstyles')){
 							obj.removeAttr('style');
 							obj.css(obj.data('cssstyles'));
@@ -11715,7 +11715,11 @@ Mura.DOMSelection = Mura.Core.extend(
 							meta.addClass(obj.data('metacssclass'));
 						}
 						if(obj.data('metacssclass')){
-							meta.addClass(obj.data('metacssclass'));
+						 obj.data('metacssclass').split(' ').forEach(function(c){
+							 if (!meta.hasClass(c)) {
+								 meta.addClass(c);
+							 }
+						 })
 						}
 						if(obj.data('metacssstyles')){
 							meta.removeAttr('style');
@@ -11729,7 +11733,11 @@ Mura.DOMSelection = Mura.Core.extend(
 							content.addClass(obj.data('contentcssclass'));
 						}
 						if(obj.data('contentcssclass')){
-							content.addClass(obj.data('contentcssclass'));
+							obj.data('contentcssclass').split(' ').forEach(function(c){
+								if (!content.hasClass(c)) {
+ 							 		content.addClass(c);
+								}
+ 						 })
 						}
 						if(obj.data('contentcssstyles')){
 							content.removeAttr('style');
