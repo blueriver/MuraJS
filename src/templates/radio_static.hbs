@@ -1,6 +1,8 @@
 	<div class="{{{inputWrapperClass}}}" id="field-{{name}}-container">
 		<div class="mura-radio-group">
-			<div class="mura-group-label">{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>{{formRequiredLabel}}</ins>{{/if}}</div>
+			<label class="mura-group-label" for="{{name}}">
+				{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>{{formRequiredLabel}}</ins>{{/if}}
+			</label>
 			{{#if summary}}</br>{{/if}}
 			{{#eachStatic dataset}}
 				<div class="{{{radioWrapperClass}}}">

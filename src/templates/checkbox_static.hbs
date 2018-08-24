@@ -1,13 +1,14 @@
 <div class="{{{inputWrapperClass}}}" id="field-{{name}}-container">
 	<div class="mura-checkbox-group">
-		<div class="mura-group-label">
-			{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>{{formRequiredLabel}}</ins>{{/if}}</div>
-			{{#if summary}}</br>{{/if}}
-			{{#eachStatic dataset}}
-				<div class="{{{checkboxWrapperClass}}}">
-					<input type="checkbox" name="{{../name}}" class="{{{checkboxClass}}}" id="field-{{datarecordid}}" value="{{value}}" {{#if isselected}} checked='checked'{{/if}}{{#if selected}} checked='checked'{{/if}}/>
-					<label class="{{{checkboxLabelClass}}}" for="field-{{datarecordid}}">{{label}}</label>
-				</div>
-			{{/eachStatic}}
+		<label class="mura-group-label" for="{{name}}">
+			{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>{{formRequiredLabel}}</ins>{{/if}}
+		</label>
+		{{#if summary}}</br>{{/if}}
+		{{#eachStatic dataset}}
+			<div class="{{{checkboxWrapperClass}}}">
+				<input type="checkbox" name="{{../name}}" class="{{{checkboxClass}}}" id="field-{{datarecordid}}" value="{{value}}" {{#if isselected}} checked='checked'{{/if}}{{#if selected}} checked='checked'{{/if}}/>
+				<label class="{{{checkboxLabelClass}}}" for="field-{{datarecordid}}">{{label}}</label>
+			</div>
+		{{/eachStatic}}
 	</div>
 </div>
