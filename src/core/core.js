@@ -1561,7 +1561,7 @@ var Mura=(function(){
 					data[p]=data[p].join();
 				}
 			}
-			
+
       var frmTextareas = theForm.getElementsByTagName("textarea");
       for (f = 0; f < frmTextareas.length; f++) {
 
@@ -2422,15 +2422,17 @@ var Mura=(function(){
           var form = Mura(this);
           var self = this;
 
-          if (form.data('async') || !(form.hasData('async') &&
-                  !form.data('async')) && !(form.hasData(
-                  'autowire') && !form.data('autowire')) && !
-              form.attr('action') && !form.attr('onsubmit') &&
-              !form.attr('onSubmit')) {
-              self.onsubmit = function() {
-                  return validateFormAjax(this);
-              };
-          }
+					if(form.closest('.mura-object').data('instanceid')==obj.data('instanceid')) {
+	          if(form.data('async') || !(form.hasData('async') &&
+	                  !form.data('async')) && !(form.hasData(
+	                  'autowire') && !form.data('autowire')) && !
+	              form.attr('action') && !form.attr('onsubmit') &&
+	              !form.attr('onSubmit')) {
+	              self.onsubmit = function() {
+	                  return validateFormAjax(this);
+	              };
+	          }
+					}
       });
 
       if (obj.data('nextnid')) {
