@@ -3230,7 +3230,8 @@ var Mura=(function(){
               buildDisplayRegion:buildDisplayRegion
           }
       );
-
+			
+		Mura.Module=Mura.DisplayObject;
     return Mura;
 
 })();
