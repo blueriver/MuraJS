@@ -197,7 +197,10 @@ Mura.Request=Mura.Core.extend(
       function nodeResponseHandler(error, httpResponse, body) {
           var debug=typeof Mura.debug != 'undefined' && Mura.debug;
 
-          if(typeof self.responseObject != 'undefined' && typeof httpResponse.headers['set-cookie'] != 'undefined'){
+          if(typeof self.responseObject != 'undefined'
+						&& typeof httpResponse != 'undefined'
+						&& typeof httpResponse.headers != 'undefined'
+						&& typeof httpResponse.headers['set-cookie'] != 'undefined'){
 
             var existingCookies=((typeof self.requestObject.headers['cookie'] != 'undefined') ? self.requestObject.headers['cookie'] : '').split("; ");
 
@@ -297,7 +300,7 @@ Mura.Request=Mura.Core.extend(
 
         }
 
-        if (typeof error == 'undefined' || ( httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
+        if (typeof error == 'undefined' || ( typeof httpResponse != 'undefined' && httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
             try {
                 var data = JSON.parse(body);
             } catch (e) {
@@ -393,7 +396,7 @@ Mura.Request=Mura.Core.extend(
 								if(typeof req.responseText != 'undefined'){
 									console.log(req.responseText);
 								}
-								
+
 								if(typeof params.error == 'function'){
 									params.error(req);
 								} else {

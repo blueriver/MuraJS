@@ -19,7 +19,11 @@ require('./core/embed');
 require('./core/templates');
 
 if(Mura.isInNode()){
-	Mura._request=require('request');
+	/*
+		This is an attempt to hide the require('request') from webpack
+		It's also ignored in the webpack.config.js
+	*/
+	Mura._request=eval("require('request')");
 } else {
 
 	window.m=Mura;

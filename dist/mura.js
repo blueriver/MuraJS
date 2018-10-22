@@ -12652,7 +12652,11 @@ __webpack_require__(349);
 __webpack_require__(350);
 
 if(Mura.isInNode()){
-	Mura._request=__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module 'request'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	/*
+		This is an attempt to hide the require('request') from webpack
+		It's also ignored in the webpack.config.js
+	*/
+	Mura._request=eval("require('request')");
 } else {
 
 	window.m=Mura;
@@ -13263,7 +13267,10 @@ Mura.Request=Mura.Core.extend(
       function nodeResponseHandler(error, httpResponse, body) {
           var debug=typeof Mura.debug != 'undefined' && Mura.debug;
 
-          if(typeof self.responseObject != 'undefined' && typeof httpResponse.headers['set-cookie'] != 'undefined'){
+          if(typeof self.responseObject != 'undefined'
+						&& typeof httpResponse != 'undefined'
+						&& typeof httpResponse.headers != 'undefined'
+						&& typeof httpResponse.headers['set-cookie'] != 'undefined'){
 
             var existingCookies=((typeof self.requestObject.headers['cookie'] != 'undefined') ? self.requestObject.headers['cookie'] : '').split("; ");
 
@@ -13363,7 +13370,7 @@ Mura.Request=Mura.Core.extend(
 
         }
 
-        if (typeof error == 'undefined' || ( httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
+        if (typeof error == 'undefined' || ( typeof httpResponse != 'undefined' && httpResponse.statusCode >= 200 && httpResponse.statusCode < 400)) {
             try {
                 var data = JSON.parse(body);
             } catch (e) {
@@ -13459,7 +13466,7 @@ Mura.Request=Mura.Core.extend(
 								if(typeof req.responseText != 'undefined'){
 									console.log(req.responseText);
 								}
-								
+
 								if(typeof params.error == 'function'){
 									params.error(req);
 								} else {
