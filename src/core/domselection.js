@@ -1307,7 +1307,7 @@ Mura.DOMSelection = Mura.Core.extend(
           var el = this.selection[0];
           //var type=el.constructor.name.toLowerCase();
 
-          if (typeof window.document != 'undefined' && el === window) {
+          if (typeof window !='undefined' && typeof window.document != 'undefined' && el === window) {
               return innerHeight
           } else if (el === document) {
               var body = document.body;
@@ -1346,7 +1346,7 @@ Mura.DOMSelection = Mura.Core.extend(
           var el = this.selection[0];
           //var type=el.constructor.name.toLowerCase();
 
-          if (typeof window.document != 'undefined' && el === window) {
+          if (typeof window !='undefined' && typeof window.document != 'undefined' && el === window) {
               return innerWidth
           } else if (el === document) {
               var body = document.body;

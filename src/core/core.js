@@ -1,6 +1,6 @@
 
 //require("babel-polyfill");
-require("./polyfill");
+//require("./polyfill");
 
 /**
  * Creates a new Mura
@@ -1324,7 +1324,7 @@ var Mura=(function(){
   }
 
   function initShadowBox(el) {
-      if(typeof window.document == 'undefined'){
+      if(typeof window =='undefined' || typeof window.document == 'undefined'){
         return;
       };
 
@@ -1685,7 +1685,7 @@ var Mura=(function(){
   }
 
   function isScrolledIntoView(el) {
-      if (typeof window.document == 'undefined' || window.innerHeight) {
+      if (typeof window =='undefined' || typeof window.document == 'undefined' || window.innerHeight) {
           true;
       }
 
@@ -1875,7 +1875,7 @@ var Mura=(function(){
                   }
 
 
-                  if (typeof window.document != 'undefined'  && window.MuraInlineEditor && window.MuraInlineEditor
+                  if (typeof window !='undefined' && typeof window.document != 'undefined'  && window.MuraInlineEditor && window.MuraInlineEditor
                       .checkforImageCroppers) {
                       find("img").each(function() {
                           window.muraInlineEditor.checkforImageCroppers(
@@ -3068,7 +3068,7 @@ var Mura=(function(){
         Mura._requestcontext=Mura.getRequestContext();
       }
 
-			if(typeof window.document != 'undefined'){
+			if(typeof window !='undefined' &&typeof window.document != 'undefined'){
 				if(Array.isArray(window.queuedMuraCmds) && window.queuedMuraCmds.length){
 					holdingQueue=window.queuedMuraCmds.concat(holdingQueue);
 					window.queuedMuraCmds=[];
@@ -3091,7 +3091,7 @@ var Mura=(function(){
 						}
 					}
 
-          if(typeof window.document != 'undefined'){
+          if(typeof window !='undefined' && typeof window.document != 'undefined'){
 
             var hash = location.hash;
 
@@ -3230,7 +3230,7 @@ var Mura=(function(){
               buildDisplayRegion:buildDisplayRegion
           }
       );
-			
+
 		Mura.Module=Mura.DisplayObject;
     return Mura;
 

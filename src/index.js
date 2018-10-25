@@ -1,4 +1,6 @@
-window = global || window;
+if(!(typeof process !== 'undefined' && {}.toString.call(process) === '[object process]' || typeof document =='undefined')){
+	require("./core/polyfill");
+}
 
 Mura=require('./core/core');
 
@@ -24,7 +26,7 @@ if(Mura.isInNode()){
 		It's also ignored in the webpack.config.js
 	*/
 	Mura._request=eval("require('request')");
-} else {
+} else if (typeof window != 'undefined'){
 
 	window.m=Mura;
 	window.mura=Mura;

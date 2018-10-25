@@ -22,7 +22,7 @@ var Mura=require('./core');
 * @note coding style is implied by the target usage of this script not my habbits
 */
 
-if(typeof window.document != 'undefined'){
+if(typeof window !='undefined' && typeof window.document != 'undefined'){
 	var isA =  function(a,b){ return a instanceof (b || Array);}
 		//-- some minifier optimisation
 		, D = document

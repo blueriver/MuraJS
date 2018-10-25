@@ -1,4 +1,4 @@
-if(typeof window.document != 'undefined'){
+if(typeof window !='undefined' && typeof window.document != 'undefined'){
 
   window.Element && function(ElementPrototype) {
     ElementPrototype.matchesSelector = ElementPrototype.matchesSelector ||
