@@ -119,5 +119,5 @@ if(typeof window !='undefined' && typeof window.document != 'undefined'){
   	else {
   		w.loadCSS = loadCSS;
   	}
-  }( typeof global !== "undefined" ? global : this ) );
+  }( window ) );
 }
