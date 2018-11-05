@@ -1,8 +1,8 @@
 if(!(typeof process !== 'undefined' && {}.toString.call(process) === '[object process]' || typeof document =='undefined')){
-	require("./core/polyfill");
+require("./core/polyfill");
 }
 
-Mura=require('./core/core');
+const Mura=require('./core/core');
 
 require('./core/object.js');
 require('./core/req_instance.js');
