@@ -307,7 +307,7 @@ Mura.RequestContext=Mura.Core.extend(
                   async: true,
                   type: 'get',
                   url: Mura.apiEndpoint +
-                      'findCurrentUser?fields=' + params.fields + '&_cacheid=' +
+                      'findCurrentUser?fields=' + params.fields + 'cacheid=' +
                       Math.random(),
                   success: function(resp) {
                       if (typeof resolve ==
@@ -343,7 +343,7 @@ Mura.RequestContext=Mura.Core.extend(
       params.entityname = params.entityname || 'content';
       params.siteid = params.siteid || Mura.siteid;
       params.method = params.method || 'findQuery';
-      params['_cacheid'] == Math.random();
+      params['cacheid'] == Math.random();
 
       return new Promise(function(resolve, reject) {
 

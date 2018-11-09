@@ -231,7 +231,7 @@ Mura.Entity = Mura.Core.extend(
                     entityname: self.get('entityname'),
                     method: 'findNew',
                     siteid: self.get('siteid'),
-                    '_cacheid': Math.random()
+                    'cacheid': Math.random()
                 },
                 params
             );
@@ -263,7 +263,7 @@ Mura.Entity = Mura.Core.extend(
                       entityname: self.get('entityname'),
                       method: 'checkSchema',
                       siteid: self.get('siteid'),
-                      '_cacheid': Math.random()
+                      'cacheid': Math.random()
                   },
                 success: function(  resp) {
                     if (resp.data != 'undefined'  ) {
@@ -297,7 +297,7 @@ Mura.Entity = Mura.Core.extend(
                                     entityname: self.get('entityname'),
                                     method: 'checkSchema',
                                     siteid: self.get('siteid'),
-                                    '_cacheid': Math.random()
+                                    'cacheid': Math.random()
                                 }, {
                                     'csrf_token': resp.data.csrf_token,
                                     'csrf_token_expires': resp.data.csrf_token_expires
@@ -347,7 +347,7 @@ Mura.Entity = Mura.Core.extend(
 												deleteSchema: deleteSchema,
                         method: 'undeclareEntity',
                         siteid: self.get('siteid'),
-                        '_cacheid': Math.random()
+                        'cacheid': Math.random()
                       },
                 success: function(  resp) {
                     if (resp.data != 'undefined'  ) {
@@ -381,7 +381,7 @@ Mura.Entity = Mura.Core.extend(
                                     entityname: self.get('entityname'),
                                     method: 'undeclareEntity',
                                     siteid: self.get('siteid'),
-                                    '_cacheid': Math.random()
+                                    'cacheid': Math.random()
                                 }, {
                                     'csrf_token': resp.data.csrf_token,
                                     'csrf_token_expires': resp.data.csrf_token_expires
@@ -444,7 +444,7 @@ Mura.Entity = Mura.Core.extend(
                     entityname: self.get('entityname').toLowerCase(),
                     method: 'findQuery',
                     siteid: self.get( 'siteid'),
-                    '_cacheid': Math.random(),
+                    'cacheid': Math.random(),
                 },
                 params
             );
