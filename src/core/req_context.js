@@ -412,6 +412,71 @@ Mura.RequestContext=Mura.Core.extend(
 
   },
 
+	/**
+	* openGate - Open's content gate when using MXP
+	*
+	* @param  {string} contentid Optional: default's to Mura.contentid
+	* @return {Promise}
+	* @memberof {class
+	*/
+	openGate:function(contentid) {
+		var self=this;
+		contentid=contentid || Mura.contentid;
+		if(contentid){
+			if(Mura.mode.toLowerCase() == 'rest'){
+				return new Promise(function(resolve, reject) {
+					self.request({
+							async: true,
+							type: 'POST',
+							url: Mura.apiEndpoint + '/gatedasset/open',
+							data:{
+								contentid: contentid
+							},
+							success: function(resp) {
+								if (typeof resolve =='function' && typeof resp.data != 'undefined') {
+									resolve(resp.data);
+								} else if (typeof reject =='function' && typeof resp.error != 'undefined') {
+									resolve(resp);
+								} else if (typeof resolve =='function'){
+									resolve(resp);
+								}
+							}
+						}
+					);
+				});
+			} else {
+				return new Promise(function(resolve, reject) {
+						self.request({
+								type: 'POST',
+								url: Mura.apiEndpoint + '?method=generateCSRFTokens',
+								data: {context: contentid},
+								success: function(resp) {
+									self.request({
+										async: true,
+										type: 'POST',
+										url: Mura.apiEndpoint + '/gatedasset/open',
+										data:{
+											contentid: contentid
+										},
+										success: function(resp) {
+											if (typeof resolve =='function' && typeof resp.data != 'undefined') {
+												resolve(resp.data);
+											} else if (typeof reject =='function' && typeof resp.error != 'undefined') {
+												resolve(resp);
+											} else if (typeof resolve =='function'){
+												resolve(resp);
+											}
+										}
+									}
+									);
+								}
+						});
+				});
+			}
+		}
+	},
+
+
   /**
    * logout - Logs user out
    *

@@ -54,6 +54,59 @@ Mura.Entity = Mura.Core.extend(
 			return this;
 		},
 
+		/**
+		 * getEnpoint - Returns API endpoint for entity type
+		 *
+		 * @return {string} All Headers
+		 */
+		getApiEndPoint:function(){
+			return  Mura.apiEndpoint + '/' + this.get('entityname') + '/';
+		},
+
+		/**
+		 * proxyFunc - Proxies method call to remote api
+		 *
+		 * @param  {string} funcName Method to call
+		 * @param  {object} params Arguments to submit to method
+		 * @param  {string} method GET or POST
+		 * @return {Promise} All Headers
+		 */
+		proxyFunc:function(funcName,params,method){
+			var self = this;
+
+			if(typeof method=='undefined' && typeof params=='string'){
+				method=params;
+				params={};
+			}
+
+			params=params || {};
+			method=method || "post";
+
+			return new Promise(function(resolve,reject) {
+					self._requestcontext.request({
+						type: method.toLowerCase(),
+						url: self.getApiEndPoint() + funcName,
+						data: Mura.extend(params,{
+								'_cacheid': Math.random()
+							}),
+						success: function(  resp) {
+							if (resp.data != 'undefined'  ) {
+									if (typeof resolve ==  'function') {
+											resolve(self);
+									}
+							} else {
+									self.set('errors',resp.error);
+									if (
+											typeof reject == 'function'
+									) {
+											reject(self);
+									}
+							}
+						}
+				});
+			});
+		},
+
     /**
      * exists - Returns if the entity was previously saved
      *

@@ -228,6 +228,17 @@ var Mura=(function(){
     return Mura._requestcontext.undeclareEntity(entityName,deleteSchema);
   }
 
+	/**
+   * openGate - Open's content gate when using MXP
+   *
+   * @param  {string} contentid Optional: default's to Mura.contentid
+   * @return {Promise}
+   * @memberof {class} Mura
+   */
+  function openGate(contentid) {
+    return Mura._requestcontext.openGate(contentid);
+  }
+
   /**
    * logout - Logs user out
    *
@@ -3237,7 +3248,8 @@ var Mura=(function(){
               mode: 'json',
               declareEntity:declareEntity,
               undeclareEntity:undeclareEntity,
-              buildDisplayRegion:buildDisplayRegion
+              buildDisplayRegion:buildDisplayRegion,
+							openGate:openGate
           }
       );
 
