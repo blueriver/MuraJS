@@ -89,10 +89,10 @@ Mura.Entity = Mura.Core.extend(
 						data: Mura.extend(params,{
 								'_cacheid': Math.random()
 							}),
-						success: function(  resp) {
+						success: function(resp) {
 							if (resp.data != 'undefined'  ) {
 									if (typeof resolve ==  'function') {
-											resolve(resp);
+											resolve(resp.data);
 									}
 							} else {
 									if (
