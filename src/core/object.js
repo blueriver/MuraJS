@@ -20,6 +20,23 @@ Core.prototype=
 	{
 	init:function(){
 	},
+
+	/**
+	 * invoke - Invokes a method
+	 *
+	 * @param  {string} funcName Method to call
+	 * @param  {object} params Arguments to submit to method
+	 * @return {any}
+	 */
+	invoke:function(funcName,params){
+		var self = this;
+		params=params || {};
+
+		if(this[funcName]=='function'){
+			return this[funcName].apply(this,params);
+		}
+	},
+
 	/**
 	 * trigger - Triggers custom event on Mura objects
 	 *

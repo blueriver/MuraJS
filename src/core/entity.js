@@ -64,12 +64,12 @@ Mura.Entity = Mura.Core.extend(
 		},
 
 		/**
-		 * invoke - Proxies method call to remote api
+		 * invoke - Invokes a method
 		 *
 		 * @param  {string} funcName Method to call
 		 * @param  {object} params Arguments to submit to method
 		 * @param  {string} method GET or POST
-		 * @return {Promise} All Headers
+		 * @return {any} 
 		 */
 		invoke:function(funcName,params,method){
 			var self = this;
@@ -81,6 +81,10 @@ Mura.Entity = Mura.Core.extend(
 
 			params=params || {};
 			method=method || "post";
+
+			if(this[funcName]=='function'){
+				return this[funcName].apply(this,params);
+			}
 
 			return new Promise(function(resolve,reject) {
 					self._requestcontext.request({
