@@ -14398,14 +14398,14 @@ Mura.Entity = Mura.Core.extend(
 		},
 
 		/**
-		 * proxyFunc - Proxies method call to remote api
+		 * invoke - Proxies method call to remote api
 		 *
 		 * @param  {string} funcName Method to call
 		 * @param  {object} params Arguments to submit to method
 		 * @param  {string} method GET or POST
 		 * @return {Promise} All Headers
 		 */
-		proxyFunc:function(funcName,params,method){
+		invoke:function(funcName,params,method){
 			var self = this;
 
 			if(typeof method=='undefined' && typeof params=='string'){
