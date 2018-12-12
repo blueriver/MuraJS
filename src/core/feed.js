@@ -105,7 +105,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}          Self
 		 */
 		orProp: function(property) {
-			this.queryString += '&or[' + this.propIndex + ']&';
+			this.queryString += '&or' + encodeURIComponent('[' + this.propIndex + ']') + '&';
 			this.propIndex++;
 			this.queryString += encodeURIComponent(property +'[' + this.propIndex + ']') +
 				'=';
@@ -265,7 +265,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}          Self
 		 */
 		openGrouping: function() {
-			this.queryString += '&openGrouping[' + this.propIndex + ']';
+			this.queryString += '&openGrouping' + encodeURIComponent('[' + this.propIndex + ']');
 			this.propIndex++;
 			return this;
 		},
@@ -276,7 +276,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}          Self
 		 */
 		andOpenGrouping: function() {
-			this.queryString += '&andOpenGrouping[' + this.propIndex + ']';
+			this.queryString += '&andOpenGrouping' + encodeURIComponent('[' + this.propIndex + ']');
 			this.propIndex++;
 			return this;
 		},
@@ -287,7 +287,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}          Self
 		 */
 		orOpenGrouping: function() {
-			this.queryString += '&orOpenGrouping[' + this.propIndex + ']';
+			this.queryString += '&orOpenGrouping' + encodeURIComponent('[' + this.propIndex + ']');
 			this.propIndex++;
 			return this;
 		},
@@ -298,7 +298,7 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}          Self
 		 */
 		closeGrouping: function() {
-			this.queryString += '&closeGrouping[' + this.propIndex + ']';
+			this.queryString += '&closeGrouping' + encodeURIComponent('[' + this.propIndex + ']');
 			this.propIndex++;
 			return this;
 		},
