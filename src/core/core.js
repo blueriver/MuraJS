@@ -261,7 +261,11 @@ var Mura=(function(){
    */
   function getEntity(entityname, siteid) {
       siteid=siteid || Mura.siteid;
-      return Mura._requestcontext.getEntity(entityname, siteid);
+			if(typeof Mura._requestcontext=='undefined'){
+				return Mura.getRequestContext().getEntity(entityname, siteid);
+			} else {
+				return Mura._requestcontext.getEntity(entityname, siteid);
+			}
   }
 
   /**
