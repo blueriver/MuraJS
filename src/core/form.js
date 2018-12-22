@@ -379,7 +379,7 @@ renderPaging:function() {
 	mura(".paging-container-" + self.context.objectid,self.context.formEl).empty();
 
 	if(self.formJSON.form.pages.length == 1) {
-		mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":Mura.trim("mura-form-submit mura-form-submit " + self.rb.formbuttonsubmitclass)}));
+		mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":Mura.trim("mura-form-submit " + self.rb.formbuttonsubmitclass)}));
 	}
 	else {
 		if(self.currentpage == 0) {
@@ -402,12 +402,18 @@ renderPaging:function() {
 	mura(".mura-form-submit",self.context.formEl).click( function() {
 		self.submitForm();
 	});
+
 	mura(".mura-form-cancel",self.context.formEl).click( function() {
 		self.getTableData( self.backlink );
 	});
 
 
 	var formNavHandler=function() {
+
+		if(Mura(this).is('.mura-form-submit')){
+			return;
+		}
+
 		self.setDataValues();
 
 		var keepGoing=self.onPageSubmit.call(self.context.targetEl);
