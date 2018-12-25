@@ -2374,13 +2374,14 @@ var Mura=(function(){
 													obj.children('.frontEndToolsModal').remove();
 													obj.prepend(window.Mura.layoutmanagertoolbar);
 
-													obj.find(".frontEndToolsModal").on(
-														'click',
-														function(event){
+													var openToolbar=function(event){
 															event.preventDefault();
 															openFrontEndToolsModal(this);
-														}
-													);
+														};
+
+													obj.find(".frontEndToolsModal").each(function(){
+														Mura(this).off('click',openToolbar).on('click',openToolbar);
+													})
 
 													obj.find("img").each(function(){MuraInlineEditor.checkforImageCroppers(this);});
 
