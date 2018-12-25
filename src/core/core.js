@@ -414,6 +414,7 @@ var Mura=(function(){
           readyInternal(fn);
       });
 
+			holdingQueue=[];
   }
 
   function holdReady(hold) {
@@ -1906,7 +1907,7 @@ var Mura=(function(){
               },
 
               function() {
-                  if (typeof urlparams.Muraadminpreview !=
+                  if (typeof urlparams.muraadminpreview !=
                       'undefined') {
                       find("a").each(function() {
                           var h = this.getAttribute(
