@@ -18,9 +18,7 @@ function Core(){
 /** @lends Mura.Core.prototype */
 Core.prototype=
 	{
-	init:function(){
-	},
-
+	init:function(){},
 	/**
 	 * invoke - Invokes a method
 	 *
@@ -47,7 +45,6 @@ Core.prototype=
 	 */
 	trigger:function(eventName){
 		eventName=eventName.toLowerCase();
-
 		if(typeof this.prototype.handlers[eventName] != 'undefined'){
 			var handlers=this.prototype.handlers[eventName];
 			for(var handler in handlers){

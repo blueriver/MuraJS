@@ -5,39 +5,37 @@ var Mura=require('./core');
  * @name Mura.Cache
  * @class
  * @extends Mura.Core
- * @memberof  Mura
+ * @memberof	Mura
  * @return {Mura.Cache}
  */
 
 Mura.Cache=Mura.Core.extend(
-  /** @lends Mura.Cache.prototype */
-  {
-
+	/** @lends Mura.Cache.prototype */
+	{
 	init:function(){
 		this.cache={};
-    return this;
+		return this;
 	},
 
-  /**
-   * getKey - Returns Key value associated with key Name
-   *
-   * @param  {string} keyName Key Name
-   * @return {*}         Key Value
-   */
-  getKey:function(keyName){
-      return Mura.hashCode(keyName);
-  },
+	/**
+	 * getKey - Returns Key value associated with key Name
+	 *
+	 * @param	{string} keyName Key Name
+	 * @return {*}				 Key Value
+	 */
+	getKey:function(keyName){
+		return Mura.hashCode(keyName);
+	},
 
-  /**
-   * get - Returns the value associated with key name
-   *
-   * @param  {string} keyName  description
-   * @param  {*} keyValue Default Value
-   * @return {*}
-   */
-  get:function(keyName,keyValue){
-    var key=this.getKey(keyName);
-
+	/**
+	 * get - Returns the value associated with key name
+	 *
+	 * @param	{string} keyName	description
+	 * @param	{*} keyValue Default Value
+	 * @return {*}
+	 */
+	get:function(keyName,keyValue){
+		var key=this.getKey(keyName);
 		if(typeof this.cache[key] != 'undefined'){
 			return this.cache[key].keyValue;
 		} else if (typeof keyValue != 'undefined') {
@@ -51,21 +49,21 @@ Mura.Cache=Mura.Core.extend(
 	/**
 	 * set - Sets and returns key value
 	 *
-	 * @param  {string} keyName  Key Name
-	 * @param  {*} keyValue Key Value
-	 * @param  {string} key      Key
+	 * @param	{string} keyName	Key Name
+	 * @param	{*} keyValue Key Value
+	 * @param	{string} key			Key
 	 * @return {*}
 	 */
 	set:function(keyName,keyValue,key){
-      key=key || this.getKey(keyName);
-	    this.cache[key]={name:keyName,value:keyValue};
+		key=key || this.getKey(keyName);
+		this.cache[key]={name:keyName,value:keyValue};
 		return keyValue;
 	},
 
 	/**
 	 * has - Returns if the key name has a value in the cache
 	 *
-	 * @param  {string} keyName Key Name
+	 * @param	{string} keyName Key Name
 	 * @return {boolean}
 	 */
 	has:function(keyName){
@@ -77,33 +75,32 @@ Mura.Cache=Mura.Core.extend(
 	 *
 	 * @return {object}
 	 */
-	  getAll:function(){
+	getAll:function(){
 		return this.cache;
 	},
 
-  /**
-   * purgeAll - Purges all key/value pairs from cache
-   *
-   * @return {object}  Self
-   */
-  purgeAll:function(){
-      this.cache={};
+	/**
+	 * purgeAll - Purges all key/value pairs from cache
+	 *
+	 * @return {object}	Self
+	 */
+	purgeAll:function(){
+		this.cache={};
 		return this;
 	},
 
-  /**
-   * purge - Purges specific key name from cache
-   *
-   * @param  {string} keyName Key Name
-   * @return {object}         Self
-   */
-  purge:function(keyName){
-      var key=this.getKey(keyName)
-      if( typeof this.cache[key] != 'undefined')
-      delete this.cache[key];
+	/**
+	 * purge - Purges specific key name from cache
+	 *
+	 * @param	{string} keyName Key Name
+	 * @return {object}				 Self
+	 */
+	purge:function(keyName){
+		var key=this.getKey(keyName)
+		if( typeof this.cache[key] != 'undefined')
+		delete this.cache[key];
 		return this;
 	}
-
 });
 
 Mura.datacache=new Mura.Cache();
