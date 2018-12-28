@@ -43,7 +43,7 @@ Mura.DOMSelection = Mura.Core.extend(
 	 * @return {*}
 	 */
 	get: function(index) {
-		if(typeof index == 'undefined'){
+		if(typeof index != 'undefined'){
 			return this.selection[index];
 		} else {
 			return this.selection;
