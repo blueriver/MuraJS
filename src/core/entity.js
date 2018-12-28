@@ -356,44 +356,44 @@ Mura.Entity = Mura.Core.extend(
 				});
 			} else {
 				self._requestcontext.request({
-						type: 'post',
-						url: Mura.apiEndpoint + '?method=generateCSRFTokens',
-						data: {
-							siteid: self.get('siteid'),
-							context: ''
-						},
-						success: function(resp) {
-							self._requestcontext.request({
-								type: 'post',
-								url: Mura.apiEndpoint,
-								data: Mura
-								.extend(
-								{
-									entityname: self.get('entityname'),
-									method: 'checkSchema',
-									siteid: self.get('siteid'),
-									'_cacheid': Math.random()
-								}, {
-									'csrf_token': resp.data.csrf_token,
-									'csrf_token_expires': resp.data.csrf_token_expires
-								}),
-								success: function(	resp) {
-									if (resp.data != 'undefined'	) {
-										if (typeof resolve ==	'function') {
-											resolve(self);
-										}
-									} else {
-										self.set('errors',resp.error);
-										if (typeof reject == 'function') {
-											reject(self);
-										}
+					type: 'post',
+					url: Mura.apiEndpoint + '?method=generateCSRFTokens',
+					data: {
+						siteid: self.get('siteid'),
+						context: ''
+					},
+					success: function(resp) {
+						self._requestcontext.request({
+							type: 'post',
+							url: Mura.apiEndpoint,
+							data: Mura
+							.extend(
+							{
+								entityname: self.get('entityname'),
+								method: 'checkSchema',
+								siteid: self.get('siteid'),
+								'_cacheid': Math.random()
+							}, {
+								'csrf_token': resp.data.csrf_token,
+								'csrf_token_expires': resp.data.csrf_token_expires
+							}),
+							success: function(	resp) {
+								if (resp.data != 'undefined'	) {
+									if (typeof resolve ==	'function') {
+										resolve(self);
+									}
+								} else {
+									self.set('errors',resp.error);
+									if (typeof reject == 'function') {
+										reject(self);
 									}
 								}
-							});
-						},
-						error: function(resp) {
-								this.success(resp );
-						}
+							}
+						});
+					},
+					error: function(resp) {
+						this.success(resp );
+					}
 				});
 			}
 		});
@@ -617,7 +617,7 @@ Mura.Entity = Mura.Core.extend(
 				});
 			});
 		} else {
-				return new Promise(function(resolve, reject) {
+			return new Promise(function(resolve, reject) {
 				var context = self.get('id');
 				if(Mura.mode.toLowerCase() == 'rest'){
 					self._requestcontext.request({
@@ -730,8 +730,8 @@ Mura.Entity = Mura.Core.extend(
 					type: 'post',
 					url: Mura.apiEndpoint + '?method=generateCSRFTokens',
 					data: {
-							siteid: self.get('siteid'),
-							context: self.get('id')
+						siteid: self.get('siteid'),
+						context: self.get('id')
 					},
 					success: function(resp) {
 						self._requestcontext.request({

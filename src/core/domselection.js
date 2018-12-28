@@ -443,7 +443,7 @@ Mura.DOMSelection = Mura.Core.extend(
 				};
 			} else {
 				var filterFn = function() {
-						return this.nodeType === 1 ||	this.nodeType === 11 ||	this.nodeType === 9;
+					return this.nodeType === 1 ||	this.nodeType === 11 ||	this.nodeType === 9;
 				};
 			}
 			return children.filter(filterFn);
@@ -527,7 +527,6 @@ Mura.DOMSelection = Mura.Core.extend(
 				if (sameTagSiblings.length > 1) {
 					var allSiblings = parent.children();
 					var index = allSiblings.index(realNode) + 1;
-
 					if (index > 0) {name += ':nth-child(' + index + ')';}
 				}
 				path = name + (path ? ' > ' + path : '');
