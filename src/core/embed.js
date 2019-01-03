@@ -10,8 +10,12 @@ var Mura=require('./core');
 Mura.DisplayObject.Embed=Mura.UI.extend(
 /** @lends Mura.DisplayObject.Embed.prototype */
 {
-	render:function(){
+	renderClient:function(){
 		this.context.targetEl.innerHTML=Mura.templates['embed'](this.context);
 		this.trigger('afterRender');
+	},
+
+	renderServer:function(){
+		return Mura.templates['embed'](this.context);
 	}
 });

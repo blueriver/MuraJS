@@ -65,7 +65,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 		formbuttoncancellabel :"Cancel",
 		formrequiredlabel:"Required"
 	},
-	render:function(){
+	renderClient:function(){
 
 		if(this.context.mode == undefined){
 			this.context.mode = 'form';

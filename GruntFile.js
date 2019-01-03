@@ -4,7 +4,7 @@ module.exports = function(grunt) {
       handlebars: {
           build: {
               files: {
-                  'src/core/templates.handlebars.js': ['src/templates/*.hb','src/templates/*.hbs']
+                  'src/core/templates-handlebars.js': ['src/templates/*.hb','src/templates/*.hbs']
               },
               options: {
                    namespace: 'Mura.templates',
@@ -19,8 +19,8 @@ module.exports = function(grunt) {
       },
       replace: {
         build: {
-                src: ['src/core/templates.handlebars.js'],
-                dest: 'src/core/templates.handlebars.js',
+                src: ['src/core/templates-handlebars.js'],
+                dest: 'src/core/templates-handlebars.js',
                 options: {
                   processTemplates: false
                 },

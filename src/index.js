@@ -5,8 +5,8 @@ require("./core/polyfill");
 const Mura=require('./core/core');
 
 require('./core/object.js');
-require('./core/req_instance.js');
-require('./core/req_context.js');
+require('./core/req-instance.js');
+require('./core/req-context.js');
 require('./core/cache.js');
 require('./core/entity.js');
 require('./core/content.js');

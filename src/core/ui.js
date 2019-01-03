@@ -14,12 +14,13 @@ Mura.UI=Mura.Core.extend(
   {
 	rb:{},
 	context:{},
+	isomorphic:false,
 	onAfterRender:function(){},
 	onBeforeRender:function(){},
 	trigger:function(eventName){
 		var $eventName=eventName.toLowerCase();
 		if(typeof this.context.targetEl != 'undefined'){
-			var obj=mura(this.context.targetEl).closest('.mura-object');
+			var obj=Mura(this.context.targetEl).closest('.mura-object');
 			if(obj.length && typeof obj.node != 'undefined'){
 				if(typeof this.handlers[$eventName] != 'undefined'){
 					var $handlers=this.handlers[$eventName];
@@ -31,7 +32,6 @@ Mura.UI=Mura.Core.extend(
 						}
 					}
 				}
-
 				if(typeof this[eventName] == 'function'){
 					if(typeof this[eventName].call == 'undefined'){
 						this[eventName](this);
@@ -40,7 +40,6 @@ Mura.UI=Mura.Core.extend(
 					}
 				}
 				var fnName='on' + eventName.substring(0,1).toUpperCase() + eventName.substring(1,eventName.length);
-
 				if(typeof this[fnName] == 'function'){
 					if(typeof this[fnName].call == 'undefined'){
 						this[fnName](this);
@@ -50,21 +49,40 @@ Mura.UI=Mura.Core.extend(
 				}
 			}
 		}
-
 		return this;
 	},
 
+	/* This method is deprecated, use renderClient and renderServer instead */
 	render:function(){
-		mura(this.context.targetEl).html(Mura.templates[context.object](this.context));
+		Mura(this.context.targetEl).html(Mura.templates[context.object](this.context));
 		this.trigger('afterRender');
 		return this;
+	},
+
+	/*
+		This method's current implementation is to support backward compatibility
+
+		Typically it would look like:
+
+		Mura(this.context.targetEl).html(Mura.templates[context.object](this.context));
+		this.trigger('afterRender');
+	*/
+	renderClient:function(){
+		return this.render();
+	},
+
+
+	renderServer:function(){
+		return '';
+	},
+
+	hydrate:function(){
+
 	},
 
 	init:function(args){
 		this.context=args;
 		this.registerHelpers();
-		this.trigger('beforeRender');
-		this.render();
 		return this;
 	},
 

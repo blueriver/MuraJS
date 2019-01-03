@@ -1014,55 +1014,79 @@ Mura.DOMSelection = Mura.Core.extend(
 	 *
 	 * @return {object}	Self
 	 */
-	calculateDisplayObjectStyles: function() {
-		this.each(function(el) {
-			var obj=Mura(el);
-			if(obj.data('cssid')){
-				obj.attr('id',obj.data('cssid'));
-			} else {
-				obj.removeAttr('id');
-			}
-			if(obj.data('cssstyles')){
-				obj.removeAttr('style');
-				obj.css(obj.data('cssstyles'));
-			}
-			if(obj.data('metacssclass') || obj.data('metacssid') || obj.data('metacssstyles')){
-				var meta=obj.find('.mura-object-meta').first();
-			}
-			if(obj.data('metacssid')){
-				meta.addClass(obj.data('metacssclass'));
-			}
-			if(obj.data('metacssclass')){
-			 obj.data('metacssclass').split(' ').forEach(function(c){
-				 if (!meta.hasClass(c)) {
-					 meta.addClass(c);
-				 }
-			 })
-			}
-			if(obj.data('metacssstyles')){
-				meta.removeAttr('style');
-				meta.css(obj.data('metacssstyles'));
-			}
-			if(obj.data('contentcssclass') || obj.data('contentcssid') || obj.data('contentcssstyles')){
-				var content=obj.find('.mura-object-content').first();
-			}
-			if(obj.data('contentcssid')){
-				content.addClass(obj.data('contentcssclass'));
-			}
-			if(obj.data('contentcssclass')){
-				obj.data('contentcssclass').split(' ').forEach(function(c){
-					if (!content.hasClass(c)) {
-					 		content.addClass(c);
-					}
-				 })
-			}
-			if(obj.data('contentcssstyles')){
-				content.removeAttr('style');
-				content.css(obj.data('contentcssstyles'));
-			}
-		});
-		return this;
-	},
+	 calculateDisplayObjectStyles: function() {
+ 		this.each(function(el) {
+ 			var obj=Mura(el);
+ 			obj = (obj.node) ? obj : Mura(obj);
+ 			var self = obj.node;
+ 			if (obj.data('class')) {
+ 				var classes = obj.data('class');
+ 				if (typeof classes != 'Array') {
+ 					var classes = classes.split(' ');
+ 				}
+ 				for (var c = 0; c < classes.length; c++) {
+ 					if (!obj.hasClass(classes[c])) {
+ 						obj.addClass(classes[c]);
+ 					}
+ 				}
+ 			}
+ 			if (obj.data('cssclass')) {
+ 				var classes = obj.data('cssclass');
+ 				if (typeof classes != 'array') {
+ 					var classes = classes.split(' ');
+ 				}
+ 				for (var c = 0; c < classes.length; c++) {
+ 					if (!obj.hasClass(classes[c])) {
+ 						obj.addClass(classes[c]);
+ 					}
+ 				}
+ 			}
+ 			if(obj.data('cssid')){
+ 				obj.attr('id',obj.data('cssid'));
+ 			} else {
+ 				obj.removeAttr('id');
+ 			}
+ 			if(obj.data('cssstyles')){
+ 				obj.removeAttr('style');
+ 				obj.css(obj.data('cssstyles'));
+ 			}
+ 			if(obj.data('metacssclass') || obj.data('metacssid') || obj.data('metacssstyles')){
+ 				var meta=obj.find('.mura-object-meta').first();
+ 			}
+ 			if(obj.data('metacssid')){
+ 				meta.addClass(obj.data('metacssclass'));
+ 			}
+ 			if(obj.data('metacssclass')){
+ 			 obj.data('metacssclass').split(' ').forEach(function(c){
+ 				 if (!meta.hasClass(c)) {
+ 					 meta.addClass(c);
+ 				 }
+ 			 })
+ 			}
+ 			if(obj.data('metacssstyles')){
+ 				meta.removeAttr('style');
+ 				meta.css(obj.data('metacssstyles'));
+ 			}
+ 			if(obj.data('contentcssclass') || obj.data('contentcssid') || obj.data('contentcssstyles')){
+ 				var content=obj.find('.mura-object-content').first();
+ 			}
+ 			if(obj.data('contentcssid')){
+ 				content.addClass(obj.data('contentcssclass'));
+ 			}
+ 			if(obj.data('contentcssclass')){
+ 				obj.data('contentcssclass').split(' ').forEach(function(c){
+ 					if (!content.hasClass(c)) {
+ 					 		content.addClass(c);
+ 					}
+ 				 })
+ 			}
+ 			if(obj.data('contentcssstyles')){
+ 				content.removeAttr('style');
+ 				content.css(obj.data('contentcssstyles'));
+ 			}
+ 		});
+ 		return this;
+ 	},
 
 	/**
 	 * text - Gets or sets the text content of each element in the selection

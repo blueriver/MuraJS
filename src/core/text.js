@@ -10,8 +10,18 @@ var Mura=require('./core');
 Mura.DisplayObject.Text=Mura.UI.extend(
 /** @lends Mura.DisplayObject.Text.prototype */
 {
-	render:function(){
+	renderClient:function(){
 		this.context.targetEl.innerHTML=Mura.templates['text'](this.context);
 		this.trigger('afterRender');
+	},
+
+	renderServer:function(){
+		this.context.sourcetype=this.context.sourcetype || 'custom';
+
+		if(this.context.sourcetype=='custom'){
+			return Mura.templates['text'](this.context);
+		} else {
+			return '';
+		}
 	}
 });

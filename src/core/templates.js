@@ -28,4 +28,4 @@ Mura.templates['embed']=function(context){
 	return context.source;
 }
 
-require('./templates.handlebars');
+require('./templates-handlebars');
