@@ -1017,8 +1017,6 @@ Mura.DOMSelection = Mura.Core.extend(
 	 calculateDisplayObjectStyles: function() {
  		this.each(function(el) {
  			var obj=Mura(el);
- 			obj = (obj.node) ? obj : Mura(obj);
- 			var self = obj.node;
  			if (obj.data('class')) {
  				var classes = obj.data('class');
  				if (typeof classes != 'Array') {

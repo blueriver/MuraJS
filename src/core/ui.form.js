@@ -1,14 +1,14 @@
 
 var Mura=require('./core');
 /**
- * Creates a new Mura.DisplayObject.Form
- * @name	Mura.DisplayObject.Form
+ * Creates a new Mura.UI.Form
+ * @name	Mura.UI.Form
  * @class
  * @extends Mura.UI
  * @memberof	Mura
  */
 
-Mura.DisplayObject.Form=Mura.UI.extend(
+Mura.UI.Form=Mura.UI.extend(
 /** @lends Mura.DisplayObject.Form.prototype */
 {
 	context:{},
@@ -77,7 +77,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 
 		this.context.html = "<div id='"+ident+"'></div>";
 
-		mura(this.context.targetEl).html( this.context.html );
+		Mura(this.context.targetEl).html( this.context.html );
 
 		if (this.context.view == 'form') {
 			this.getForm();
@@ -163,15 +163,15 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 			context.master = this;
 
 			var nestedForm = new Mura.FormUI( context );
-			var holder = mura('<div id="nested-'+field.formid+'"></div>');
+			var holder = Mura('<div id="nested-'+field.formid+'"></div>');
 
-			mura(".field-container-" + self.context.objectid,self.context.formEl).append(holder);
+			Mura(".field-container-" + self.context.objectid,self.context.formEl).append(holder);
 
 			context.formEl = holder;
 			nestedForm.getForm();
 
 			var html = Mura.templates[template](field);
-			mura(".field-container-" + self.context.objectid,self.context.formEl).append(html);
+			Mura(".field-container-" + self.context.objectid,self.context.formEl).append(html);
 		}
 		else {
 			if(fieldtype == "checkbox") {
@@ -204,7 +204,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 
 			var html = Mura.templates[template](field);
 
-			mura(".field-container-" + self.context.objectid,self.context.formEl).append(html);
+			Mura(".field-container-" + self.context.objectid,self.context.formEl).append(html);
 		}
 
 	},
@@ -330,7 +330,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 
 		//console.log("render form: " + self.currentpage);
 
-		mura(".field-container-" + self.context.objectid,self.context.formEl).empty();
+		Mura(".field-container-" + self.context.objectid,self.context.formEl).empty();
 
 		if(!self.formInit) {
 			self.initForm();
@@ -351,7 +351,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 		}
 
 		if(self.ishuman && self.currentpage==(self.formJSON.form.pages.length-1)){
-			mura(".field-container-" + self.context.objectid,self.context.formEl).append(self.ishuman);
+			Mura(".field-container-" + self.context.objectid,self.context.formEl).append(self.ishuman);
 		}
 
 		if (self.context.mode == 'form') {
@@ -369,37 +369,37 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 		var self = this;
 		var submitlabel=(typeof self.formJSON.form.formattributes != 'undefined' && typeof self.formJSON.form.formattributes.submitlabel != 'undefined' && self.formJSON.form.formattributes.submitlabel) ? self.formJSON.form.formattributes.submitlabel : self.rb.formbuttonsubmitlabel;
 
-		mura(".error-container-" + self.context.objectid,self.context.formEl).empty();
-		mura(".paging-container-" + self.context.objectid,self.context.formEl).empty();
+		Mura(".error-container-" + self.context.objectid,self.context.formEl).empty();
+		Mura(".paging-container-" + self.context.objectid,self.context.formEl).empty();
 
 		if(self.formJSON.form.pages.length == 1) {
-			mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":Mura.trim("mura-form-submit " + self.rb.formbuttonsubmitclass)}));
+			Mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":Mura.trim("mura-form-submit " + self.rb.formbuttonsubmitclass)}));
 		}
 		else {
 			if(self.currentpage == 0) {
-				mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:1,label:self.rb.formbuttonnextlabel,"class":Mura.trim("mura-form-nav mura-form-next " + self.rb.formbuttonnextclass)}));
+				Mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:1,label:self.rb.formbuttonnextlabel,"class":Mura.trim("mura-form-nav mura-form-next " + self.rb.formbuttonnextclass)}));
 			} else {
-				mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage-1,label:self.rb.formbuttonbacklabel,"class":Mura.trim("mura-form-nav mura-form-back " + self.rb.formbuttonbackclass)}));
+				Mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage-1,label:self.rb.formbuttonbacklabel,"class":Mura.trim("mura-form-nav mura-form-back " + self.rb.formbuttonbackclass)}));
 
 				if(self.currentpage+1 < self.formJSON.form.pages.length) {
-					mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.formbuttonnextlabel,"class":Mura.trim("mura-form-nav mura-form-next " + self.rb.formbuttonnextclass)}));
+					Mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.formbuttonnextlabel,"class":Mura.trim("mura-form-nav mura-form-next " + self.rb.formbuttonnextclass)}));
 				}
 				else {
-					mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":Mura.trim("mura-form-submit " + self.rb.formbuttonsubmitclass)}));
+					Mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:submitlabel,"class":Mura.trim("mura-form-submit " + self.rb.formbuttonsubmitclass)}));
 				}
 			}
 
 			if(self.backlink != undefined && self.backlink.length)
-				mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.formbuttoncancellabel,"class":Mura.trim("mura-form-nav mura-form-cancel " + self.rb.formbuttoncancelclass)}));
+				Mura(".paging-container-" + self.context.objectid,self.context.formEl).append(Mura.templates['paging']({page:self.currentpage+1,label:self.rb.formbuttoncancellabel,"class":Mura.trim("mura-form-nav mura-form-cancel " + self.rb.formbuttoncancelclass)}));
 		}
 
 		var submitHandler=function() {
 			self.submitForm();
 		};
 
-		mura(".mura-form-submit",self.context.formEl).off('click',submitHandler).on('click',submitHandler);
+		Mura(".mura-form-submit",self.context.formEl).off('click',submitHandler).on('click',submitHandler);
 
-		mura(".mura-form-cancel",self.context.formEl).click( function() {
+		Mura(".mura-form-cancel",self.context.formEl).click( function() {
 			self.getTableData( self.backlink );
 		});
 
@@ -430,7 +430,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 						if(entity.hasErrors()){
 							self.showErrors( entity.properties.errors );
 						} else {
-							self.currentpage = mura(button).data('page');
+							self.currentpage = Mura(button).data('page');
 							self.renderForm();
 						}
 					}
@@ -467,7 +467,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 									location.reload(true);
 								}
 							} else {
-								self.currentpage = mura(button).data('page');
+								self.currentpage = Mura(button).data('page');
 								if(self.currentpage >= self.formJSON.form.pages.length){
 									self.currentpage=self.formJSON.form.pages.length-1;
 								}
@@ -486,7 +486,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 			*/
 		};
 
-		mura(".mura-form-nav",self.context.formEl).off('click',formNavHandler).on('click',formNavHandler);
+		Mura(".mura-form-nav",self.context.formEl).off('click',formNavHandler).on('click',formNavHandler);
 	},
 
 	setDataValues: function() {
@@ -496,38 +496,38 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 		var valid = [];
 		var currentPage = {};
 
-		mura(".field-container-" + self.context.objectid + " input, .field-container-" + self.context.objectid + " select, .field-container-" + self.context.objectid + " textarea").each( function() {
+		Mura(".field-container-" + self.context.objectid + " input, .field-container-" + self.context.objectid + " select, .field-container-" + self.context.objectid + " textarea").each( function() {
 
-			currentPage[mura(this).attr('name')]=true;
+			currentPage[Mura(this).attr('name')]=true;
 
-			if( mura(this).is('[type="checkbox"]')) {
-				if ( multi[mura(this).attr('name')] == undefined )
-					multi[mura(this).attr('name')] = [];
+			if( Mura(this).is('[type="checkbox"]')) {
+				if ( multi[Mura(this).attr('name')] == undefined )
+					multi[Mura(this).attr('name')] = [];
 
 				if( this.checked ) {
 					if (self.ormform) {
 						item = {};
 						item['id'] = Mura.createUUID();
 						item[self.entity + 'id'] = self.data.id;
-						item[mura(this).attr('source') + 'id'] = mura(this).val();
-						item['key'] = mura(this).val();
+						item[Mura(this).attr('source') + 'id'] = Mura(this).val();
+						item['key'] = Mura(this).val();
 
-						multi[mura(this).attr('name')].push(item);
+						multi[Mura(this).attr('name')].push(item);
 					}
 					else {
-						multi[mura(this).attr('name')].push(mura(this).val());
+						multi[Mura(this).attr('name')].push(Mura(this).val());
 					}
 				}
 			}
-			else if( mura(this).is('[type="radio"]')) {
+			else if( Mura(this).is('[type="radio"]')) {
 				if( this.checked ) {
-					self.data[ mura(this).attr('name') ] = mura(this).val();
-					valid[ mura(this).attr('name') ] = self.data[name];
+					self.data[ Mura(this).attr('name') ] = Mura(this).val();
+					valid[ Mura(this).attr('name') ] = self.data[name];
 				}
 			}
 			else {
-				self.data[ mura(this).attr('name') ] = mura(this).val();
-				valid[ mura(this).attr('name') ] = self.data[mura(this).attr('name')];
+				self.data[ Mura(this).attr('name') ] = Mura(this).val();
+				valid[ Mura(this).attr('name') ] = self.data[Mura(this).attr('name')];
 			}
 		});
 
@@ -716,7 +716,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 
 	initForm: function() {
 		var self = this;
-		mura(self.context.formEl).empty();
+		Mura(self.context.formEl).empty();
 
 		if(self.context.mode != undefined && self.context.mode == 'nested') {
 			var html = Mura.templates['nested'](self.context);
@@ -725,7 +725,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 			var html = Mura.templates['form'](self.context);
 		}
 
-		mura(self.context.formEl).append(html);
+		Mura(self.context.formEl).append(html);
 
 		self.currentpage = 0;
 		self.attachments={};
@@ -745,7 +745,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 
 		var self = this;
 		var valid = self.setDataValues();
-		mura(".error-container-" + self.context.objectid,self.context.formEl).empty();
+		Mura(".error-container-" + self.context.objectid,self.context.formEl).empty();
 
 		var keepGoing=this.onSubmit.call(this.context.targetEl);
 		if(typeof keepGoing != 'undefined' && !keepGoing){
@@ -754,7 +754,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 
 		delete self.data.isNew;
 
-		mura(self.context.formEl)
+		Mura(self.context.formEl)
 			.find('form')
 			.trigger('formSubmit');
 
@@ -779,7 +779,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 							location.reload(true);
 						}
 					} else {
-						mura(self.context.formEl).html( Mura.templates['success'](data) );
+						Mura(self.context.formEl).html( Mura.templates['success'](data) );
 						self.trigger('afterResponseRender');
 					}
 				},
@@ -858,7 +858,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 								 self.trigger('afterErrorRender');
 							 } else {
 
-								 mura(self.context.formEl)
+								 Mura(self.context.formEl)
 									 .find('form')
 									 .trigger('formSubmitSuccess');
 
@@ -875,7 +875,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 											 location.reload(true);
 										 }
 									 } else {
-										 mura(self.context.formEl).html( Mura.templates['success'](resp.data) );
+										 Mura(self.context.formEl).html( Mura.templates['success'](resp.data) );
 										 self.trigger('afterResponseRender');
 									 }
 								 });
@@ -893,10 +893,10 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 
 	showErrors: function( errors ) {
 		var self = this;
-		var frm=mura(this.context.formEl);
+		var frm=Mura(this.context.formEl);
 		var frmErrors=frm.find(".error-container-" + self.context.objectid);
 
-		mura(this.context.formEl).find('.mura-response-error').remove();
+		Mura(this.context.formEl).find('.mura-response-error').remove();
 
 		console.log(errors);
 
@@ -934,7 +934,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 			}
 
 			if(this.inlineerrors){
-				var label=mura(this.context.formEl).find('label[for="' + e + '"]');
+				var label=Mura(this.context.formEl).find('label[for="' + e + '"]');
 
 				if(label.length){
 					label.node.insertAdjacentHTML('afterend',Mura.templates['error'](error));
@@ -946,11 +946,11 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 			}
 		}
 
-		mura(self.context.formEl).find('.g-recaptcha-container').each(function(el){
+		Mura(self.context.formEl).find('.g-recaptcha-container').each(function(el){
 			grecaptcha.reset(el.getAttribute('data-widgetid'));
 		});
 
-		var errorsSel=mura(this.context.formEl).find('.mura-response-error');
+		var errorsSel=Mura(this.context.formEl).find('.mura-response-error');
 
 		if(errorsSel.length){
 			errorsSel=errorsSel.first().node;
@@ -982,14 +982,14 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 		var before = "";
 		var after = "";
 
-		self.filters.filterby = mura("#results-filterby",self.context.formEl).val();
-		self.filters.filterkey = mura("#results-keywords",self.context.formEl).val();
+		self.filters.filterby = Mura("#results-filterby",self.context.formEl).val();
+		self.filters.filterkey = Mura("#results-keywords",self.context.formEl).val();
 
-		if( mura("#date1",self.context.formEl).length ) {
-			if(mura("#date1",self.context.formEl).val().length) {
-				self.filters.from = mura("#date1",self.context.formEl).val() + " " + mura("#hour1",self.context.formEl).val() + ":00:00";
-				self.filters.fromhour = mura("#hour1",self.context.formEl).val();
-				self.filters.fromdate = mura("#date1",self.context.formEl).val();
+		if( Mura("#date1",self.context.formEl).length ) {
+			if(Mura("#date1",self.context.formEl).val().length) {
+				self.filters.from = Mura("#date1",self.context.formEl).val() + " " + Mura("#hour1",self.context.formEl).val() + ":00:00";
+				self.filters.fromhour = Mura("#hour1",self.context.formEl).val();
+				self.filters.fromdate = Mura("#date1",self.context.formEl).val();
 			}
 			else {
 				self.filters.from = "";
@@ -997,10 +997,10 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 				self.filters.fromdate = "";
 			}
 
-			if(mura("#date2",self.context.formEl).val().length) {
-				self.filters.to = mura("#date2",self.context.formEl).val() + " " + mura("#hour2",self.context.formEl).val() + ":00:00";
-				self.filters.tohour = mura("#hour2",self.context.formEl).val();
-				self.filters.todate = mura("#date2",self.context.formEl).val();
+			if(Mura("#date2",self.context.formEl).val().length) {
+				self.filters.to = Mura("#date2",self.context.formEl).val() + " " + Mura("#hour2",self.context.formEl).val() + ":00:00";
+				self.filters.tohour = Mura("#hour2",self.context.formEl).val();
+				self.filters.todate = Mura("#date2",self.context.formEl).val();
 			}
 			else {
 				self.filters.to = "";
@@ -1032,7 +1032,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 			self.ormform = true;
 		}
 		else {
-			mura(self.context.formEl).append("Unsupported for pre-Mura 7.0 MuraORM Forms.");
+			Mura(self.context.formEl).append("Unsupported for pre-Mura 7.0 MuraORM Forms.");
 			return;
 		}
 
@@ -1052,7 +1052,7 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 					self.ormform = true;
 				}
 				else {
-					mura(self.context.formEl).append("Unsupported for pre-Mura 7.0 MuraORM Forms.");
+					Mura(self.context.formEl).append("Unsupported for pre-Mura 7.0 MuraORM Forms.");
 					return;
 				}
 
@@ -1111,47 +1111,47 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 		var self = this;
 
 		var html = Mura.templates['table'](tableData);
-		mura(self.context.formEl).html( html );
+		Mura(self.context.formEl).html( html );
 
 		if (self.context.view == 'list') {
-			mura("#date-filters",self.context.formEl).empty();
-			mura("#btn-results-download",self.context.formEl).remove();
+			Mura("#date-filters",self.context.formEl).empty();
+			Mura("#btn-results-download",self.context.formEl).remove();
 		}
 		else {
 			if (self.context.render == undefined) {
-				mura(".datepicker", self.context.formEl).datepicker();
+				Mura(".datepicker", self.context.formEl).datepicker();
 			}
 
-			mura("#btn-results-download",self.context.formEl).click( function() {
+			Mura("#btn-results-download",self.context.formEl).click( function() {
 				self.downloadResults();
 			});
 		}
 
-		mura("#btn-results-search",self.context.formEl).click( function() {
+		Mura("#btn-results-search",self.context.formEl).click( function() {
 			self.filterResults();
 		});
 
 
-		mura(".data-edit",self.context.formEl).click( function() {
-			self.renderCRUD( mura(this).attr('data-value'),mura(this).attr('data-pos'));
+		Mura(".data-edit",self.context.formEl).click( function() {
+			self.renderCRUD( Mura(this).attr('data-value'),Mura(this).attr('data-pos'));
 		});
-		mura(".data-view",self.context.formEl).click( function() {
-			self.loadOverview(mura(this).attr('data-value'),mura(this).attr('data-pos'));
+		Mura(".data-view",self.context.formEl).click( function() {
+			self.loadOverview(Mura(this).attr('data-value'),Mura(this).attr('data-pos'));
 		});
-		mura(".data-nav",self.context.formEl).click( function() {
-			self.getTableData( mura(this).attr('data-value') );
+		Mura(".data-nav",self.context.formEl).click( function() {
+			self.getTableData( Mura(this).attr('data-value') );
 		});
 
-		mura(".data-sort").click( function() {
+		Mura(".data-sort").click( function() {
 
-			var sortfield = mura(this).attr('data-value');
+			var sortfield = Mura(this).attr('data-value');
 
 			if(sortfield == self.sortfield && self.sortdir == '')
 				self.sortdir = '-';
 			else
 				self.sortdir = '';
 
-			self.sortfield = mura(this).attr('data-value');
+			self.sortfield = Mura(this).attr('data-value');
 			self.getTableData();
 
 		});
@@ -1176,12 +1176,12 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 		//console.log('ia');
 		//console.log(self.item);
 
-		mura(self.context.formEl).empty();
+		Mura(self.context.formEl).empty();
 
 		var html = Mura.templates['view'](self.item);
-		mura(self.context.formEl).append(html);
+		Mura(self.context.formEl).append(html);
 
-		mura(".nav-back",self.context.formEl).click( function() {
+		Mura(".nav-back",self.context.formEl).click( function() {
 			self.getTableData( self.location );
 		});
 	},
@@ -1501,4 +1501,4 @@ Mura.DisplayObject.Form=Mura.UI.extend(
 });
 
 //Legacy for early adopter backwords support
-Mura.DisplayObject.form=Mura.DisplayObject.Form;
+Mura.DisplayObject.Form=Mura.UI.Form;

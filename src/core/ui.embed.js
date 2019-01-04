@@ -1,13 +1,13 @@
 var Mura=require('./core');
 /**
- * Creates a new Mura.DisplayObject.Embed
- * @name  Mura.DisplayObject.Embed
+ * Creates a new Mura.UI.Embed
+ * @name  Mura.UI.Embed
  * @class
  * @extends Mura.UI
  * @memberof  Mura
  */
 
-Mura.DisplayObject.Embed=Mura.UI.extend(
+Mura.UI.Embed=Mura.UI.extend(
 /** @lends Mura.DisplayObject.Embed.prototype */
 {
 	renderClient:function(){
@@ -19,3 +19,5 @@ Mura.DisplayObject.Embed=Mura.UI.extend(
 		return Mura.templates['embed'](this.context);
 	}
 });
+
+Mura.DisplayObject.Embed=Mura.UI.Embed;

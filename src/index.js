@@ -15,9 +15,10 @@ require('./core/feed.js');
 require('./core/loader.js');
 require('./core/domselection.js');
 require('./core/ui.js');
-require('./core/form');
-require('./core/text');
-require('./core/embed');
+require('./core/ui.form');
+require('./core/ui.text');
+require('./core/ui.embed');
+require('./core/ui.collection');
 require('./core/templates');
 
 if(Mura.isInNode()){

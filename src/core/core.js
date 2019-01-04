@@ -2066,6 +2066,9 @@ var Mura=(function(){
 			return false;
 		}
 
+		obj = (obj.node) ? obj : Mura(obj);
+		var self = obj.node;
+		
 		obj.data('inited', true);
 
 		if (response) {
