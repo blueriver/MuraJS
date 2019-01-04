@@ -302,8 +302,10 @@ Mura.DOMSelection = Mura.Core.extend(
 	 * @param	{function} handlerOut Out method
 	 * @return {object}						Self
 	 */
-	hover: function(handlerIn, handlerOut) {
-		var EventListenerOptions=Mura.supportsPassive ? { passive: true } : false;
+	hover: function(handlerIn, handlerOut, EventListenerOptions) {
+		if(typeof EventListenerOptions =='undefined' || EventListenerOptions == null){
+			EventListenerOptions= Mura.supportsPassive ? { passive: true } : false;
+		}
 		this.on('mouseover', handlerIn, EventListenerOptions);
 		this.on('mouseout', handlerOut, EventListenerOptions);
 		this.on('touchstart', handlerIn, EventListenerOptions);
@@ -1017,6 +1019,8 @@ Mura.DOMSelection = Mura.Core.extend(
 	 calculateDisplayObjectStyles: function() {
  		this.each(function(el) {
  			var obj=Mura(el);
+ 			obj = (obj.node) ? obj : Mura(obj);
+ 			var self = obj.node;
  			if (obj.data('class')) {
  				var classes = obj.data('class');
  				if (typeof classes != 'Array') {

@@ -2068,7 +2068,7 @@ var Mura=(function(){
 
 		obj = (obj.node) ? obj : Mura(obj);
 		var self = obj.node;
-		
+
 		obj.data('inited', true);
 
 		if (response) {
@@ -2190,99 +2190,98 @@ var Mura=(function(){
 						Mura.initDraggableObject_hoverin
 					);
 			} else {
-			if (Mura.type == 'Variation') {
-				var objectData = obj.data();
-				if (MuraInlineEditor
-					&& (MuraInlineEditor.objectHasConfigurator(obj)
-						|| (!Mura.layoutmanager && MuraInlineEditor.objectHasEditor(objectParams))
-						)
-					) {
-					obj.children('.frontEndToolsModal').remove();
-					obj.prepend(layoutmanagertoolbar);
-					MuraInlineEditor.setAnchorSaveChecks(obj.node);
+				if (Mura.type == 'Variation') {
+					var objectData = obj.data();
+					if (MuraInlineEditor
+						&& (MuraInlineEditor.objectHasConfigurator(obj)
+							|| (!Mura.layoutmanager && MuraInlineEditor.objectHasEditor(objectParams))
+							)
+						) {
+						obj.children('.frontEndToolsModal').remove();
+						obj.prepend(layoutmanagertoolbar);
+						MuraInlineEditor.setAnchorSaveChecks(obj.node);
 
-					obj
-						.addClass('mura-active')
-						.hover(
-							Mura.initDraggableObject_hoverin,
-							Mura.initDraggableObject_hoverin
-						);
-
-					Mura.initDraggableObject(self);
-				}
-			} else {
-				var lcaseObject=obj.data('object');
-				if(typeof lcaseObject=='string'){
-					lcaseObject=lcaseObject.toLowerCase();
-				}
-				var region = Mura(self).closest(".mura-region-local");
-				if (region && region.length) {
-					if (region.data('perm')) {
-						var objectData = obj.data();
-
-						if (MuraInlineEditor && (MuraInlineEditor.objectHasConfigurator(obj) || (!Mura.layoutmanager && MuraInlineEditor.objectHasEditor(objectData)))) {
-							obj.children('.frontEndToolsModal').remove();
-							obj.prepend(layoutmanagertoolbar);
-							MuraInlineEditor.setAnchorSaveChecks(obj.node);
-
-							obj
-								.addClass('mura-active')
-								.hover(
-									function(e) {
-										//e.stopPropagation();
-										Mura('.mura-active-target').removeClass('mura-active-target');
-										Mura(this).addClass('mura-active-target');
-									},
-									function(e) {
-										//e.stopPropagation();
-										Mura(this).removeClass('mura-active-target');
-									}
-								);
-
-							Mura.initDraggableObject(self);
-						}
-					}
-				} else if (lcaseObject=='form' || lcaseObject=='component'){
-
-					if(obj.data('perm')){
-						objectParams=obj.data();
-						if(window.MuraInlineEditor.objectHasConfigurator(obj) || (!window.Mura.layoutmanager && window.MuraInlineEditor.objectHasEditor(objectParams)) ){
-							obj.addClass('mura-active');
-							obj.hover(
+						obj
+							.addClass('mura-active')
+							.hover(
 								Mura.initDraggableObject_hoverin,
-								Mura.initDraggableObject_hoverout
+								Mura.initDraggableObject_hoverin
 							);
-							obj.data('notconfigurable',true);
-							obj.children('.frontEndToolsModal').remove();
-							obj.prepend(window.Mura.layoutmanagertoolbar);
 
-							var openToolbar=function(event){
-								event.preventDefault();
-								openFrontEndToolsModal(this);
-							};
+						Mura.initDraggableObject(self);
+					}
+				} else {
+					var lcaseObject=obj.data('object');
+					if(typeof lcaseObject=='string'){
+						lcaseObject=lcaseObject.toLowerCase();
+					}
+					var region = Mura(self).closest(".mura-region-local");
+					if (region && region.length) {
+						if (region.data('perm')) {
+							var objectData = obj.data();
+							if (MuraInlineEditor && (MuraInlineEditor.objectHasConfigurator(obj) || (!Mura.layoutmanager && MuraInlineEditor.objectHasEditor(objectData)))) {
+								obj.children('.frontEndToolsModal').remove();
+								obj.prepend(layoutmanagertoolbar);
+								MuraInlineEditor.setAnchorSaveChecks(obj.node);
 
-							obj.find(".frontEndToolsModal").each(function(){
-								Mura(this).off('click',openToolbar).on('click',openToolbar);
-							})
+								obj
+									.addClass('mura-active')
+									.hover(
+										function(e) {
+											//e.stopPropagation();
+											Mura('.mura-active-target').removeClass('mura-active-target');
+											Mura(this).addClass('mura-active-target');
+										},
+										function(e) {
+											//e.stopPropagation();
+											Mura(this).removeClass('mura-active-target');
+										}
+									);
 
-							obj.find("img").each(function(){MuraInlineEditor.checkforImageCroppers(this);});
-
-							obj
-								.addClass('mura-active')
-								.hover(
-									function(e) {
-										//e.stopPropagation();
-										Mura('.mura-active-target').removeClass('mura-active-target');
-										Mura(this).addClass('mura-active-target');
-									},
-									function(e) {
-										//e.stopPropagation();
-										Mura(this).removeClass('mura-active-target');
-									}
-								);
+								Mura.initDraggableObject(self);
 							}
 						}
-					}
+					} else if (lcaseObject=='form' || lcaseObject=='component'){
+
+						if(obj.data('perm')){
+							objectParams=obj.data();
+							if(window.MuraInlineEditor.objectHasConfigurator(obj) || (!window.Mura.layoutmanager && window.MuraInlineEditor.objectHasEditor(objectParams)) ){
+								obj.addClass('mura-active');
+								obj.hover(
+									Mura.initDraggableObject_hoverin,
+									Mura.initDraggableObject_hoverout
+								);
+								obj.data('notconfigurable',true);
+								obj.children('.frontEndToolsModal').remove();
+								obj.prepend(window.Mura.layoutmanagertoolbar);
+
+								var openToolbar=function(event){
+									event.preventDefault();
+									openFrontEndToolsModal(this);
+								};
+
+								obj.find(".frontEndToolsModal").each(function(){
+									Mura(this).off('click',openToolbar).on('click',openToolbar);
+								})
+
+								obj.find("img").each(function(){MuraInlineEditor.checkforImageCroppers(this);});
+
+								obj
+									.addClass('mura-active')
+									.hover(
+										function(e) {
+											//e.stopPropagation();
+											Mura('.mura-active-target').removeClass('mura-active-target');
+											Mura(this).addClass('mura-active-target');
+										},
+										function(e) {
+											//e.stopPropagation();
+											Mura(this).removeClass('mura-active-target');
+										}
+									);
+								}
+							}
+						}
 				}
 			}
 		}
