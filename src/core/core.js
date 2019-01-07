@@ -2051,6 +2051,18 @@ var Mura=(function(){
 			return processDisplayObject(obj, false, true);
 	}
 
+	function destroyDisplayObjects(){
+		for (var property in Mura.displayObjectInstances) {
+			if (Mura.displayObjectInstances.hasOwnProperty(property)) {
+				var obj=Mura.displayObjectInstances[property];
+				if(typeof obj.destroy == 'function'){
+					obj.destroy();
+				}
+				delete Mura.displayObjectInstances[property];
+			}
+		}
+	}
+
 	function wireUpObject(obj, response, attempt) {
 
 		attempt= attempt || 0;
@@ -2104,6 +2116,9 @@ var Mura=(function(){
 
 						if (typeof Mura.DisplayObject[template] != 'undefined') {
 							context.html = '';
+							if(typeof Mura.displayObjectInstances[obj.data('instanceid')] != 'undefined'){
+								Mura.displayObjectInstances[obj.data('instanceid')].destroy();
+							}
 							obj.html(Mura.templates.content(context));
 							obj.prepend(Mura.templates.meta(context));
 							context.targetEl = obj.children('.mura-object-content').node;
@@ -2146,6 +2161,9 @@ var Mura=(function(){
 
 				if (typeof Mura.DisplayObject[template] == 'function') {
 					context.html = '';
+					if(typeof Mura.displayObjectInstances[obj.data('instanceid')] != 'undefined'){
+						Mura.displayObjectInstances[obj.data('instanceid')].destroy();
+					}
 					obj.html(Mura.templates.content(context));
 					obj.prepend(Mura.templates.meta(context));
 					context.targetEl = obj.children('.mura-object-content').node;
@@ -3103,6 +3121,7 @@ var Mura=(function(){
 			hashCode: hashCode,
 			DisplayObject: {},
 			displayObjectInstances: {},
+			destroyDisplayObjects: destroyDisplayObjects,
 			holdReady: holdReady,
 			trackEvent: trackEvent,
 			recordEvent: trackEvent,

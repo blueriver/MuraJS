@@ -8,7 +8,7 @@ var Mura=require('./core');
  */
 
 Mura.UI.Collection=Mura.UI.extend(
-/** @lends Mura.DisplayObject.Collection.prototype */
+/** @lends Mura.UI.Collection.prototype */
 {
 	renderClient:function(){
 		this.context.targetEl.innerHTML=this.context.html;

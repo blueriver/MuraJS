@@ -14,7 +14,6 @@ Mura.UI=Mura.Core.extend(
   {
 	rb:{},
 	context:{},
-	isomorphic:false,
 	onAfterRender:function(){},
 	onBeforeRender:function(){},
 	trigger:function(eventName){
@@ -78,6 +77,10 @@ Mura.UI=Mura.Core.extend(
 
 	hydrate:function(){
 
+	},
+
+	destroy:function(){
+		
 	},
 
 	init:function(args){

@@ -19,6 +19,8 @@ Mura.UI.React=Mura.UI.extend(
 	},
 
 	destroy:function(){
-		ReactDOM.unmountComponentAtNode(this.context.targetEl);
+		if(this.context && this.context.targetEl && this.context.targetEl.innerHTML){
+			ReactDOM.unmountComponentAtNode(this.context.targetEl);
+		}
 	}
 });
