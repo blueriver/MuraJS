@@ -1,5 +1,6 @@
-const Vue require('vue');
+import Vue from 'vue'
 const Mura=require('./core');
+
 
 /**
  * Creates a new Mura.UI.Vue
@@ -13,6 +14,7 @@ Mura.UI.Vue=Mura.UI.extend(
 /** @lends Mura.UI.Vue.prototype */
 {
 	vm:function(){
+
 		return new Vue(
 			Object.assign({},
 				this.component,

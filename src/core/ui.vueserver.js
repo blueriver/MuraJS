@@ -1,6 +1,7 @@
-const Vue require('vue');
+import Vue from 'vue';
+import { createRenderer } from 'vue-server-renderer'
+
 const Mura=require('./core');
-const { createRenderer } = require('vue-server-renderer')
 
 require('./ui.vue')
 
@@ -15,16 +16,6 @@ require('./ui.vue')
 Mura.UI.VueServer=Mura.UI.Vue.extend(
 /** @lends Mura.UI.VueServer.prototype */
 {
-	vm:function(){
-		return new Vue(
-			Object.assign({},
-				this.component,
-				{
-					propsData:{ context: this.context }
-				})
-		)
-	},
-
 	renderServer:function(){
 		async _renderServer(){
 			return this.renderer.renderToString(this.vm()).then((html) => {
