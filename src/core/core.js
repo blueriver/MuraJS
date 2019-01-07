@@ -2990,6 +2990,9 @@ var Mura=(function(){
 		}
 
 		if(!initForDataOnly){
+
+			destroyDisplayObjects();
+
 			Mura(function() {
 				for(var cmd in holdingPreInitQueue){
 					if(typeof holdingPreInitQueue[cmd] == 'function'){
@@ -3025,7 +3028,6 @@ var Mura=(function(){
 
 
 					Mura(window).on('hashchange', handleHashChange);
-
 
 					processMarkup(document);
 
