@@ -2119,7 +2119,7 @@ var Mura=(function(){
 							if(typeof Mura.displayObjectInstances[obj.data('instanceid')] != 'undefined'){
 								Mura.displayObjectInstances[obj.data('instanceid')].destroy();
 							}
-							obj.html(Mura.templates.content(context));
+							obj.html(Mura.templates.content({html:''}));
 							obj.prepend(Mura.templates.meta(context));
 							context.targetEl = obj.children('.mura-object-content').node;
 							Mura.displayObjectInstances[obj.data('instanceid')]=new Mura.DisplayObject[template](context);
@@ -2164,7 +2164,7 @@ var Mura=(function(){
 					if(typeof Mura.displayObjectInstances[obj.data('instanceid')] != 'undefined'){
 						Mura.displayObjectInstances[obj.data('instanceid')].destroy();
 					}
-					obj.html(Mura.templates.content(context));
+					obj.html(Mura.templates.content({html:''}));
 					obj.prepend(Mura.templates.meta(context));
 					context.targetEl = obj.children('.mura-object-content').node;
 					Mura.displayObjectInstances[obj.data('instanceid')]=new Mura.DisplayObject[template](context);

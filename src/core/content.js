@@ -58,11 +58,11 @@ Mura.entities.Content = Mura.Entity.extend(
 	 * @return {Mura.EntityCollection}
 	 */
 	getRelatedContent:function(relatedContentSetName,params){
+		var self=this;
 		return new Promise(function(resolve,reject) {
 			var query = [];
-			var self=this;
 			params = params || {};
-			params.siteid = this.get('siteid') || Mura.siteid;
+			params.siteid = self.get('siteid') || Mura.siteid;
 			for (var key in params) {
 				if (key != 'entityname' && key != 'filename' && key != 'siteid' && key != 'method') {
 					query.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
@@ -71,7 +71,7 @@ Mura.entities.Content = Mura.Entity.extend(
 			self._requestcontext.request({
 				type: 'get',
 				url: Mura.apiEndpoint +
-					'/content/' + self.get('contentid') + '/' + relatedContentSetName + '?' +
+					'/content/' + self.get('contentid') + '/relatedcontent/' + relatedContentSetName + '?' +
 					query.join('&'),
 				params: params,
 				success: function(resp) {
