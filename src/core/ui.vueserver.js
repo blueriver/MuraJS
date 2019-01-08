@@ -28,9 +28,10 @@ Mura.UI.VueServer=Mura.UI.Vue.extend(
 
 	hydrate:function(){
 		const container=Mura(this.context.targetEl)
-		if(!container.attr('id')){
-			container.attr('id','mc' + this.context.instanceid);
+		if(!container.node.firstChild){
+			container.node.appendChild(document.createElement('DIV'));
 		}
+		container.node.firstChild.setAttribute('id','mc' + this.context.instanceid)
 		this.vm().$mount('#' + container.attr('id'),true)
 		this.trigger('afterRender');
 	},

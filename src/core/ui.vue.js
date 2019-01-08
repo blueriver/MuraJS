@@ -26,11 +26,16 @@ Mura.UI.Vue=Mura.UI.extend(
 
 	renderClient:function(){
 		const container=Mura(this.context.targetEl)
-		if(!container.attr('id')){
-			container.attr('id','mc' + this.context.instanceid);
+		if(!container.node.firstChild){
+			container.node.appendChild(document.createElement('DIV'));
 		}
-		this.vm().$mount('#' + container.attr('id'))
+		container.node.firstChild.setAttribute('id','mc' + this.context.instanceid)
+		this.vm().$mount('#mc' + this.context.instanceid)
 		this.trigger('afterRender');
+	},
+
+	destroy:function(){
+
 	}
 
 });
