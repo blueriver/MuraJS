@@ -13,15 +13,19 @@ const Mura=require('./core');
 Mura.UI.Vue=Mura.UI.extend(
 /** @lends Mura.UI.Vue.prototype */
 {
-	vm:function(){
+	vm:'',
 
-		return new Vue(
-			Object.assign({},
-				this.component,
-				{
-					propsData:{ context: this.context }
-				})
-		)
+	$vm:function(){
+		if(!this.vm){
+			this.vm=new Vue(
+				Object.assign({},
+					this.component,
+					{
+						propsData:{ context: this.context }
+					})
+			);
+		}
+		return this.vm;
 	},
 
 	renderClient:function(){
@@ -30,12 +34,12 @@ Mura.UI.Vue=Mura.UI.extend(
 			container.node.appendChild(document.createElement('DIV'));
 		}
 		container.node.firstChild.setAttribute('id','mc' + this.context.instanceid)
-		this.vm().$mount('#mc' + this.context.instanceid)
+		this.$vm().$mount('#mc' + this.context.instanceid)
 		this.trigger('afterRender');
 	},
 
 	destroy:function(){
-
+		this.$vm().destroy();
 	}
 
 });
