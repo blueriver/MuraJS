@@ -82,7 +82,6 @@ Mura.UI.Collection=Mura.UI.extend(
 	renderClient:function(){
 		if (typeof Mura.Module[this.context.layout] != 'undefined'){
 			this.getCollection().then((collection)=>{
-				console.log(collection)
 				this.context.collection=collection;
 				this.getLayoutInstance().renderClient();
 			})
