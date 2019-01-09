@@ -10,6 +10,7 @@ var Mura=require('./core');
 Mura.UI.Collection=Mura.UI.extend(
 /** @lends Mura.UI.Collection.prototype */
 {
+	defaultLayout: "List",
 
 	layoutInstance:'',
 
@@ -93,6 +94,10 @@ Mura.UI.Collection=Mura.UI.extend(
 	renderClient:function(){
 		if(typeof Mura.Module[this.context.layout] == 'undefined'){
 			this.context.layout=Mura.firstToUpperCase(this.context.layout);
+		}
+		if(typeof Mura.Module[this.context.layout] == 'undefined'
+	 		&& Mura.Module[this.defaultLayout] != 'undefined'){
+				this.context.layout=this.defaultLayout;
 		}
 		if (typeof Mura.Module[this.context.layout] != 'undefined'){
 			this.getCollection().then((collection)=>{
