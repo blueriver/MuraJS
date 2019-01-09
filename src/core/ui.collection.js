@@ -91,6 +91,9 @@ Mura.UI.Collection=Mura.UI.extend(
 	},
 
 	renderClient:function(){
+		if(typeof Mura.Module[this.context.layout] == 'undefined'){
+			this.context.layout=Mura.firstToUpperCase(this.context.layout);
+		}
 		if (typeof Mura.Module[this.context.layout] != 'undefined'){
 			this.getCollection().then((collection)=>{
 				this.context.collection=collection;
