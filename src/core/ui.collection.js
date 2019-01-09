@@ -111,6 +111,8 @@ Mura.UI.Collection=Mura.UI.extend(
 	},
 
 	renderServer:function(){
+		return '';
+		
 		if(this.context.html){
 			return this.context.html;
 		} else if (typeof Mura.Module[this.layout] != 'undefined'){
