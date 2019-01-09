@@ -39,7 +39,10 @@ Mura.UI.Vue=Mura.UI.extend(
 	},
 
 	destroy:function(){
-		this.$vm().destroy();
+		if(container.node.innerHTML){
+			container.node.firstChild.setAttribute('id','mc' + this.context.instanceid)
+			this.$vm().destroy();
+		}
 	}
 
 });
