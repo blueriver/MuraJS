@@ -19561,16 +19561,13 @@ Mura.UI.Collection=Mura.UI.extend(
 
 	renderServer:function(){
 		return '';
-		
 		if(this.context.html){
 			return this.context.html;
 		} else if (typeof Mura.Module[this.layout] != 'undefined'){
-			return (async ()=>{
-				return await (()=>{
-					this.context.collection=this.getCollection();
-					return this.getLayoutInstance().renderServer();
-				})()
-			})()
+			this.getCollection().then((collection)=>{
+				this.context.collection=collection;
+				return this.getLayoutInstance().renderServer();
+			});
 		} else {
 			return "This collection has an undefined layout";
 		}
