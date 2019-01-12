@@ -111,17 +111,8 @@ Mura.UI.Collection=Mura.UI.extend(
 	},
 
 	renderServer:function(){
+		//has implementation in ui.serverutils
 		return '';
-		if(this.context.html){
-			return this.context.html;
-		} else if (typeof Mura.Module[this.layout] != 'undefined'){
-			this.getCollection().then((collection)=>{
-				this.context.collection=collection;
-				return this.getLayoutInstance().renderServer();
-			});
-		} else {
-			return "This collection has an undefined layout";
-		}
 	}
 });
 

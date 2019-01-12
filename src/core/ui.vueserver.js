@@ -4,6 +4,7 @@ import { createRenderer } from 'vue-server-renderer'
 const Mura=require('./core');
 
 require('./ui.vue')
+require('./ui.serverutils')
 
 /**
  * Creates a new Mura.UI.VueServer

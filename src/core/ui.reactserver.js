@@ -4,6 +4,7 @@ const Mura=require('./core');
 const ReactDOMServer = require('react-dom/server');
 
 require('./ui.react')
+require('./ui.serverutils')
 
 /**
  * Creates a new Mura.UI.ReactServer
