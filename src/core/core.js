@@ -722,20 +722,6 @@ var Mura=(function(){
 				str += data.inherited.items[i].header;
 				if(typeof data.inherited.items[i].html != 'undefined' && data.inherited.items[i].html){
 					str += data.inherited.items[i].html;
-				} else if (Mura.isInNode()) {
-					var template=data.inherited.items[i].clienttemplate || data.inherited.items[i].object;
-					var properNameCheck = firstToUpperCase(template);
-
-					if (typeof Mura.DisplayObject[properNameCheck] != 'undefined') {
-						template = properNameCheck;
-					}
-
-					if(typeof Mura.DisplayObject[template] != 'undefined') {
-						var html=new Mura.DisplayObject[template](data.inherited.items[i]).renderServer();
-						if(html){
-							str += Mura.templates['meta'](data.inherited.items[i]) + Mura.templates['content']({html:html})
-						}
-					}
 				}
 				str += data.inherited.items[i].footer;
 			}
@@ -750,20 +736,6 @@ var Mura=(function(){
 				str += data.local.items[i].header;
 				if(typeof data.local.items[i].html != 'undefined' && data.local.items[i].html){
 					str += data.local.items[i].html;
-				} else if (Mura.isInNode()) {
-					var template=data.local.items[i].clienttemplate || data.local.items[i].object;
-					var properNameCheck = firstToUpperCase(template);
-
-					if (typeof Mura.DisplayObject[properNameCheck] != 'undefined') {
-						template = properNameCheck;
-					}
-
-					if(typeof Mura.DisplayObject[template] != 'undefined') {
-						var html=new Mura.DisplayObject[template](data.local.items[i]).renderServer();
-						if(html){
-							str += Mura.templates['meta'](data.local.items[i]) + Mura.templates['content']({html:html})
-						}
-					}
 				}
 				str += data.local.items[i].footer;
 			}
