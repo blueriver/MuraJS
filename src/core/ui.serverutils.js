@@ -2,14 +2,7 @@ var Mura=require('./core');
 
 Mura.UI.buildDisplayObject=async function(template, params){
 	params = Object.assign({},params);
-	return (
-		async ()=> {
-				return (()=> new Promise((resolve,reject)=>{
-						resolve(new Mura.DisplayObject[template](params).renderServer())
-					}
-				)) ().then(str=>str)
-		}
-	)()
+	return new Mura.DisplayObject[template](params).renderServer()
 }
 
 Mura.UI.buildDisplayRegion=async function(data){
@@ -25,7 +18,12 @@ Mura.UI.buildDisplayRegion=async function(data){
 					template = properNameCheck;
 				}
 				if(typeof Mura.DisplayObject[template] != 'undefined') {
-					data.inherited.items[i].html=await Mura.UI.buildDisplayObject(template,data.inherited.items[i])
+					let builtObj=await Mura.UI.buildDisplayObject(template,data.inherited.items[i])
+					if(typeof builtObj == 'string'){
+						data.inherited.items[i].html=builtObj;
+					} else {
+						data.inherited.items[i]=builtObj;
+					}
 					if(data.inherited.items[i].html){
 						data.inherited.items[i].html= Mura.templates['meta'](data.inherited.items[i]) + Mura.templates['content']({html:data.inherited.items[i].html})
 					}
@@ -40,7 +38,12 @@ Mura.UI.buildDisplayRegion=async function(data){
 					template = properNameCheck;
 				}
 				if(typeof Mura.DisplayObject[template] != 'undefined') {
-					data.local.items[i].html=await Mura.UI.buildDisplayObject(template,data.local.items[i])
+					let builtObj=await Mura.UI.buildDisplayObject(template,data.local.items[i])
+					if(typeof builtObj == 'string'){
+						data.local.items[i].html=builtObj;
+					} else {
+						data.local.items[i]=builtObj;
+					}
 					if(data.local.items[i].html){
 						data.local.items[i].html= Mura.templates['meta'](data.local.items[i]) + Mura.templates['content']({html:data.local.items[i].html})
 					}
@@ -60,18 +63,28 @@ Mura.entities.Content=Mura.entities.Content.extend({
 })
 
 Mura.UI.Collection=Mura.UI.Collection.extend({
-	renderServer:function(){
+	renderServer:async function(){
 		if(this.context.html){
 			return this.context.html;
 		} else if (typeof Mura.Module[this.context.layout] != 'undefined'){
-			return this.getCollection().then((collection)=>{
-				this.context.collection=collection;
-				return this.getLayoutInstance().renderServer();
-			});
+			const adjustedContext=Object.assign({},this.context)
+			adjustedContext.html=await this.getCollection().then((collection)=>{
+					this.context.collection=collection;
+					return this.getLayoutInstance().renderServer();
+				});
+			adjustedContext.rawcollection=this.context.collection.getAll();
+			return adjustedContext;
 		} else {
 			console.log("This collection has an undefined layout")
 			return "";
 		}
+	},
+
+	hydrate:function(){
+		this.getCollection().then((collection)=>{
+			this.context.collection=collection;
+			this.getLayoutInstance().hydrate();
+		})
 	}
 })
 

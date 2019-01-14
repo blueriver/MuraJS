@@ -40,18 +40,20 @@ Mura.UI.Collection=Mura.UI.extend(
 				this.context.itemsperpage=this.context.nextn;
 			}
 
-			if(this.context.sourcetype=='relatedcontent'){
+			if(typeof this.context.rawcollection != 'undefined'){
+				return new Promise((resolve,reject)=>{
+					resolve(new Mura.EntityCollection(this.context.rawcollection,self._requestcontext))
+				});
+			} else if(this.context.sourcetype=='relatedcontent'){
 				if(this.context.source=='custom'){
-					if(typeof this.context.items == 'array'){
+					if(typeof this.context.items != 'undefined'){
 						this.context.items=this.context.items.join();
 					}
-					return Mura.get(Mura.apiEndpoint + '/?entityname=content&method=findMany&id=' + this.context.items,{
+					return Mura.get(Mura.apiEndpoint + 'content/' + this.context.items + ',_',{
 						itemsperpage:this.context.itemsperpage,
 						maxitems:this.context.maxitems
-					}).then((response)=>{
-						return new Promise(function(resolve,reject) {
-								resolve(new Mura.EntityCollection(resp.data,self._requestcontext));
-						})
+					}).then((resp)=>{
+						return new Mura.EntityCollection(resp.data,Mura._requestcontext);
 					});
 				} else if(this.context.source=='reverse'){
 					return Mura.getEntity('content')
@@ -113,7 +115,15 @@ Mura.UI.Collection=Mura.UI.extend(
 	renderServer:function(){
 		//has implementation in ui.serverutils
 		return '';
+	},
+
+	destroy:function(){
+		//has implementation in ui.serverutils
+		if(this.layoutInstance){
+			this.layoutInstance.destroy();
+		}
 	}
+
 });
 
 Mura.Module.Collection=Mura.UI.Collection;

@@ -22,8 +22,11 @@ Mura.UI.ReactServer=Mura.UI.React.extend(
 	},
 
 	hydrate:function(){
-		this.context.suppressHydrationWarning=true;
-		ReactDOM.hydrate(React.createElement(this.component, this.context), this.context.targetEl	);
-		this.trigger('afterRender');
+		this.context.suppressHydrationWarning=true
+		ReactDOM.hydrate(
+			React.createElement(this.component, this.context),
+			this.context.targetEl,
+			()=>{this.trigger('afterRender')}
+		)
 	}
 });

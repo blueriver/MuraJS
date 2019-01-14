@@ -14,8 +14,11 @@ Mura.UI.React=Mura.UI.extend(
 /** @lends Mura.UI.React.prototype */
 {
 	renderClient:function(){
-		ReactDOM.render(React.createElement(this.component, this.context), this.context.targetEl	);
-		this.trigger('afterRender');
+		ReactDOM.render(
+			React.createElement(this.component, this.context),
+			this.context.targetEl,
+			()=>{this.trigger('afterRender')}
+		);
 	},
 
 	destroy:function(){

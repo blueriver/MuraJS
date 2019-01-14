@@ -2120,7 +2120,6 @@ var Mura=(function(){
 				}
 		} else {
 			var context = obj.data();
-
 			if (obj.data('object') == 'container') {
 				obj.prepend(Mura.templates.meta(context));
 			} else {
@@ -2377,7 +2376,6 @@ var Mura=(function(){
 	}
 
 	function processDisplayObject(el, queue, rerender, resolveFn) {
-
 		var obj = (el.node) ? el : Mura(el);
 
 		if (obj.data('queue') != null) {
@@ -2448,12 +2446,16 @@ var Mura=(function(){
 
 				if(!rerender && obj.data('render')=='client' && obj.children('.mura-object-content').length){
 					var context=obj.data();
+					if(typeof context.instanceid != 'undefined' && typeof Mura.hydrationData[context.instanceid] != 'undefined'){
+						Mura.extend(context,Mura.hydrationData[context.instanceid]);
+					}
 					var template=obj.data('clienttemplate') || obj.data('object');
 					var properNameCheck = firstToUpperCase(template);
 
 					if (typeof Mura.DisplayObject[properNameCheck] != 'undefined') {
 						template = properNameCheck;
 					}
+
 					if(typeof Mura.DisplayObject[template] != 'undefined'){
 						context.targetEl = obj.children('.mura-object-content').node;
 						Mura.displayObjectInstances[obj.data('instanceid')]=new Mura.DisplayObject[template](context);
@@ -2831,6 +2833,13 @@ var Mura=(function(){
 
 	function init(config) {
 
+		if(typeof config.content != 'undefined'){
+			if(typeof config.content.get == 'undefined'){
+				config.content=getEntity('content').set(config.content);
+			}
+			Mura.extend(config,config.content.get('config'));
+		}
+
 		if (config.rootpath) {
 			config.context = config.rootpath;
 		}
@@ -2933,6 +2942,25 @@ var Mura=(function(){
 		extend(Mura, config);
 
 		Mura.trackingMetadata={};
+		Mura.hydrationData={}
+
+		if(typeof config.content != 'undefined' && config.content.get('displayregions')){
+		for(var r in config.content.properties.displayregions){
+				if( config.content.properties.displayregions.hasOwnProperty(r)){
+					var data=config.content.properties.displayregions[r];
+					if(typeof data.inherited != 'undefined' && typeof data.inherited.items != 'undefined'){
+						for(var d in data.inherited.items){
+							Mura.hydrationData[data.inherited.items[d].instanceid]=data.inherited.items[d];
+						}
+					}
+					if(typeof data.local != 'undefined' && typeof data.local.items != 'undefined'){
+						for(var d in data.local.items){
+							Mura.hydrationData[data.local.items[d].instanceid]=data.local.items[d];
+						}
+					}
+				}
+			}
+		}
 
 		Mura.dateformat=generateDateFormat();
 
