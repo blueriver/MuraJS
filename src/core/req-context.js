@@ -295,7 +295,7 @@ Mura.RequestContext=Mura.Core.extend(
 			params.fields=params.fields || '';
 			return new Promise(function(resolve, reject) {
 				if (Mura.currentUser) {
-						return Mura.currentUser;
+					resolve(Mura.currentUser);
 				} else {
 					self.request({
 						async: true,
@@ -310,7 +310,7 @@ Mura.RequestContext=Mura.Core.extend(
 								resolve(Mura.currentUser);
 							}
 						},
-						success: function(resp) {
+						error: function(resp) {
 							if (typeof resolve =='function') {
 								Mura.currentUser=self.getEntity('user')
 								Mura.currentUser.set( resp.data);
