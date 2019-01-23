@@ -229,7 +229,12 @@ Mura.Entity = Mura.Core.extend(
 								resolve(returnObj);
 							}
 						},
-						error: reject
+						error: function(resp){
+							resp=Mura.parseString(resp.response);
+							if (typeof reject == 'function'){
+								reject(resp);
+							}
+						}
 					});
 				});
 			}
@@ -388,11 +393,14 @@ Mura.Entity = Mura.Core.extend(
 										reject(self);
 									}
 								}
+							},
+							error: function(resp) {
+								this.success(Mura.parseString(resp.response));
 							}
 						});
 					},
 					error: function(resp) {
-						this.success(resp );
+						this.success(Mura.parseString(resp.response));
 					}
 				});
 			}
@@ -431,6 +439,9 @@ Mura.Entity = Mura.Core.extend(
 								reject(self);
 							}
 						}
+					},
+					error:function(resp){
+						this.success(Mura.parseString(resp.response));
 					}
 				});
 			} else {
@@ -470,7 +481,7 @@ Mura.Entity = Mura.Core.extend(
 						});
 					},
 					error: function(resp) {
-						this.success(resp );
+						this.success(Mura.parseString(resp.response));
 					}
 				});
 			}
@@ -523,6 +534,11 @@ Mura.Entity = Mura.Core.extend(
 					if (typeof resolve == 'function') {
 						resolve(self);
 					}
+			},function(resp){
+				resp=Mura.parseString(resp.response);
+				if (typeof reject == 'function'){
+					reject(resp);
+				}
 			});
 		});
 	},

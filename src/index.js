@@ -10,6 +10,7 @@ require('./core/req-context.js');
 require('./core/cache.js');
 require('./core/entity.js');
 require('./core/content.js');
+require('./core/user.js');
 require('./core/entitycollection.js');
 require('./core/feed.js');
 require('./core/loader.js');

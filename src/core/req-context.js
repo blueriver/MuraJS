@@ -135,6 +135,10 @@ Mura.RequestContext=Mura.Core.extend(
 			properties.siteid = properties.siteid || Mura.siteid;
 		}
 
+		properties.links={
+			permissions:Mura.apiEndpoint + properties.entityname + "/permissions"
+		}
+
 		if (Mura.entities[properties.entityname]) {
 			var entity=new Mura.entities[properties.entityname](properties,this);
 			return entity;

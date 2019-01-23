@@ -542,8 +542,11 @@ Mura.Feed = Mura.Core.extend(
 							reject(resp);
 						}
 					},
-					error:  function(resp) {
-						this.success(resp );
+					error: function(resp) {
+						resp=Mura.parseString(resp.response);
+						if (typeof reject == 'function'){
+							reject(resp);
+						}
 					}
 				});
 			});
