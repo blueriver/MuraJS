@@ -3288,7 +3288,7 @@ var Mura=(function(){
 
 					Mura.markupInitted=true;
 
-					if(Mura.cookieConsentEnabled){Mura(function(){Mura('body').appendDisplayObject({object:'cookie_consent',queue:false});});}
+					if(Mura.cookieConsentEnabled){Mura(function(){Mura('body').appendDisplayObject({object:'cookie_consent',queue:false,statsid:'cookie_consent'});});}
 
 					Mura(document).on("keydown", function(event) {
 						loginCheck(event.which);
