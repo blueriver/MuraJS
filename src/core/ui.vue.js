@@ -1,6 +1,5 @@
 import Vue from 'vue'
-const Mura=require('./core');
-
+Mura=require('mura.js')
 
 /**
  * Creates a new Mura.UI.Vue
@@ -39,9 +38,10 @@ Mura.UI.Vue=Mura.UI.extend(
 	},
 
 	destroy:function(){
-		if(container.node.innerHTML){
+		const container=Mura(this.context.targetEl)
+		if(container.length && container.node.innerHTML){
 			container.node.firstChild.setAttribute('id','mc' + this.context.instanceid)
-			this.$vm().destroy();
+			this.$vm().$destroy();
 		}
 	}
 

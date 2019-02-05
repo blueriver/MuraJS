@@ -1,10 +1,8 @@
-import Vue from 'vue';
-import { createRenderer } from 'vue-server-renderer'
+import Vue from 'vue'
+Mura=require('mura.js')
 
-const Mura=require('./core');
-
-require('./ui.vue')
-require('./ui.serverutils')
+require('mura.js/src/core/ui.vue')
+require('mura.js/src/core/ui.serverutils')
 
 /**
  * Creates a new Mura.UI.VueServer
@@ -18,26 +16,22 @@ Mura.UI.VueServer=Mura.UI.Vue.extend(
 /** @lends Mura.UI.VueServer.prototype */
 {
 	renderServer:function(){
-		async _renderServer(){
-			return this.renderer.renderToString(this.vm()).then((html) => {
-				return html
-			})
-		}
-
-		return await _renderServer()
+		return this.renderer.renderToString(this.$vm())
 	},
 
 	hydrate:function(){
 		const container=Mura(this.context.targetEl)
-		if(!container.attr('id')){
-			container.attr('id','mc' + this.context.instanceid);
+		if(container.length && container.node.innerHTML){
+			container.node.firstChild.setAttribute('id','mc' + this.context.instanceid)
+			this.$vm().$mount('#mc' + this.context.instanceid,true)
+			this.trigger('afterRender');
 		}
-		this.$vm().$mount('#' + container.attr('id'),true)
-		this.trigger('afterRender');
 	},
 
 	registerHelpers:function(){
-		this.renderer = createRenderer(this.rendererOptions)
+		if(Mura.isInNode()){
+			this.renderer = eval("require('vue-server-renderer')").createRenderer(this.rendererOptions)
+		}
 	},
 
 	renderer:null,
