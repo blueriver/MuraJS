@@ -13,19 +13,23 @@ Mura.UI.buildDisplayRegion=async function(data){
 		if(typeof data.inherited != 'undefined'){
 			for(var i in data.inherited.items){
 				var template=data.inherited.items[i].clienttemplate || data.inherited.items[i].object;
-				var properNameCheck = Mura.firstToUpperCase(template);
-				if (typeof Mura.DisplayObject[properNameCheck] != 'undefined') {
-					template = properNameCheck;
-				}
-				if(typeof Mura.DisplayObject[template] != 'undefined') {
-					let builtObj=await Mura.UI.buildDisplayObject(template,data.inherited.items[i])
-					if(typeof builtObj == 'string'){
-						data.inherited.items[i].html=builtObj;
-					} else {
-						data.inherited.items[i]=builtObj;
+				if(typeof template=='string'){
+					var properNameCheck = Mura.firstToUpperCase(template);
+					if (typeof Mura.DisplayObject[properNameCheck] != 'undefined') {
+						template = properNameCheck;
 					}
-					if(data.inherited.items[i].html){
-						data.inherited.items[i].html= Mura.templates['meta'](data.inherited.items[i]) + Mura.templates['content']({html:data.inherited.items[i].html})
+					if(typeof Mura.DisplayObject[template] != 'undefined') {
+						let builtObj=await Mura.UI.buildDisplayObject(template,data.inherited.items[i])
+						if(typeof builtObj == 'string'){
+							data.inherited.items[i].html=builtObj;
+						} else {
+							data.inherited.items[i]=builtObj;
+						}
+						if(data.inherited.items[i].html){
+							data.inherited.items[i].html= Mura.templates['meta'](data.inherited.items[i]) + Mura.templates['content']({html:data.inherited.items[i].html})
+						}
+					} else {
+						console.log('Invalid Module Template')
 					}
 				}
 			}
@@ -33,21 +37,24 @@ Mura.UI.buildDisplayRegion=async function(data){
 		if(typeof data.local != 'undefined'){
 			for(var i in data.local.items){
 				var template=data.local.items[i].clienttemplate || data.local.items[i].object;
-				var properNameCheck = Mura.firstToUpperCase(template);
-				if (typeof Mura.DisplayObject[properNameCheck] != 'undefined') {
-					template = properNameCheck;
-				}
-				if(typeof Mura.DisplayObject[template] != 'undefined') {
-					let builtObj=await Mura.UI.buildDisplayObject(template,data.local.items[i])
-					if(typeof builtObj == 'string'){
-						data.local.items[i].html=builtObj;
+				if(typeof template=='string'){
+					var properNameCheck = Mura.firstToUpperCase(template);
+					if (typeof Mura.DisplayObject[properNameCheck] != 'undefined') {
+						template = properNameCheck;
+					}
+					if(typeof Mura.DisplayObject[template] != 'undefined') {
+						let builtObj=await Mura.UI.buildDisplayObject(template,data.local.items[i])
+						if(typeof builtObj == 'string'){
+							data.local.items[i].html=builtObj;
+						} else {
+							data.local.items[i]=builtObj;
+						}
+						if(data.local.items[i].html){
+							data.local.items[i].html= Mura.templates['meta'](data.local.items[i]) + Mura.templates['content']({html:data.local.items[i].html})
+						}
 					} else {
-						data.local.items[i]=builtObj;
+						console.log('Invalid Module Template')
 					}
-					if(data.local.items[i].html){
-						data.local.items[i].html= Mura.templates['meta'](data.local.items[i]) + Mura.templates['content']({html:data.local.items[i].html})
-					}
-
 				}
 			}
 		}
