@@ -1,5 +1,5 @@
 <div class="{{{inputWrapperClass}}}" id="field-{{name}}-container">
-	<label for="field-{{name}}">{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>{{formRequiredLabel}}</ins>{{/if}}</label>
+	<label for="{{labelForValue}}">{{#if summary}}{{summary}}{{else}}{{label}}{{/if}}{{#if isrequired}} <ins>{{formRequiredLabel}}</ins>{{/if}}</label>
 	{{#if summary}}</br>{{/if}}
 	<input type="{{{textInputTypeValue}}}" {{{commonInputAttributes}}} value="{{value}}"{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}/>
 </div>

@@ -1445,6 +1445,19 @@ Mura.UI.Form=Mura.UI.extend(
 			}
 		});
 
+		Mura.Handlebars.registerHelper('labelForValue',function() {
+			//id, class, title, size
+			var escapeExpression=Mura.Handlebars.escapeExpression;
+
+			if(this.cssid){
+				return escapeExpression(this.cssid);
+			} else {
+				return "field-" + escapeExpression(this.name) ;
+			}
+
+			return returnString;
+		});
+
 		Mura.Handlebars.registerHelper('commonInputAttributes',function() {
 			//id, class, title, size
 			var escapeExpression=Mura.Handlebars.escapeExpression;
