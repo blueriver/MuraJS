@@ -491,6 +491,20 @@ var Mura=(function(){
 	}
 
 	/**
+	 * normalizeRequestHandler - Standardizes request handler objects
+	 *
+	 * @param	{object} eventHandler
+	 * @memberof {object} eventHandler
+	 */
+	function normalizeRequestHandler(eventHandler) {
+		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
+		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
+		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
+		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+		return eventHandler;
+	}
+
+	/**
 	 * getRequestContext - Returns a new Mura.RequestContext;
 	 *
 	 * @name getRequestContext
@@ -3139,7 +3153,8 @@ var Mura=(function(){
 			undeclareEntity:undeclareEntity,
 			buildDisplayRegion:buildDisplayRegion,
 			openGate:openGate,
-			firstToUpperCase:firstToUpperCase
+			firstToUpperCase:firstToUpperCase,
+			normalizeRequestHandler:normalizeRequestHandler
 		}
 	);
 

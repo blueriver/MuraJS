@@ -502,10 +502,7 @@ Mura.RequestContext=Mura.Core.extend(
 			eventHandler=eventHandler || {};
 		}
 
-		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
-		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
-		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
-		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+		Mura.normalizeRequestHandler(eventHandler);
 
 		var self=this;
 		data = data || {};
@@ -548,10 +545,7 @@ Mura.RequestContext=Mura.Core.extend(
 			eventHandler=eventHandler || {};
 		}
 
-		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
-		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
-		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
-		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+		Mura.normalizeRequestHandler(eventHandler);
 
 		var self=this;
 		data = data || {};
