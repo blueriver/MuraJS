@@ -714,7 +714,7 @@ Mura.Entity = Mura.Core.extend(
 								if (self.get('saveerrors') ||
 									Mura.isEmptyObject(self.getErrors())
 								) {
-									if (typeof ventHandler.success ==	'function') {
+									if (typeof eventHandler.success ==	'function') {
 											eventHandler.success(self);
 									}
 								} else {
