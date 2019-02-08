@@ -493,20 +493,41 @@ Mura.RequestContext=Mura.Core.extend(
 	 * @param	{object} data Data to send to url
 	 * @return {Promise}
 	 */
-	get:function(url, data) {
+	get:function(url, data, eventHandler) {
+		if(typeof url == 'object'){
+			data=url.data;
+			eventHander=url;
+			url=url.url;
+		} else {
+			eventHandler=eventHandler || {};
+		}
+
+		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
+		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
+		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
+		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+
 		var self=this;
 		data = data || {};
+
 		return new Promise(function(resolve, reject) {
+
+			if(typeof resolve == 'function'){
+				eventHandler.success=resolve;
+			}
+
+			if(typeof reject == 'function'){
+				eventHandler.error=reject;
+			}
+
 			return self.request({
 				type: 'get',
 				url: url,
 				data: data,
-				success: function(resp) {
-					resolve(resp);
-				},
-				error: function(resp) {
-					reject(resp);
-				}
+				success: eventHandler.success,
+				error: eventHandler.error,
+				progress:eventHandler.progress,
+				abort: eventHandler.abort
 			});
 		});
 	},
@@ -518,20 +539,41 @@ Mura.RequestContext=Mura.Core.extend(
 	 * @param	{object} data Data to send to url
 	 * @return {Promise}
 	 */
-	post:function(url, data) {
+	post:function(url, data, eventHandler) {
+		if(typeof url == 'object'){
+			data=url.data;
+			eventHander=url;
+			url=url.url;
+		} else {
+			eventHandler=eventHandler || {};
+		}
+
+		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
+		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
+		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
+		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+
 		var self=this;
 		data = data || {};
+
 		return new Promise(function(resolve, reject) {
+
+			if(typeof resolve == 'function'){
+				eventHandler.success=resolve;
+			}
+
+			if(typeof reject == 'function'){
+				eventHandler.error=reject;
+			}
+
 			return self.request({
 				type: 'post',
 				url: url,
 				data: data,
-				success: function(resp) {
-					resolve(resp);
-				},
-				error: function(resp) {
-					reject(resp);
-				}
+				success: eventHandler.success,
+				error: eventHandler.error,
+				progress:eventHandler.progress,
+				abort: eventHandler.abort
 			});
 		});
 	},

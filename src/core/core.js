@@ -463,8 +463,8 @@ var Mura=(function(){
 	 * @return {Promise}
 	 * @memberof {class} Mura
 	 */
-	function get(url, data) {
-		return Mura._requestcontext.get(url, data);
+	function get(url, data, eventHandler) {
+		return Mura._requestcontext.get(url, data, eventHandler);
 	}
 
 	/**
@@ -475,8 +475,8 @@ var Mura=(function(){
 	 * @return {Promise}
 	 * @memberof {class} Mura
 	 */
-	function post(url, data) {
-		return Mura._requestcontext.post(url, data);
+	function post(url, data, eventHandler) {
+		return Mura._requestcontext.post(url, data, eventHandler);
 	}
 
 	/**

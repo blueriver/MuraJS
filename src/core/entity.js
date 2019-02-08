@@ -64,12 +64,25 @@ Mura.Entity = Mura.Core.extend(
 	/**
 	 * invoke - Invokes a method
 	 *
-	 * @param	{string} funcName Method to call
+	 * @param	{string} name Method to call
 	 * @param	{object} params Arguments to submit to method
 	 * @param	{string} method GET or POST
 	 * @return {any}
 	 */
-	invoke:function(funcName,params,method){
+	invoke:function(name,params,method,eventHandler){
+		if(typeof name == 'object'){
+			params=name.params || {};
+			method=name.method || 'get';
+			eventHandler=name;
+			name=name.name;
+		} else {
+			eventHandler=eventHandler || {};
+		}
+		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
+		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
+		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
+		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+
 		var self = this;
 
 		if(typeof method=='undefined' && typeof params=='string'){
@@ -80,82 +93,115 @@ Mura.Entity = Mura.Core.extend(
 		params=params || {};
 		method=method || "post";
 
-		if(this[funcName]=='function'){
-			return this[funcName].apply(this,params);
+		if(this[name]=='function'){
+			return this[name].apply(this,params);
 		}
 
 		return new Promise(function(resolve,reject) {
+
+			if(typeof resolve == 'function'){
+				eventHandler.success=resolve;
+			}
+
+			if(typeof reject == 'function'){
+				eventHandler.error=reject;
+			}
+
 			self._requestcontext.request({
 				type: method.toLowerCase(),
-				url: self.getApiEndPoint() + funcName,
+				url: self.getApiEndPoint() + name,
 				data: Mura.extend(params,{
 					'_cacheid': Math.random()
 				}),
 				success: function(resp) {
 					if (resp.data != 'undefined'	) {
-						if (typeof resolve ==	'function') {
-							resolve(resp.data);
+						if (typeof 	eventHandler.success ==	'function') {
+							eventHandler.success(resp.data);
 						}
 					} else {
-						if (typeof reject == 'function') {
-							reject(resp);
+						if (typeof eventHandler.error == 'function') {
+							eventHandler.error(resp);
 						}
 					}
 				},
 				error: function(resp) {
 					resp=Mura.parseString(resp.response);
-					if (typeof reject == 'function'){
-						reject(resp);
+					if (typeof eventHandler.error == 'function'){
+						eventHandler.error(resp);
 					}
-				}
+				},
+				progress:eventHandler.progress,
+				abort: eventHandler.abort
 			});
 		});
 	},
 
 	/**
-	 * invokeWithCSRF - Proxies method call to remote api, but first generates CSRF tokens based on funcName
+	 * invokeWithCSRF - Proxies method call to remote api, but first generates CSRF tokens based on name
 	 *
-	 * @param	{string} funcName Method to call
+	 * @param	{string} name Method to call
 	 * @param	{object} params Arguments to submit to method
 	 * @param	{string} method GET or POST
 	 * @return {Promise} All Headers
 	 */
-	invokeWithCSRF:function(funcName,params,method){
+	invokeWithCSRF:function(name,params,method,eventHandler){
+		if(typeof name == 'object'){
+			params=name.params || {};
+			method=name.method || 'get';
+			eventHandler=name;
+			name=name.name;
+		} else {
+			eventHandler=eventHandler || {};
+		}
+		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
+		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
+		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
+		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+
 		if(Mura.mode.toLowerCase() == 'rest'){
 			return new Promise(function(resolve,reject) {
 				return self.invoke(
-					funcName,
+					name,
 					Mura.extend(params,resp.data),
-					method
+					method,
+					eventHandler
 				).then(resolve,reject);
 			});
 		} else {
 			var self = this;
 			return new Promise(function(resolve,reject) {
+				if(typeof resolve == 'function'){
+					eventHandler.success=resolve;
+				}
+
+				if(typeof reject == 'function'){
+					eventHandler.error=reject;
+				}
 				self._requestcontext.request({
 					type: 'post',
 					url: Mura.apiEndpoint + '?method=generateCSRFTokens',
 					data: {
 						siteid: self.get('siteid'),
-						context: funcName
+						context: name
 					},
 					success: function(resp) {
 						if (resp.data != 'undefined'	) {
 							self.invoke(
-								funcName,
+								name,
 								Mura.extend(params,resp.data),
-								method
+								method,
+								eventHandler
 							).then(resolve,reject);
 						} else {
-							if (typeof reject == 'function'){
-								reject(resp);
+							if (typeof eventHandler.error == 'function'){
+								eventHandler.error(resp);
 							}
 						}
 					},
 					error: function(resp) {
 						resp=Mura.parseString(resp.response);
-						if (typeof reject == 'function'){
-							reject(resp);
+						if (typeof eventHandler.error == 'function'){
+							eventHandler.error(resp);
 						}
 					}
 				});
@@ -604,12 +650,22 @@ Mura.Entity = Mura.Core.extend(
 	 *
 	 * @return {Promise}
 	 */
-	save: function() {
+	save: function(eventHandler) {
+		eventHandler=eventHandler || {};
+		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
+		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
+		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
+		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+
 		var self = this;
+
 		if (!this.get('isdirty')) {
 			return new Promise(function(resolve, reject) {
-				if (typeof resolve =='function') {
-					resolve(self);
+				if(typeof resolve == 'function'){
+					eventHandler.success=resolve;
+				}
+				if (typeof eventHandler.success =='function') {
+					eventHandler.success(self);
 				}
 			});
 		}
@@ -625,15 +681,26 @@ Mura.Entity = Mura.Core.extend(
 						self.set('id',resp.data.id);
 						self.set('isdirty',true);
 						self.cachePut();
-						self.save().then(
+						self.save(eventHandler).then(
 							resolve,
 							reject
 						);
-					}
+					},
+					error: eventHandler.error,
+					abort: eventHandler.abort
 				});
 			});
 		} else {
 			return new Promise(function(resolve, reject) {
+
+				if(typeof resolve == 'function'){
+					eventHandler.success=resolve;
+				}
+
+				if(typeof reject == 'function'){
+					eventHandler.error=reject;
+				}
+
 				var context = self.get('id');
 				if(Mura.mode.toLowerCase() == 'rest'){
 					self._requestcontext.request({
@@ -647,21 +714,23 @@ Mura.Entity = Mura.Core.extend(
 								if (self.get('saveerrors') ||
 									Mura.isEmptyObject(self.getErrors())
 								) {
-									if (typeof resolve ==	'function') {
-											resolve(self);
+									if (typeof ventHandler.success ==	'function') {
+											eventHandler.success(self);
 									}
 								} else {
-									if (typeof reject == 'function') {
-											reject(self);
+									if (typeof eventHandler.error == 'function') {
+											eventHandler.error(self);
 									}
 								}
 							} else {
 								self.set('errors',resp.error);
-								if (typeof reject == 'function') {
-									reject(self);
+								if (typeof eventHandler.error == 'function') {
+									eventHandler.error(self);
 								}
 							}
-						}
+						},
+						progress:eventHandler.progress,
+						abort: eventHandler.abort
 					});
 				} else {
 					self._requestcontext.request({
@@ -688,26 +757,29 @@ Mura.Entity = Mura.Core.extend(
 										if (self.get('saveerrors') ||
 											Mura.isEmptyObject(self.getErrors())
 										) {
-											if (typeof resolve ==	'function') {
-												resolve(self);
+											if (typeof eventHandler.success ==	'function') {
+												eventHandler.success(self);
 											}
 										} else {
-											if (typeof reject == 'function') {
-												reject(self);
+											if (typeof eventHandler.error == 'function') {
+												eventHandler.error(self);
 											}
 										}
 									} else {
 										self.set('errors',resp.error);
-										if (typeof reject == 'function') {
-											reject(self);
+										if (typeof eventHandler.error == 'function') {
+											eventHandler.error(self);
 										}
 									}
-								}
+								},
+								progress:eventHandler.progress,
+								abort: eventHandler.abort
 							});
 						},
 						error: function(resp) {
 							this.success(resp );
-						}
+						},
+						abort: eventHandler.abort
 					});
 				}
 			});
@@ -719,10 +791,25 @@ Mura.Entity = Mura.Core.extend(
 	 *
 	 * @return {Promise}
 	 */
-	'delete': function() {
+	'delete': function(eventHandler) {
+		eventHandler=eventHandler || {};
+		eventHandler.progress=eventHandler.progress || eventHandler.onProgress || eventHandler.onUploadProgress || function(){};
+		eventHandler.abort=eventHandler.abort || eventHandler.onAbort|| function(){};
+		eventHandler.success=eventHandler.success || eventHandler.onSuccess || function(){};
+		eventHandler.error=eventHandler.error || eventHandler.onError || function(){};
+
 		var self = this;
 		if(Mura.mode.toLowerCase() == 'rest'){
 			return new Promise(function(resolve, reject) {
+
+				if(typeof resolve == 'function'){
+					eventHandler.success=resolve;
+				}
+
+				if(typeof reject == 'function'){
+					eventHandler.error=reject;
+				}
+
 				self._requestcontext.request({
 					type: 'post',
 					url: Mura.apiEndpoint + '?method=delete',
@@ -734,14 +821,25 @@ Mura.Entity = Mura.Core.extend(
 					success: function() {
 						self.set('isdeleted',true);
 						self.cachePurge();
-						if (typeof resolve == 'function') {
-								resolve(self);
+						if (typeof eventHandler.success == 'function') {
+							eventHandler.success(self);
 						}
-					}
+					},
+					error: eventHandler.error,
+					progress:eventHandler.progress,
+					abort: eventHandler.abort
 				});
 			});
 		} else {
 			return new Promise(function(resolve, reject) {
+				if(typeof resolve == 'function'){
+					eventHandler.success=resolve;
+				}
+
+				if(typeof reject == 'function'){
+					eventHandler.error=reject;
+				}
+
 				self._requestcontext.request({
 					type: 'post',
 					url: Mura.apiEndpoint + '?method=generateCSRFTokens',
@@ -763,12 +861,17 @@ Mura.Entity = Mura.Core.extend(
 							success: function() {
 								self.set('isdeleted',true);
 								self.cachePurge();
-								if (typeof resolve == 'function') {
-									resolve(self);
+								if (typeof eventHandler.success == 'function') {
+									eventHandler.success(self);
 								}
-							}
+							},
+							error: eventHandler.error,
+							progress:eventHandler.progress,
+							abort: eventHandler.abort
 						});
-					}
+					},
+					error: eventHandler.error,
+					abort: eventHandler.abort
 				});
 			});
 		}

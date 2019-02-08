@@ -936,7 +936,7 @@ Mura.UI.Form=Mura.UI.extend(
 			}
 
 			if(this.inlineerrors){
-				var label=Mura(this.context.formEl).find('label[for="' + e + '"]');
+				var label=Mura(this.context.formEl).find('label[data-for="' + e + '"]');
 
 				if(label.length){
 					label.node.insertAdjacentHTML('afterend',Mura.templates['error'](error));

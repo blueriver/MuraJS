@@ -330,6 +330,7 @@ Mura.Request=Mura.Core.extend(
 				params.async = true;
 			}
 			var req = new XMLHttpRequest();
+
 			if (params.crossDomain) {
 				if (!("withCredentials" in req) && typeof XDomainRequest !=
 					"undefined" && this.isXDomainRequest(params.url)) {
@@ -340,6 +341,20 @@ Mura.Request=Mura.Core.extend(
 					req = new XDomainRequest();
 				}
 			}
+
+			params.progress=params.progress || params.onProgress || params.onUploadProgress || function(){};
+			params.abort=params.abort || params.onAbort|| function(){};
+			params.success=params.success || params.onSuccess || function(){};
+			params.error=params.error || params.onError || function(){};
+
+			if(typeof params.progress == 'function'){
+				req.addEventListener("progress", params.progress);
+			}
+
+			if(typeof params.abort == 'function'){
+				req.addEventListener("abort", params.abort);
+			}
+
 			req.onreadystatechange = function() {
 				if (req.readyState == 4) {
 					//IE9 doesn't appear to return the request status
