@@ -347,12 +347,14 @@ Mura.Request=Mura.Core.extend(
 			params.success=params.success || params.onSuccess || function(){};
 			params.error=params.error || params.onError || function(){};
 
-			if(typeof params.progress == 'function'){
-				req.addEventListener("progress", params.progress);
-			}
+			if(typeof req.addEventListener != 'undefined'){
+				if(typeof params.progress == 'function'){
+					req.addEventListener("progress", params.progress);
+				}
 
-			if(typeof params.abort == 'function'){
-				req.addEventListener("abort", params.abort);
+				if(typeof params.abort == 'function'){
+					req.addEventListener("abort", params.abort);
+				}
 			}
 
 			req.onreadystatechange = function() {
