@@ -163,7 +163,7 @@ Mura.UI.Form=Mura.UI.extend(
 			context.mode = 'nested';
 			context.master = this;
 
-			var nestedForm = new Mura.FormUI( context );
+			var nestedForm = new Mura.UI.Form( context );
 			var holder = Mura('<div id="nested-'+field.formid+'"></div>');
 
 			Mura(".field-container-" + self.context.objectid,self.context.formEl).append(holder);
