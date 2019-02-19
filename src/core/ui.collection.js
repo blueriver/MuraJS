@@ -41,6 +41,18 @@ Mura.UI.Collection=Mura.UI.extend(
 				this.context.itemsperpage=this.context.nextn;
 			}
 
+			if(typeof this.context.expand == 'undefined'){
+				this.context.expand='';
+			}
+
+			if(typeof this.context.expanddepth == 'undefined'){
+				this.context.expanddepth=1;
+			}
+
+			if(typeof this.context.fields == 'undefined'){
+				this.context.fields='';
+			}
+
 			if(typeof this.context.rawcollection != 'undefined'){
 				return new Promise(function(resolve,reject){
 					resolve(new Mura.EntityCollection(self.context.rawcollection,Mura._requestcontext))
@@ -52,7 +64,10 @@ Mura.UI.Collection=Mura.UI.extend(
 					}
 					return Mura.get(Mura.apiEndpoint + 'content/' + this.context.items + ',_',{
 						itemsperpage:this.context.itemsperpage,
-						maxitems:this.context.maxitems
+						maxitems:this.context.maxitems,
+						expand:this.context.expand,
+						expanddepth:this.context.expanddepth,
+						fields:this.context.fields
 					}).then(function(resp){
 						return new Mura.EntityCollection(resp.data,Mura._requestcontext);
 					});
@@ -64,7 +79,10 @@ Mura.UI.Collection=Mura.UI.extend(
 						}).getRelatedContent('reverse',{
 							itemsperpage:this.context.itemsperpage,
 							maxitems:this.context.maxitems,
-							sortby:this.context.sortby
+							sortby:this.context.sortby,
+							expand:this.context.expand,
+							expanddepth:this.context.expanddepth,
+							fields:this.context.fields
 						})
 				} else {
 					return Mura.getEntity('content')
@@ -73,7 +91,10 @@ Mura.UI.Collection=Mura.UI.extend(
 							'id':Mura.contentid
 						}).getRelatedContent(this.context.source,{
 							itemsperpage:this.context.itemsperpage,
-							maxitems:this.context.maxitems
+							maxitems:this.context.maxitems,
+							expand:this.context.expand,
+							expanddepth:this.context.expanddepth,
+							fields:this.context.fields
 						})
 				}
 			} else if(this.context.sourcetype=='children'){
@@ -82,6 +103,9 @@ Mura.UI.Collection=Mura.UI.extend(
 					.prop('parentid').isEQ(Mura.contentid)
 					.maxItems(100)
 					.itemsPerPage(this.context.itemsperpage)
+					.expand(this.context.expand)
+					.expandDepth(this.context.expanddepth)
+					.fields(this.context.fields)
 					.getQuery();
 			} else {
 				return Mura.getFeed('content')
@@ -89,6 +113,9 @@ Mura.UI.Collection=Mura.UI.extend(
 					.prop('feedid').isEQ(this.context.source)
 					.maxItems(this.context.maxitems)
 					.itemsPerPage(this.context.itemsperpage)
+					.expand(this.context.expand)
+					.expandDepth(this.context.expand)
+					.fields(this.context.fields)
 					.getQuery();
 			}
 		}

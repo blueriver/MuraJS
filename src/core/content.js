@@ -59,6 +59,9 @@ Mura.entities.Content = Mura.Entity.extend(
 	 */
 	getRelatedContent:function(relatedContentSetName,params){
 		var self=this;
+
+		relatedContentSetName=relatedContentSetName || '';
+		
 		return new Promise(function(resolve,reject) {
 			var query = [];
 			params = params || {};

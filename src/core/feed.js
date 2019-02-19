@@ -35,7 +35,9 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}        Self
 		 */
 		fields: function(fields) {
-			this.queryString += '&fields=' + encodeURIComponent(fields);
+			if(typeof fields != 'undefined' && fields){
+				this.queryString += '&fields=' + encodeURIComponent(fields);
+			}
 			return this;
 		},
 
@@ -453,8 +455,12 @@ Mura.Feed = Mura.Core.extend(
 		 * @return {Mura.Feed}              Self
 		 */
 		expand: function(expand) {
-			expand = expand || 'all';
-			this.queryString += '&expand=' + encodeURIComponent(expand);
+			if(typeof expand == 'undefined'){
+				expand = 'all';
+			}
+			if(expand){
+				this.queryString += '&expand=' + encodeURIComponent(expand);
+			}
 			return this;
 		},
 
@@ -466,7 +472,9 @@ Mura.Feed = Mura.Core.extend(
 		 */
 		expandDepth: function(expandDepth) {
 			expandDepth = expandDepth || 1;
-			this.queryString += '&expandDepth=' + encodeURIComponent(expandDepth);
+			if(Mura.isNumeric(expandDepth) && expandDepth > 1){
+				this.queryString += '&expandDepth=' + encodeURIComponent(expandDepth);
+			}
 			return this;
 		},
 
