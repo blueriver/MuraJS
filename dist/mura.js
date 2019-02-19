@@ -16012,7 +16012,7 @@ Mura.Feed = Mura.Core.extend(
 		 */
 		expandDepth: function(expandDepth) {
 			expandDepth = expandDepth || 1;
-			if(Mura.isNumeric(expandDepth) && expandDepth > 1){
+			if(Mura.isNumeric(expandDepth) && Number(parseFloat(expandDepth)) > 1){
 				this.queryString += '&expandDepth=' + encodeURIComponent(expandDepth);
 			}
 			return this;
