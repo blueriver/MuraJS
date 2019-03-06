@@ -17601,7 +17601,11 @@ Mura.DOMSelection = Mura.Core.extend(
 		if (!this.selection.length) {
 			return false;
 		}
-		return this.selection[0].matchesSelector && this.selection[0].matchesSelector(selector);
+		if (typeof this.selection[0] !== "undefined") {
+		 	return this.selection[0].matchesSelector && this.selection[0].matchesSelector(selector);
+		} else {
+			return false;
+		}
 	},
 
 	/**
