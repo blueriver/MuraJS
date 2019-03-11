@@ -11,7 +11,7 @@ Mura.UI.Text=Mura.UI.extend(
 /** @lends Mura.DisplayObject.Text.prototype */
 {
 	renderClient:function(){
-		this.context.targetEl.innerHTML=Mura.templates['text'](this.context);
+		Mura(this.context.targetEl).html(Mura.templates['text'](this.context));
 		this.trigger('afterRender');
 	},
 

@@ -11,7 +11,7 @@ Mura.UI.Embed=Mura.UI.extend(
 /** @lends Mura.DisplayObject.Embed.prototype */
 {
 	renderClient:function(){
-		this.context.targetEl.innerHTML=Mura.templates['embed'](this.context);
+		Mura(this.context.targetEl).html(Mura.templates['embed'](this.context));
 		this.trigger('afterRender');
 	},
 
