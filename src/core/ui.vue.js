@@ -1,5 +1,5 @@
 import Vue from 'vue'
-Mura=require('mura.js')
+var Mura=require('mura.js');
 
 /**
  * Creates a new Mura.UI.Vue
