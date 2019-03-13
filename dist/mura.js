@@ -17774,13 +17774,15 @@ Mura.DOMSelection = Mura.Core.extend(
 	 * @return {Mura.DOMSelection} Self
 	 */
 	addClass: function(className) {
-		this.each(function(el) {
-			if (el.classList) {
-				el.classList.add(className);
-			} else {
-				el.className += ' ' + className;
-			}
-		});
+		if (className.length) {
+			this.each(function(el) {
+				if (el.classList) {
+					el.classList.add(className);
+				} else {
+					el.className += ' ' + className;
+				}
+			});
+		}
 		return this;
 	},
 
@@ -18030,9 +18032,9 @@ Mura.DOMSelection = Mura.Core.extend(
 		if (!this.selection.length) {
 			return false;
 		}
-		if (typeof this.selection[0] !== "undefined") {
-		 	return this.selection[0].matchesSelector && this.selection[0].matchesSelector(selector);
-		} else {
+		try {
+			return this.selection[0].matchesSelector && this.selection[0].matchesSelector(selector);
+		} catch(e) {
 			return false;
 		}
 	},
