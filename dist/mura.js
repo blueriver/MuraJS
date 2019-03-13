@@ -18033,8 +18033,12 @@ Mura.DOMSelection = Mura.Core.extend(
 			return false;
 		}
 		try {
-			return this.selection[0].matchesSelector && this.selection[0].matchesSelector(selector);
-		} catch(e) {
+			if (typeof this.selection[0] !== "undefined") {
+			 	return this.selection[0].matchesSelector && this.selection[0].matchesSelector(selector);
+			} else {
+				return false;
+			}
+		} catch(e){
 			return false;
 		}
 	},
