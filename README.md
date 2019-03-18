@@ -75,19 +75,19 @@ Mura(function(Mura){
       alert(item.get('title'));
     });
 
-  Mura.getEntity('content').loadBy('contentid','00000000000000000000000000000000001')
+  Mura.getEntity('content').loadBy('contentid','${contentid}')
     .then(function(item){
       alert(item.get('title'));
     });
 
-  Mura.getEntity('content').loadBy('contentid','00000000000000000000000000000000001')
+  Mura.getEntity('content').loadBy('contentid','${contentid}')
     .then(function(item){
       item.get('kids').then(function(kids){
         alert(kids.get('items').length);
       });
     });
 
-  Mura.getEntity('content').loadBy('contentid','1C2AD93E-E39C-C758-A005942E1399F4D6')
+  Mura.getEntity('content').loadBy('contentid','${contentid}')
     .then(function(item){
       item.get('parent').then(function(parent){
         alert(parent.get('title'));
@@ -95,7 +95,7 @@ Mura(function(Mura){
     });
 
   Mura.getEntity('content').
-    .set('parentid''1C2AD93E-E39C-C758-A005942E1399F4D6')
+    .set('parentid''${contentid}')
     .set('approved',1)
     .set('title','test 5')
     .save()
@@ -106,7 +106,7 @@ Mura(function(Mura){
   Mura.getEntity('content').
     .set(
       {
-        parentid:'1C2AD93E-E39C-C758-A005942E1399F4D6',
+        parentid:'${contentid}',
         approved:1,
         title:'test 5'
       }
