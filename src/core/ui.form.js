@@ -472,6 +472,13 @@ Mura.UI.Form=Mura.UI.extend(
 				data.siteid=data.siteid || Mura.siteid;
 				data.fields=self.getPageFieldList();
 
+				delete data.filename;
+				delete data.def;
+				delete data.ishuman;
+				delete data.targetEl;
+				delete data.html;
+
+
 				Mura.ajax({
 					type: 'post',
 					url: Mura.apiEndpoint +
@@ -831,9 +838,10 @@ Mura.UI.Form=Mura.UI.extend(
 				data.contenthistid=Mura.contenthistid || '';
 
 				delete data.filename;
-				delete rawdata.def;
-				delete rawdata.ishuman;
-				delete rawdata.targetEl;
+				delete data.def;
+				delete data.ishuman;
+				delete data.targetEl;
+				delete data.html;
 
 				var tokenArgs={
 					siteid: data.siteid,
@@ -852,6 +860,7 @@ Mura.UI.Form=Mura.UI.extend(
 				delete rawdata.def;
 				delete rawdata.ishuman;
 				delete rawdata.targetEl;
+				delete rawdata.html;
 
 				var tokenArgs={
 					siteid: rawdata.siteid,
