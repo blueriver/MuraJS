@@ -2578,7 +2578,7 @@ var Mura=(function(){
 
 						ajax({
 							url: Mura.apiEndpoint + '?method=processAsyncObject',
-							type: 'get',
+							type: 'post',
 							data: data,
 							success: function(resp) {
 								handleResponse(obj,resp);
