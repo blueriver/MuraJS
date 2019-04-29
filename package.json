@@ -1,7 +1,7 @@
 {
   "name": "mura.js",
   "homepage": "http://www.getmura.com",
-  "version": "1.0.143",
+  "version": "1.0.144",
   "description": "Utility for interacting with the Mura JSON/REST API",
 	"files":["index.js","tests","dist","src/core/","src/templates/"],
   "main": "src/index.js",
