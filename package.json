@@ -1,9 +1,15 @@
 {
   "name": "mura.js",
   "homepage": "http://www.getmura.com",
-  "version": "1.0.144",
+  "version": "1.0.145",
   "description": "Utility for interacting with the Mura JSON/REST API",
-	"files":["index.js","tests","dist","src/core/","src/templates/"],
+  "files": [
+    "index.js",
+    "tests",
+    "dist",
+    "src/core/",
+    "src/templates/"
+  ],
   "main": "src/index.js",
   "scripts": {
     "build": "WEBPACK_ENV=build  webpack -p",
@@ -23,7 +29,7 @@
     "grunt-handlebars-compiler": "^0.3.1",
     "grunt-text-replace": "^0.4.0",
     "webpack": "^4.29.3",
-    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {

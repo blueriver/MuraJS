@@ -853,8 +853,7 @@ var Mura=(function(){
 				continue;
 
 			for (var key in arguments[i]) {
-				if (typeof arguments[i].hasOwnProperty != 'undefined' &&
-					arguments[i].hasOwnProperty(key))
+				if (key != '__proto__' && typeof arguments[i].hasOwnProperty != 'undefined' && arguments[i].hasOwnProperty(key) )
 					out[key] = arguments[i][key];
 			}
 		}
@@ -879,8 +878,7 @@ var Mura=(function(){
 				continue;
 
 			for (var key in obj) {
-				if (typeof arguments[i].hasOwnProperty != 'undefined' &&
-					arguments[i].hasOwnProperty(key)) {
+				if ( key != '__proto__' && typeof arguments[i].hasOwnProperty != 'undefined' && arguments[i].hasOwnProperty(key) ) {
 					if (Array.isArray(obj[key])) {
 						out[key] = obj[key].slice(0);
 					} else if (typeof obj[key] === 'object') {
