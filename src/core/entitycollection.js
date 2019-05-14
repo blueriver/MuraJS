@@ -22,8 +22,9 @@ Mura.EntityCollection=Mura.Entity.extend(
 		var self=this;
 		if(Array.isArray(self.get('items'))){
 			self.set('items',self.get('items').map(function(obj){
-				if(Mura.entities[obj.entityname]){
-					return new Mura.entities[obj.entityname](obj,self._requestcontext);
+				var entityname=obj.entityname.substr(0, 1).toUpperCase() + obj.entityname.substr(1);
+				if(Mura.entities[entityname]){
+					return new Mura.entities[entityname](obj,self._requestcontext);
 				} else {
 					return new Mura.Entity(obj,self._requestcontext);
 				}
