@@ -2003,6 +2003,7 @@ var Mura=(function(){
 		self.removeAttr('data-perm');
 		self.removeAttr('data-runtime');
 		self.removeAttr('draggable');
+		self.removeAttr('style');
 
 		if (self.data('object') == 'container') {
 			self.find('.mura-object:not([data-object="container"])').html('');
@@ -2014,6 +2015,7 @@ var Mura=(function(){
 				self.removeAttr('data-inited');
 				self.removeAttr('data-runtime');
 				self.removeAttr('draggable');
+				self.removeAttr('style');
 			});
 
 			self.find('.mura-object[data-object="container"]').each(
@@ -2239,6 +2241,7 @@ var Mura=(function(){
 					if (region && region.length) {
 						if (region.data('perm')) {
 							var objectData = obj.data();
+
 							if (MuraInlineEditor && (MuraInlineEditor.objectHasConfigurator(obj) || (!Mura.layoutmanager && MuraInlineEditor.objectHasEditor(objectData)))) {
 								obj.children('.frontEndToolsModal').remove();
 								obj.prepend(layoutmanagertoolbar);
@@ -2248,12 +2251,12 @@ var Mura=(function(){
 									.addClass('mura-active')
 									.hover(
 										function(e) {
-											//e.stopPropagation();
+											e.stopPropagation();
 											Mura('.mura-active-target').removeClass('mura-active-target');
 											Mura(this).addClass('mura-active-target');
 										},
 										function(e) {
-											//e.stopPropagation();
+											e.stopPropagation();
 											Mura(this).removeClass('mura-active-target');
 										}
 									);
@@ -2466,6 +2469,7 @@ var Mura=(function(){
 			obj.html(Mura.templates.content(obj.data()));
 
 			obj.find('.mura-object').each(function() {
+				this.innerHTML=obj.data('preloadermarkup') || Mura.preloaderMarkup;
 				this.setAttribute('data-instanceid', createUUID());
 			});
 		}
@@ -2788,6 +2792,22 @@ var Mura=(function(){
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * getStyleSheet - Returns a stylesheet object;
+	 *
+	 * @param	{string} id Text string
+	 * @return {object}						Self
+	 */
+	function getStyleSheet(id) {
+		var sheet=Mura('#' + id);
+		if(sheet.length){
+			return sheet.get(0).sheet;
+		} else {
+			Mura('HEAD').append('<style id="' + id +'" type="text/css"></style>');
+			return Mura('#' + id).get(0).sheet;
+		}
 	}
 
 	/**
@@ -3186,7 +3206,8 @@ var Mura=(function(){
 			buildDisplayRegion:buildDisplayRegion,
 			openGate:openGate,
 			firstToUpperCase:firstToUpperCase,
-			normalizeRequestHandler:normalizeRequestHandler
+			normalizeRequestHandler:normalizeRequestHandler,
+			getStyleSheet:getStyleSheet
 		}
 	);
 

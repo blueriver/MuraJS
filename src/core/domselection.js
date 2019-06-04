@@ -1050,10 +1050,28 @@ Mura.DOMSelection = Mura.Core.extend(
  			} else {
  				obj.removeAttr('id');
  			}
- 			if(obj.data('cssstyles')){
+
+			var cssstyles=obj.data('cssstyles');
+
+ 			if(cssstyles){
  				obj.removeAttr('style');
- 				obj.css(obj.data('cssstyles'));
+ 				obj.css(cssstyles);
  			}
+
+			var sheet=Mura.getStyleSheet('mura-styles-' + obj.data('instanceid'));
+
+			while (sheet.cssRules.length) {
+				sheet.deleteRule(0);
+			}
+
+			console.log(cssstyles)
+			if (cssstyles && typeof cssstyles.backgroundColor != 'undefined') {
+				sheet.insertRule(
+					'div.mura-object[data-instanceid="' + obj.data('instanceid') + '"]:before{content: ""; position: absolute;	top: 0; right: 0;left: 0;bottom:0; background:' + cssstyles.backgroundColor + '}',
+					sheet.cssRules.length
+				);
+ 			}
+
  			if(obj.data('metacssclass') || obj.data('metacssid') || obj.data('metacssstyles')){
  				var meta=obj.children('.mura-object-meta').first();
 
