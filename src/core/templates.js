@@ -8,7 +8,7 @@ Handlebars.noConflict();
 Mura.templates=Mura.templates || {};
 Mura.templates['meta']=function(context){
 	if(context.label){
-		return '<div class="mura-object-meta"><h2>' + Mura.escapeHTML(context.label) + '</h2></div>';
+		return '<div class="mura-object-meta-wrapper"><div class="mura-object-meta"><h2>' + Mura.escapeHTML(context.label) + '</h2></div></div>';
 	} else {
 		return '';
 	}

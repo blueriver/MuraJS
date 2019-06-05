@@ -1073,22 +1073,26 @@ Mura.DOMSelection = Mura.Core.extend(
  			}
 
  			if(obj.data('metacssclass') || obj.data('metacssid') || obj.data('metacssstyles')){
- 				var meta=obj.children('.mura-object-meta').first();
+ 				var metaWrapper=obj.children('.mura-object-meta-wrapper');
+				if(metaWrapper.length){
+					var meta=metaWrapper.children('.mura-object-meta');
+					if(meta.length){
+			 			if(obj.data('metacssid')){
+			 				meta.attr('id',obj.data('metacssid'));
+			 			}
+			 			if(obj.data('metacssclass')){
+			 			 obj.data('metacssclass').split(' ').forEach(function(c){
+			 				 if (!meta.hasClass(c)) {
+			 					 meta.addClass(c);
+			 				 }
+			 			 })
+			 			}
 
-	 			if(obj.data('metacssid')){
-	 				meta.attr('id',obj.data('metacssid'));
-	 			}
-	 			if(obj.data('metacssclass')){
-	 			 obj.data('metacssclass').split(' ').forEach(function(c){
-	 				 if (!meta.hasClass(c)) {
-	 					 meta.addClass(c);
-	 				 }
-	 			 })
-	 			}
-
-				if(obj.data('metacssstyles')){
-					meta.removeAttr('style');
-					meta.css(obj.data('metacssstyles'));
+						if(obj.data('metacssstyles')){
+							meta.removeAttr('style');
+							meta.css(obj.data('metacssstyles'));
+						}
+					}
 				}
 			}
 
