@@ -1075,7 +1075,7 @@ Mura.DOMSelection = Mura.Core.extend(
 				);
  			}
 			if(obj.data('textcolor')){
-				var style=selector + ', ' + selector + 'p, ' + ', ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + obj.data('textcolor') + ';} ';
+				var style=selector + ', ' + selector + ' p, ' + ', ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + obj.data('textcolor') + ';} ';
 				sheet.insertRule(
 					style,
 					sheet.cssRules.length
@@ -1090,7 +1090,7 @@ Mura.DOMSelection = Mura.Core.extend(
 
 						if(obj.data('metatextcolor')){
 							var selector='div.mura-object[data-instanceid="' + obj.data('instanceid') + '"] .mura-object-meta';
-							var style = selector + ', ' + selector + 'p, ' + ', ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + obj.data('metatextcolor') + ';} ';
+							var style = selector + ', ' + selector + ' p, ' + ', ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + obj.data('metatextcolor') + ';} ';
 							sheet.insertRule(
 								style,
 								sheet.cssRules.length
@@ -1118,7 +1118,7 @@ Mura.DOMSelection = Mura.Core.extend(
 
 			if(obj.data('contenttextcolor')){
 				var selector='div.mura-object[data-instanceid="' + obj.data('instanceid') + '"] .mura-object-content';
-				var style=	selector + ', ' + selector + 'p, ' + ', ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + obj.data('contenttextcolor') + ';} ';
+				var style=	selector + ', ' + selector + ' p, ' + ', ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + obj.data('contenttextcolor') + ';} ';
 				sheet.insertRule(
 				style,
 					sheet.cssRules.length
