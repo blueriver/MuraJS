@@ -20602,12 +20602,20 @@ Mura.templates['content']=function(context){
 }
 Mura.templates['text']=function(context){
 	context=context || {};
-	context.source=context.source || '<p>This object has not been configured.</p>';
+	if(context.label){
+		context.source=context.source || '';
+	} else {
+		context.source=context.source || '<p>This object has not been configured.</p>';
+	}
 	return context.source;
 }
 Mura.templates['embed']=function(context){
 	context=context || {};
-	context.source=context.source || '<p>This object has not been configured.</p>';
+	if(context.label){
+		context.source=context.source || '';
+	} else {
+		context.source=context.source || '<p>This object has not been configured.</p>';
+	}
 	return context.source;
 }
 
