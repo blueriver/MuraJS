@@ -2059,7 +2059,7 @@ var Mura=(function(){
 	function filterUnwantedParams(params){
 
 		//Strip out unwanted attributes
-		var unwanted=['iconclass','objectname','inited','params','supportstyle','cssstyles','metacssstyles','contentcssstyles',
+		var unwanted=['iconclass','objectname','inited','params','stylesupport','cssstyles','metacssstyles','contentcssstyles',
 			'cssclass','cssid','metacssclass','metacssid','contentcssclass','contentcssid'];
 
 		for(var c=0; c<unwanted.length;c++){
