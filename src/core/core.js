@@ -2059,15 +2059,8 @@ var Mura=(function(){
 	function filterUnwantedParams(params){
 
 		//Strip out unwanted attributes
-		var unwanted=['iconclass','objectname','inited','params','cssstyles','metacssstyles','contentcssstyles',
-			'cssclass','cssid','metacssclass','metacssid','contentcssclass','contentcssid',
-			'objectminheightuom','metaminheightuom','contentinheightuom',
-			'textcolor','metatextcolor','contenttextcolor',
-			'objectpaddinguom','metapaddinguom','contentpaddinguom',
-			'objectmarginuom','metamarginuom','contentmarginuom',
-			'objectbackgroundimageurl','metabackgroundimageurl','contentbackgroundimageurl',
-			'objectbackgroundpositiony','metabackgroundpositiony','contentbackgroundpositiony',
-			'objectbackgroundpositionx','metabackgroundpositionx','contentbackgroundpositionx'];
+		var unwanted=['iconclass','objectname','inited','params','supportstyle','cssstyles','metacssstyles','contentcssstyles',
+			'cssclass','cssid','metacssclass','metacssid','contentcssclass','contentcssid'];
 
 		for(var c=0; c<unwanted.length;c++){
 			delete params[unwanted[c]];
