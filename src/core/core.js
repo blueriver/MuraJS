@@ -1898,13 +1898,17 @@ var Mura=(function(){
 
 			var data = new FormData(frm);
 			var checkdata = setLowerCaseKeys(formToObject(frm));
-			var keys = filterUnwantedParams(deepExtend(setLowerCaseKeys(obj.data())),
-				urlparams, {
+			var keys = filterUnwantedParams(
+					deepExtend(
+						setLowerCaseKeys(obj.data()),
+						urlparams,
+						{
 						siteid: Mura.siteid,
 						contentid: Mura.contentid,
 						contenthistid: Mura.contenthistid,
 						nocache: 1
-				}
+						}
+					)
 			);
 
 			for (var k in keys) {
@@ -1938,15 +1942,18 @@ var Mura=(function(){
 
 		} else {
 
-			var data = filterUnwantedParams(deepExtend(setLowerCaseKeys(obj.data())),
-				urlparams, setLowerCaseKeys(formToObject(frm)),
+			var data = filterUnwantedParams(
+				deepExtend(
+					setLowerCaseKeys(obj.data()),
+					urlparams,
+					setLowerCaseKeys(formToObject(frm)),
 					{
 						siteid: Mura.siteid,
 						contentid: Mura.contentid,
 						contenthistid: Mura.contenthistid,
 						nocache: 1
 					}
-				);
+				));
 
 			if (data.object == 'container' && data.content) {
 				delete data.content;
