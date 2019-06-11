@@ -1020,7 +1020,8 @@ Mura.DOMSelection = Mura.Core.extend(
 	 */
 	 calculateDisplayObjectStyles: function() {
  		this.each(function(el) {
-			var fullsize=(Mura(window).height() > 768);
+			var breakpoint=Mura.getBreakpoint();
+
  			var obj=Mura(el);
  			obj = (obj.node) ? obj : Mura(obj);
  			var self = obj.node;
@@ -1176,7 +1177,7 @@ Mura.DOMSelection = Mura.Core.extend(
 							meta.css(metastyles);
 						}
 
-						if(fullsize && obj.is('.mura-object-label-left, .mura-object-label-right')){
+						if(breakpoint!='xs' && obj.is('.mura-object-label-left, .mura-object-label-right')){
 							var left=meta.css('marginLeft');
 							var right=meta.css('marginRight')
 							if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
@@ -1239,7 +1240,7 @@ Mura.DOMSelection = Mura.Core.extend(
 					content.css(contentstyles);
 				}
 
-				if(fullsize && obj.is('.mura-object-label-left, .mura-object-label-right')){
+				if(breakpoint!='xs' && obj.is('.mura-object-label-left, .mura-object-label-right')){
 					var left=content.css('marginLeft');
 					var right=content.css('marginRight')
 					if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
@@ -1248,45 +1249,48 @@ Mura.DOMSelection = Mura.Core.extend(
 				}
 			}
 
-			if(fullsize){
-				var width='100%';
+			var width='100%';
+			var adjust=false;
 
+			if(breakpoint!='xs'){
 				if(obj.is('.mura-one')){
-					width='8.33%';
+					width='8.33%';adjust=true;
 				} else if(obj.is('.mura-two')){
-					width='16.66%';
+					width='16.66%';adjust=true;
 				} else if(obj.is('.mura-three')){
-					width='25%';
+					width='25%';adjust=true;
 				} else if(obj.is('.mura-four')){
-					width='33.33%';
+					width='33.33%';adjust=true;
 				} else if(obj.is('.mura-five')){
-					width='41.66%';
+					width='41.66%';adjust=true;
 				} else if(obj.is('.mura-six')){
-					width='50%';
+					width='50%';adjust=true;
 				} else if(obj.is('.mura-seven')){
-					width='58.33';
+					width='58.33';adjust=true;
 				} else if(obj.is('.mura-eigth')){
-					width='66.66%';
+					width='66.66%';adjust=true;
 				} else if(obj.is('.mura-nine')){
-					width='75%';
+					width='75%';adjust=true;
 				} else if(obj.is('.mura-ten')){
-					width='83.33%';
+					width='83.33%';adjust=true;
 				} else if(obj.is('.mura-eleven')){
-					width='91.66%';
+					width='91.66%';adjust=true;
 				} else if(obj.is('.mura-twelve')){
-					width='100%';
+					width='100%';adjust=true;
 				} else if(obj.is('.mura-one-third')){
-					width='33.33%';
+					width='33.33%';adjust=true;
 				} else if(obj.is('.mura-two-thirds')){
-					width='66.66%';
+					width='66.66%';adjust=true;
 				} else if(obj.is('.mura-one-half')){
-					width='50%';
+					width='50%';adjust=true;
 				}
 
-				var left=obj.css('marginLeft');
-				var right=obj.css('marginRight')
-				if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
-						obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
+				if(adjust){
+					var left=obj.css('marginLeft');
+					var right=obj.css('marginRight')
+					if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
+							obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
+					}
 				}
 			}
 

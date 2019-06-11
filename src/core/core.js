@@ -2905,6 +2905,23 @@ var Mura=(function(){
 	**/
 	var requestHeaders={};
 
+	function getBreakpoint(){
+		if(typeof document != 'undefined'){
+			var width=document.documentElement.clientWidth;
+			if(width >=1200){
+				return 'lg';
+			} else if(width >=992){
+				return 'md';
+			} else if(width >=769){
+				return 'sm';
+			} else {
+				return 'xs';
+			}
+		} else {
+			return '';
+		}
+	}
+
 	function init(config) {
 
 		if(typeof config.content != 'undefined'){
@@ -3123,18 +3140,24 @@ var Mura=(function(){
 
 					Mura('label.mura-editable-label').show();
 
+					Mura.breakpoint=getBreakpoint();
+
 					window.addEventListener("resize", function(){
 			    	clearTimeout(Mura.windowResizeID);
 			    	Mura.windowResizeID = setTimeout(doneResizing, 250);
+
 						function doneResizing(){
-						 	Mura('.mura-object').each(function(){
-								var obj=Mura(this);
-								var left=obj.css('marginLeft');
-								var right=obj.css('marginRight');
-								if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
-									calculateDisplayObjectStyles();
-								}
-							});
+							var breakpoint=Mura.currentBreakpoint=getBreakpoint();
+							if(breakpoint!=Mura.breakpoint){
+							 	Mura('.mura-object').each(function(){
+									var obj=Mura(this);
+									var left=obj.css('marginLeft');
+									var right=obj.css('marginRight');
+									if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
+										obj.calculateDisplayObjectStyles();
+									}
+								});
+							}
 							delete Mura.windowResizeID;
 						}
 					});
@@ -3240,7 +3263,8 @@ var Mura=(function(){
 			openGate:openGate,
 			firstToUpperCase:firstToUpperCase,
 			normalizeRequestHandler:normalizeRequestHandler,
-			getStyleSheet:getStyleSheet
+			getStyleSheet:getStyleSheet,
+			getBreakpoint:getBreakpoint
 		}
 	);
 
