@@ -3147,15 +3147,11 @@ var Mura=(function(){
 			    	Mura.windowResizeID = setTimeout(doneResizing, 250);
 
 						function doneResizing(){
-							var breakpoint=Mura.currentBreakpoint=getBreakpoint();
+							var breakpoint=getBreakpoint();
 							if(breakpoint!=Mura.breakpoint){
+								Mura.breakpoint=breakpoint;
 							 	Mura('.mura-object').each(function(){
-									var obj=Mura(this);
-									var left=obj.css('marginLeft');
-									var right=obj.css('marginRight');
-									if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
-										obj.calculateDisplayObjectStyles();
-									}
+									Mura(this).calculateDisplayObjectStyles();
 								});
 							}
 							delete Mura.windowResizeID;

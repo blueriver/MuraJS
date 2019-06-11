@@ -3413,15 +3413,11 @@ var Mura=(function(){
 			    	Mura.windowResizeID = setTimeout(doneResizing, 250);
 
 						function doneResizing(){
-							var breakpoint=Mura.currentBreakpoint=getBreakpoint();
+							var breakpoint=getBreakpoint();
 							if(breakpoint!=Mura.breakpoint){
+								Mura.breakpoint=breakpoint;
 							 	Mura('.mura-object').each(function(){
-									var obj=Mura(this);
-									var left=obj.css('marginLeft');
-									var right=obj.css('marginRight');
-									if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
-										obj.calculateDisplayObjectStyles();
-									}
+									Mura(this).calculateDisplayObjectStyles();
 								});
 							}
 							delete Mura.windowResizeID;
@@ -18049,7 +18045,7 @@ Mura.DOMSelection = Mura.Core.extend(
 	 calculateDisplayObjectStyles: function() {
  		this.each(function(el) {
 			var breakpoint=Mura.getBreakpoint();
-
+			var fullsize=(breakpoint!='xs');
  			var obj=Mura(el);
  			obj = (obj.node) ? obj : Mura(obj);
  			var self = obj.node;
@@ -18082,10 +18078,21 @@ Mura.DOMSelection = Mura.Core.extend(
  			}
 
 			var styleSupport=obj.data('stylesupport');
+			var objectstyles=false;
+			if(styleSupport && styleSupport.objectstyles){
+				objectstyles=styleSupport.objectstyles;
+			}
 
- 			if(styleSupport && styleSupport.objectstyles){
+ 			if(styleSupport && objectstyles){
  				obj.removeAttr('style');
- 				obj.css(styleSupport.objectstyles);
+				if(!fullsize){
+					delete objectstyles.margin;
+					delete objectstyles.marginLeft;
+					delete objectstyles.marginRight;
+					delete objectstyles.marginTop;
+					delete objectstyles.marginBottom;
+				}
+ 				obj.css(objectstyles);
  			}
 
 			var sheet=Mura.getStyleSheet('mura-styles-' + obj.data('instanceid'));
@@ -18096,8 +18103,7 @@ Mura.DOMSelection = Mura.Core.extend(
 
 			var selector='div.mura-object[data-instanceid="' + obj.data('instanceid') + '"]';
 
-			if(styleSupport && styleSupport.objectstyles){
-				var objectstyles=styleSupport.objectstyles;
+			if(styleSupport && objectstyles){
 				if (objectstyles && typeof objectstyles.backgroundColor != 'undefined' && objectstyles.backgroundColor
 					&& typeof objectstyles.backgroundImage != 'undefined' && objectstyles.backgroundImage) {
 					var style =selector + '::before{content: ""; position: absolute;	top: 0; right: 0;left: 0;bottom:0; background:' + objectstyles.backgroundColor + '}';
@@ -18125,7 +18131,6 @@ Mura.DOMSelection = Mura.Core.extend(
 
 			if(styleSupport && styleSupport.css){
 				var styles=styleSupport.css.split('}');
-				console.log(styles);
 				if(Array.isArray(styles) && styles.length){
 					styles.forEach(function(style){
 						var styleParts=style.split("{");
@@ -18158,7 +18163,7 @@ Mura.DOMSelection = Mura.Core.extend(
 				if(metaWrapper.length){
 					var meta=metaWrapper.children('.mura-object-meta');
 					if(meta.length){
-						metastyles={};
+						var metastyles={};
 						if(styleSupport && styleSupport.metastyles){
 							metastyles=styleSupport.metastyles;
 						}
@@ -18268,7 +18273,7 @@ Mura.DOMSelection = Mura.Core.extend(
 					content.css(contentstyles);
 				}
 
-				if(breakpoint!='xs' && obj.is('.mura-object-label-left, .mura-object-label-right')){
+				if(fullsize && obj.is('.mura-object-label-left, .mura-object-label-right')){
 					var left=content.css('marginLeft');
 					var right=content.css('marginRight')
 					if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
@@ -18280,7 +18285,7 @@ Mura.DOMSelection = Mura.Core.extend(
 			var width='100%';
 			var adjust=false;
 
-			if(breakpoint!='xs'){
+			if(fullsize){
 				if(obj.is('.mura-one')){
 					width='8.33%';adjust=true;
 				} else if(obj.is('.mura-two')){
@@ -18317,7 +18322,7 @@ Mura.DOMSelection = Mura.Core.extend(
 					var left=obj.css('marginLeft');
 					var right=obj.css('marginRight')
 					if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
-							obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
+						obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
 					}
 				}
 			}
