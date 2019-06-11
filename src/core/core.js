@@ -3151,7 +3151,7 @@ var Mura=(function(){
 							if(breakpoint!=Mura.breakpoint){
 								Mura.breakpoint=breakpoint;
 							 	Mura('.mura-object').each(function(){
-									Mura(this).calculateDisplayObjectStyles();
+									Mura(this).calculateDisplayObjectStyles(true);
 								});
 							}
 							delete Mura.windowResizeID;
