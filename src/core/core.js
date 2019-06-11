@@ -3141,6 +3141,7 @@ var Mura=(function(){
 					Mura('label.mura-editable-label').show();
 
 					Mura.breakpoint=getBreakpoint();
+					Mura.windowResponsiveModules={};
 
 					window.addEventListener("resize", function(){
 			    	clearTimeout(Mura.windowResizeID);
@@ -3151,7 +3152,11 @@ var Mura=(function(){
 							if(breakpoint!=Mura.breakpoint){
 								Mura.breakpoint=breakpoint;
 							 	Mura('.mura-object').each(function(){
-									Mura(this).calculateDisplayObjectStyles(true);
+									var obj=Mura(this);
+									var instanceid=obj.data('instanceid');
+									if(typeof Mura.windowResponsiveModules[instanceid] == 'undefined' || Mura.windowResponsiveModules[instanceid]){
+										obj.calculateDisplayObjectStyles(true);
+									}
 								});
 							}
 							delete Mura.windowResizeID;
