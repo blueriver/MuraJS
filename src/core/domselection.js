@@ -1174,6 +1174,10 @@ Mura.DOMSelection = Mura.Core.extend(
 							meta.removeAttr('style');
 							meta.css(metastyles);
 						}
+
+						if(obj.is('.mura-object-label-left, .mura-object-label-right')){
+							meta.css('width','calc(50% - (' + meta.css('marginLeft') + ' + ' + meta.css('marginRight') + '))');
+						}
 					}
 				}
 			}
@@ -1228,6 +1232,10 @@ Mura.DOMSelection = Mura.Core.extend(
 				if(contentstyles){
 					content.removeAttr('style');
 					content.css(contentstyles);
+				}
+
+				if(obj.is('.mura-object-label-left, .mura-object-label-right')){
+					content.css('width','calc(50% - (' + content.css('marginLeft') + ' + ' + content.css('marginRight') + '))');
 				}
 			}
 
