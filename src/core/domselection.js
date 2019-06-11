@@ -1020,6 +1020,7 @@ Mura.DOMSelection = Mura.Core.extend(
 	 */
 	 calculateDisplayObjectStyles: function() {
  		this.each(function(el) {
+			var fullsize=(Mura(window).height() > 768);
  			var obj=Mura(el);
  			obj = (obj.node) ? obj : Mura(obj);
  			var self = obj.node;
@@ -1175,10 +1176,10 @@ Mura.DOMSelection = Mura.Core.extend(
 							meta.css(metastyles);
 						}
 
-						if(obj.is('.mura-object-label-left, .mura-object-label-right')){
+						if(fullsize && obj.is('.mura-object-label-left, .mura-object-label-right')){
 							var left=meta.css('marginLeft');
 							var right=meta.css('marginRight')
-							if(left.charAt(0) != "-" && right.charAt(0) != "-"){
+							if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
 								meta.css('width','calc(50% - (' + left + ' + ' + right + '))');
 							}
 						}
@@ -1238,53 +1239,55 @@ Mura.DOMSelection = Mura.Core.extend(
 					content.css(contentstyles);
 				}
 
-				if(obj.is('.mura-object-label-left, .mura-object-label-right')){
+				if(fullsize && obj.is('.mura-object-label-left, .mura-object-label-right')){
 					var left=content.css('marginLeft');
 					var right=content.css('marginRight')
-					if(left.charAt(0) != "-" && right.charAt(0) != "-"){
+					if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
 						content.css('width','calc(50% - (' + left + ' + ' + right + '))');
 					}
 				}
 			}
 
-			var width='100%';
+			if(fullsize){
+				var width='100%';
 
-			if(obj.is('.mura-one')){
-				width='8.33%';
-			} else if(obj.is('.mura-two')){
-				width='16.66%';
-			} else if(obj.is('.mura-three')){
-				width='25%';
-			} else if(obj.is('.mura-four')){
-				width='33.33%';
-			} else if(obj.is('.mura-five')){
-				width='41.66%';
-			} else if(obj.is('.mura-six')){
-				width='50%';
-			} else if(obj.is('.mura-seven')){
-				width='58.33';
-			} else if(obj.is('.mura-eigth')){
-				width='66.66%';
-			} else if(obj.is('.mura-nine')){
-				width='75%';
-			} else if(obj.is('.mura-ten')){
-				width='83.33%';
-			} else if(obj.is('.mura-eleven')){
-				width='91.66%';
-			} else if(obj.is('.mura-twelve')){
-				width='100%';
-			} else if(obj.is('.mura-one-third')){
-				width='33.33%';
-			} else if(obj.is('.mura-two-thirds')){
-				width='66.66%';
-			} else if(obj.is('.mura-one-half')){
-				width='50%';
-			}
+				if(obj.is('.mura-one')){
+					width='8.33%';
+				} else if(obj.is('.mura-two')){
+					width='16.66%';
+				} else if(obj.is('.mura-three')){
+					width='25%';
+				} else if(obj.is('.mura-four')){
+					width='33.33%';
+				} else if(obj.is('.mura-five')){
+					width='41.66%';
+				} else if(obj.is('.mura-six')){
+					width='50%';
+				} else if(obj.is('.mura-seven')){
+					width='58.33';
+				} else if(obj.is('.mura-eigth')){
+					width='66.66%';
+				} else if(obj.is('.mura-nine')){
+					width='75%';
+				} else if(obj.is('.mura-ten')){
+					width='83.33%';
+				} else if(obj.is('.mura-eleven')){
+					width='91.66%';
+				} else if(obj.is('.mura-twelve')){
+					width='100%';
+				} else if(obj.is('.mura-one-third')){
+					width='33.33%';
+				} else if(obj.is('.mura-two-thirds')){
+					width='66.66%';
+				} else if(obj.is('.mura-one-half')){
+					width='50%';
+				}
 
-			var left=obj.css('marginLeft');
-			var right=obj.css('marginRight')
-			if(left.charAt(0) != "-" && right.charAt(0) != "-"){
-					obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
+				var left=obj.css('marginLeft');
+				var right=obj.css('marginRight')
+				if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
+						obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
+				}
 			}
 
 			if(obj.css('paddingTop').replace(/[^0-9]/g,'') != '0' || obj.css('paddingLeft').replace(/[^0-9]/g,'') != '0'){

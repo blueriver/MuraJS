@@ -3122,6 +3122,23 @@ var Mura=(function(){
 					});
 
 					Mura('label.mura-editable-label').show();
+
+					window.addEventListener("resize", function(){
+			    	clearTimeout(Mura.windowResizeID);
+			    	Mura.windowResizeID = setTimeout(doneResizing, 250);
+						function doneResizing(){
+						 	Mura('.mura-object').each(function(){
+								var obj=Mura(this);
+								var left=obj.css('marginLeft');
+								var right=obj.css('marginRight');
+								if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
+									calculateDisplayObjectStyles();
+								}
+							});
+							delete Mura.windowResizeID;
+						}
+					});
+
 					Mura(document).trigger('muraReady');
 				}
 			});
