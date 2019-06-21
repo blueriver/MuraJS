@@ -18353,7 +18353,8 @@ Mura.DOMSelection = Mura.Core.extend(
 			if(adjust){
 				var left=obj.css('marginLeft');
 				var right=obj.css('marginRight')
-				if(!(left=='0px' && right=='0px') && left.charAt(0) != "-" && right.charAt(0) != "-"){
+
+				if(!obj.is('.mura-center') && !(left=='0px' && right=='0px') && !(left=='auto' || right=='auto') && left.charAt(0) != "-" && right.charAt(0) != "-"){
 					if(fullsize){
 						obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
 					}
