@@ -2012,6 +2012,14 @@ var Mura=(function(){
 		self.removeAttr('draggable');
 		self.removeAttr('style');
 
+		var data=self.data();
+
+		for(var p in data){
+			if(data.hasOwnProperty(p) && (typeof p == 'undefined') || data[p] == ''){
+				self.removeAttr('data-' + p);
+			}
+		}
+
 		if (self.data('object') == 'container') {
 			self.find('.mura-object:not([data-object="container"])').html('');
 			self.find('.frontEndToolsModal').remove();
