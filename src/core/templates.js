@@ -22,7 +22,7 @@ Mura.templates['text']=function(context){
 	if(context.label){
 		context.source=context.source || '';
 	} else {
-		context.source=context.source || '<p>This object has not been configured.</p>';
+		context.source=context.source || '';
 	}
 	return context.source;
 }
@@ -31,7 +31,7 @@ Mura.templates['embed']=function(context){
 	if(context.label){
 		context.source=context.source || '';
 	} else {
-		context.source=context.source || '<p>This object has not been configured.</p>';
+		context.source=context.source || '';
 	}
 	return context.source;
 }
