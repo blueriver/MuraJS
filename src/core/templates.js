@@ -14,7 +14,7 @@ Mura.templates['meta']=function(context){
 	}
 }
 Mura.templates['content']=function(context){
-	context.html=context.html || context.content || context.source || '';
+	context.html=context.html || context.content || context.source || '<p></p>';
 	return '<div class="mura-object-content">' + context.html + '</div>';
 }
 Mura.templates['text']=function(context){
@@ -22,7 +22,7 @@ Mura.templates['text']=function(context){
 	if(context.label){
 		context.source=context.source || '';
 	} else {
-		context.source=context.source || '';
+		context.source=context.source || '<p></p>';
 	}
 	return context.source;
 }
@@ -31,7 +31,7 @@ Mura.templates['embed']=function(context){
 	if(context.label){
 		context.source=context.source || '';
 	} else {
-		context.source=context.source || '';
+		context.source=context.source || '<p></p>';
 	}
 	return context.source;
 }
