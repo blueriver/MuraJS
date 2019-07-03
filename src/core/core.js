@@ -1686,7 +1686,7 @@ var Mura=(function(){
 
 
 	var layoutmanagertoolbar =
-			'<div class="frontEndToolsModal mura"><span class="mura-edit-icon"></span></div>';
+			'<div class="frontEndToolsModal mura"><span class="mura-edit-icon"></span><span class="mura-edit-label"></span><span class="mura-edit-handle"></span></div>';
 
 	function processMarkup(scope) {
 
@@ -2226,6 +2226,12 @@ var Mura=(function(){
 			if (obj.hasClass('mura-body-object')) {
 				obj.children('.frontEndToolsModal').remove();
 				obj.prepend(layoutmanagertoolbar);
+				if(obj.data('objectname')){
+					obj.children('.frontEndToolsModal').children('.mura-edit-label').html(obj.data('objectname'));
+				} else {
+					obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
+				}
+
 				MuraInlineEditor.setAnchorSaveChecks(obj.node);
 
 				obj.addClass('mura-active')
@@ -2243,6 +2249,12 @@ var Mura=(function(){
 						) {
 						obj.children('.frontEndToolsModal').remove();
 						obj.prepend(layoutmanagertoolbar);
+						if(obj.data('objectname')){
+							obj.children('.frontEndToolsModal').children('.mura-edit-label').html(obj.data('objectname'));
+						} else {
+							obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
+						}
+
 						MuraInlineEditor.setAnchorSaveChecks(obj.node);
 
 						obj
@@ -2267,6 +2279,12 @@ var Mura=(function(){
 							if (MuraInlineEditor && (MuraInlineEditor.objectHasConfigurator(obj) || (!Mura.layoutmanager && MuraInlineEditor.objectHasEditor(objectData)))) {
 								obj.children('.frontEndToolsModal').remove();
 								obj.prepend(layoutmanagertoolbar);
+								if(obj.data('objectname')){
+									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(obj.data('objectname'));
+								} else {
+									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
+								}
+
 								MuraInlineEditor.setAnchorSaveChecks(obj.node);
 
 								obj
@@ -2299,6 +2317,11 @@ var Mura=(function(){
 								obj.data('notconfigurable',true);
 								obj.children('.frontEndToolsModal').remove();
 								obj.prepend(window.Mura.layoutmanagertoolbar);
+								if(obj.data('objectname')){
+									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(obj.data('objectname'));
+								} else {
+									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
+								}
 
 								obj.off('click',Mura.handleObjectClick).on('click',Mura.handleObjectClick);
 
