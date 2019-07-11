@@ -1686,7 +1686,7 @@ var Mura=(function(){
 
 
 	var layoutmanagertoolbar =
-			'<div class="frontEndToolsModal mura"><span class="mura-edit-icon"></span><span class="mura-edit-label"></span><span class="mura-edit-handle"></span></div>';
+			'<span class="mura-fetborder mura-fetborder-left"></span><span class="mura-fetborder mura-fetborder-right"></span><span class="mura-fetborder mura-fetborder-top"></span><span class="mura-fetborder mura-fetborder-bottom"></span><div class="frontEndToolsModal mura"><span class="mura-edit-icon"></span><span class="mura-edit-label"></span></div>';
 
 	function processMarkup(scope) {
 
@@ -2231,6 +2231,9 @@ var Mura=(function(){
 				} else {
 					obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
 				}
+				if(obj.data('objecticonclass')){
+					obj.children('.frontEndToolsModal').children('.mura-edit-label').addClass(obj.data('objecticonclass'));
+				}
 
 				MuraInlineEditor.setAnchorSaveChecks(obj.node);
 
@@ -2253,6 +2256,9 @@ var Mura=(function(){
 							obj.children('.frontEndToolsModal').children('.mura-edit-label').html(obj.data('objectname'));
 						} else {
 							obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
+						}
+						if(obj.data('objecticonclass')){
+							obj.children('.frontEndToolsModal').children('.mura-edit-label').addClass(obj.data('objecticonclass'));
 						}
 
 						MuraInlineEditor.setAnchorSaveChecks(obj.node);
@@ -2283,6 +2289,9 @@ var Mura=(function(){
 									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(obj.data('objectname'));
 								} else {
 									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
+								}
+								if(obj.data('objecticonclass')){
+									obj.children('.frontEndToolsModal').children('.mura-edit-label').addClass(obj.data('objecticonclass'));
 								}
 
 								MuraInlineEditor.setAnchorSaveChecks(obj.node);
@@ -2321,6 +2330,9 @@ var Mura=(function(){
 									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(obj.data('objectname'));
 								} else {
 									obj.children('.frontEndToolsModal').children('.mura-edit-label').html(Mura.firstToUpperCase(obj.data('object')));
+								}
+								if(obj.data('objecticonclass')){
+									obj.children('.frontEndToolsModal').children('.mura-edit-label').addClass(obj.data('objecticonclass'));
 								}
 
 								obj.off('click',Mura.handleObjectClick).on('click',Mura.handleObjectClick);
