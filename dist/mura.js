@@ -18927,7 +18927,6 @@ Mura.DOMSelection = Mura.Core.extend(
 		</div>
 		*/
 		var markup='<div class="' + outerClass + '">';
-		markup +='<label class="mura-editable-label" style="display:none">' + params.label.toUpperCase() + '</label>';
 		markup +='<div contenteditable="false" id="mura-editable-attribute-' + params.name +' class="' + innerClass + '" ';
 		markup += ' data-attribute="' + params.name + '" ';
 		markup += ' data-type="' + params.type + '" ';
@@ -18937,7 +18936,9 @@ Mura.DOMSelection = Mura.Core.extend(
 		if(params.type == 'htmlEditor'){
 			markup += ' data-loose="true" data-perm="true" data-inited="false"';
 		}
-		markup += '>' + value + '</div></div>';
+		markup += '>' + value + '</div>';
+		markup += '<label class="mura-editable-label" style="display:none">' + params.label.toUpperCase() + '</label>';
+		markup +=	'</div>';
 		this.selection[0].innerHTML=markup;
 		Mura.evalScripts(this.selection[0]);
 		return this;
