@@ -1,7 +1,7 @@
 {
   "name": "mura.js",
   "homepage": "http://www.getmura.com",
-  "version": "1.0.152",
+  "version": "1.0.153",
   "description": "Utility for interacting with the Mura JSON/REST API",
   "files": [
     "index.js",
@@ -23,20 +23,20 @@
   "author": "Blue River Interactive Group, Inc.",
   "license": "GPL-2.0 with execptions",
   "devDependencies": {
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "grunt": "^1.0.3",
     "grunt-contrib-handlebars": "^1.0.0",
     "grunt-handlebars-compiler": "^0.3.1",
     "grunt-text-replace": "^0.4.0",
-    "webpack": "^4.29.3",
+    "webpack": "^4.35.3",
     "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.3.5"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "handlebars": "^4.1.0",
     "install": "^0.10.4",
-    "npm": "^6.8.0",
+    "npm": "^6.10.1",
     "request": "^2.88.0",
     "tough-cookie": "^2.5.0"
   },

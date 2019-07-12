@@ -729,9 +729,10 @@ var Mura=(function(){
 
 		var str = data.header;
 
-		str += data.inherited.header;
+
 
 		if(data.inherited.items.length){
+			str += data.inherited.header;
 			for(var i in data.inherited.items){
 				str += data.inherited.items[i].header;
 				if(typeof data.inherited.items[i].html != 'undefined' && data.inherited.items[i].html){
@@ -739,9 +740,8 @@ var Mura=(function(){
 				}
 				str += data.inherited.items[i].footer;
 			}
+			str += data.inherited.footer;
 		}
-
-		str += data.inherited.footer;
 
 		str += data.local.header;
 
