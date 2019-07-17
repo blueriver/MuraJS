@@ -1969,6 +1969,23 @@ var Mura=(function(){
 
 			var processors = [
 
+				function(){
+					//if layout manager UI exists check for rendered regions and remove them from additional regions
+					if(Mura('.mura__layout-manager__display-regions').length){
+						find('.mura-region').each(function(){
+							var region=Mura(this);
+							var isEditRegion=region.closest('.mura-region__item');
+							if(!isEditRegion.length){
+								Mura('.mura-region__item[data-regionid="' + region.data('regionid') + '"]').remove()
+							}
+						})
+
+						if(!Mura('.mura__layout-manager__display-regions .mura-region__item').length){
+							Mura('#mura-objects-openregions-btn, .mura__layout-manager__display-regions').remove();
+						}
+					}
+				},
+
 				function() {
 					find('.mura-object, .mura-async-object')
 						.each(function() {
