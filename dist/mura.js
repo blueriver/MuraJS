@@ -14914,12 +14914,16 @@ Mura.Entity = Mura.Core.extend(
 				eventHandler.error=reject;
 			}
 
+			if(params instanceof FormData){
+				params.append('_cacheid',Math.random());
+			} else {
+				params._cacheid=Math.random();
+			}
+
 			self._requestcontext.request({
 				type: method.toLowerCase(),
 				url: self.getApiEndPoint() + name,
-				data: Mura.extend(params,{
-					'_cacheid': Math.random()
-				}),
+				data: params,
 				success: function(resp) {
 					if (resp.data != 'undefined'	) {
 						if (typeof 	eventHandler.success ==	'function') {
@@ -14964,10 +14968,11 @@ Mura.Entity = Mura.Core.extend(
 		Mura.normalizeRequestHandler(eventHandler);
 
 		if(Mura.mode.toLowerCase() == 'rest'){
+
 			return new Promise(function(resolve,reject) {
 				return self.invoke(
 					name,
-					Mura.extend(params,resp.data),
+					params,
 					method,
 					eventHandler
 				).then(resolve,reject);
@@ -14990,10 +14995,18 @@ Mura.Entity = Mura.Core.extend(
 						context: name
 					},
 					success: function(resp) {
+
+						if(params instanceof FormData){
+							params.append('csrf_token',resp.data.csrf_token);
+							params.append('csrf_token_expires',resp.data.csrf_token_expires);
+						} else {
+							params=Mura.extend(params,resp.data);
+						}
+
 						if (resp.data != 'undefined'	) {
 							self.invoke(
 								name,
-								Mura.extend(params,resp.data),
+								params,
 								method,
 								eventHandler
 							).then(resolve,reject);
