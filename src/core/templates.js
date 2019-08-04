@@ -36,4 +36,25 @@ Mura.templates['embed']=function(context){
 	return context.source;
 }
 
+Mura.templates['image']=function(context){
+	context=context || {};
+	context.src=context.src||'';
+	context.alt=context.alt||'';
+	context.caption=context.caption||'';
+
+	var source='';
+
+	if(!context.src){
+		return '';
+	}
+
+	source='<img src="' + Mura.escapeHTML(context.src) + '" alt="' + Mura.escapeHTML(context.alt) + '" />';
+	if(context.caption && context.caption != '<p></p>'){
+		source+='<figcaption>' + context.caption + '</figcaption>';
+	}
+	source='<figure>' + source + '</figure>';
+
+	return source;
+}
+
 require('./templates-handlebars');

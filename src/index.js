@@ -19,6 +19,7 @@ require('./core/ui.js');
 require('./core/ui.form');
 require('./core/ui.text');
 require('./core/ui.embed');
+require('./core/ui.image');
 require('./core/ui.collection');
 require('./core/templates');
 
