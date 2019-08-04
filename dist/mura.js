@@ -20964,8 +20964,11 @@ Handlebars.noConflict();
 
 Mura.templates=Mura.templates || {};
 Mura.templates['meta']=function(context){
+	if(typeof context.labeltag == 'undefined' || !context.labeltag){
+		context.labeltag='h2';
+	}
 	if(context.label){
-		return '<div class="mura-object-meta-wrapper"><div class="mura-object-meta"><h2>' + Mura.escapeHTML(context.label) + '</h2></div></div>';
+		return '<div class="mura-object-meta-wrapper"><div class="mura-object-meta"><' + Mura.escapeHTML(context.labeltag) + '>' + Mura.escapeHTML(context.label) + '</' + Mura.escapeHTML(context.labeltag) + '></div></div>';
 	} else {
 		return '';
 	}
