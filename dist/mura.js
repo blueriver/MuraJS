@@ -17783,6 +17783,81 @@ Mura.DOMSelection = Mura.Core.extend(
 	},
 
 	/**
+	 * insertDisplayObjectAfter - Inserts display object after selected items
+	 *
+	 * @param	{object} data Display objectparams (including object='objectkey')
+	 * @return {Promise}
+	 */
+	insertDisplayObjectAfter: function(data) {
+		var self = this;
+		delete data.method;
+		return new Promise(function(resolve, reject) {
+			self.each(function() {
+				console.log(2)
+				var el = document.createElement('div');
+				el.setAttribute('class','mura-object');
+				for (var a in data) {
+					el.setAttribute('data-' + a,data[a]);
+				}
+				if (typeof data.async == 'undefined') {
+					el.setAttribute('data-async',true);
+				}
+				if (typeof data.render == 'undefined') {
+					el.setAttribute('data-render','server');
+				}
+				el.setAttribute('data-instanceid',Mura.createUUID());
+				var self=this;
+				function watcher(){
+					if(Mura.markupInitted){
+						Mura(self).after(el);
+						Mura.processDisplayObject(el,true,true).then(resolve, reject);
+					} else {
+						setTimeout(watcher);
+					}
+				}
+				watcher();
+			});
+		});
+	},
+
+	/**
+	 * insertDisplayObjectAfter - Inserts display object after selected items
+	 *
+	 * @param	{object} data Display objectparams (including object='objectkey')
+	 * @return {Promise}
+	 */
+	insertDisplayObjectBefore: function(data) {
+		var self = this;
+		delete data.method;
+		return new Promise(function(resolve, reject) {
+			self.each(function() {
+				var el = document.createElement('div');
+				el.setAttribute('class','mura-object');
+				for (var a in data) {
+					el.setAttribute('data-' + a,data[a]);
+				}
+				if (typeof data.async == 'undefined') {
+					el.setAttribute('data-async',true);
+				}
+				if (typeof data.render == 'undefined') {
+					el.setAttribute('data-render','server');
+				}
+				el.setAttribute('data-instanceid',Mura.createUUID());
+				var self=this;
+				function watcher(){
+					if(Mura.markupInitted){
+						Mura(self).before(el);
+						Mura.processDisplayObject(el,true,true).then(resolve, reject);
+					} else {
+						setTimeout(watcher);
+					}
+				}
+				watcher();
+			});
+		});
+	},
+
+	/**
 	 * prependDisplayObject - Prepends display object to selected items
 	 *
 	 * @param	{object} data Display objectparams (including object='objectkey')
@@ -17883,7 +17958,12 @@ Mura.DOMSelection = Mura.Core.extend(
 			if (typeof el == 'string') {
 				this.insertAdjacentHTML('afterend', el);
 			} else {
-				this.parent.insertBefore(el,this.parent.firstChild);
+				if(this.nextSibling){
+					this.parentNode.insertBefore(el, this.nextSibling);
+				} else {
+					this.parentNode.appendChild(el);
+				}
+				
 			}
 		});
 		return this;
