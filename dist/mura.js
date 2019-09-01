@@ -18236,10 +18236,14 @@ Mura.DOMSelection = Mura.Core.extend(
 
 			var styleSupport=obj.data('stylesupport');
 			var objectstyles=false;
+
 			if(styleSupport && styleSupport.objectstyles){
 				objectstyles=styleSupport.objectstyles;
 			}
 
+			var hasLayeredBg=(objectstyles && typeof objectstyles.backgroundColor != 'undefined' && objectstyles.backgroundColor
+			&& typeof objectstyles.backgroundImage != 'undefined' && objectstyles.backgroundImage);
+			
  			if(styleSupport && objectstyles){
  				obj.removeAttr('style');
 				if(!fullsize){
@@ -18249,7 +18253,13 @@ Mura.DOMSelection = Mura.Core.extend(
 					delete objectstyles.marginTop;
 					delete objectstyles.marginBottom;
 				}
- 				obj.css(objectstyles);
+
+				if(hasLayeredBg){
+					objectstyles.backgroundImage='linear-gradient(' + objectstyles.backgroundColor + ', ' + objectstyles.backgroundColor +' ), ' + objectstyles.backgroundImage;
+				}
+
+				obj.css(objectstyles);
+			
 				if(!fullsize || (fullsize && !(
 					obj.css('marginTop')=='0px'
 					&& obj.css('marginBottom')=='0px'
@@ -18270,18 +18280,6 @@ Mura.DOMSelection = Mura.Core.extend(
 				var selector='div.mura-object[data-instanceid="' + obj.data('instanceid') + '"]';
 
 				if(styleSupport && objectstyles){
-					if (objectstyles && typeof objectstyles.backgroundColor != 'undefined' && objectstyles.backgroundColor
-						&& typeof objectstyles.backgroundImage != 'undefined' && objectstyles.backgroundImage) {
-						var style =selector + '::before{content: ""; position: absolute;	top: 0; right: 0;left: 0;bottom:0; background:' + objectstyles.backgroundColor + '}';
-						sheet.insertRule(
-							style,
-							sheet.cssRules.length
-						);
-						sheet.insertRule(
-							selector + ' > * {position:relative;}',
-							sheet.cssRules.length
-						);
-		 			}
 					if(objectstyles && objectstyles.color){
 						var style=selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + objectstyles.color + ';} ';
 						sheet.insertRule(
@@ -18335,21 +18333,16 @@ Mura.DOMSelection = Mura.Core.extend(
 							metastyles=styleSupport.metastyles;
 						}
 
+						var hasLayeredBg=(metastyles && typeof metastyles.backgroundColor != 'undefined' && metastyles.backgroundColor
+						&& typeof metastyles.backgroundImage != 'undefined' && metastyles.backgroundImage);
+
+						if(hasLayeredBg){
+							metastyles.backgroundImage='linear-gradient(' + metastyles.backgroundColor + ', ' + metastyles.backgroundColor +' ), ' + metastyles.backgroundImage;
+						}
+
 						if(!windowResponse){
 							var selector='div.mura-object[data-instanceid="' + obj.data('instanceid') + '"] .mura-object-meta';
 
-							if (metastyles && typeof metastyles.backgroundColor != 'undefined' && metastyles.backgroundColor
-								&& typeof metastyles.backgroundImage != 'undefined' && metastyles.backgroundImage) {
-								var style =selector + '::before{content: ""; position: absolute;	top: 0; right: 0;left: 0;bottom:0; background:' + metastyles.backgroundColor + '}';
-								sheet.insertRule(
-									style,
-									sheet.cssRules.length
-								);
-								sheet.insertRule(
-									selector + ' > * {position:relative;}',
-									sheet.cssRules.length
-								);
-				 			}
 							if(metastyles && metastyles.color){
 
 								var style = selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + metastyles.color + ';} ';
@@ -18398,17 +18391,11 @@ Mura.DOMSelection = Mura.Core.extend(
 
 			var selector='div.mura-object[data-instanceid="' + obj.data('instanceid') + '"] .mura-object-content';
 
-			if (!windowResponse && contentstyles && typeof contentstyles.backgroundColor != 'undefined' && contentstyles.backgroundColor
-				&& typeof contentstyles.backgroundImage != 'undefined' && contentstyles.backgroundImage) {
-				var style =selector + '::before{content: ""; position: absolute;	top: 0; right: 0;left: 0;bottom:0; background:' + contentstyles.backgroundColor + '}';
-				sheet.insertRule(
-					style,
-					sheet.cssRules.length
-				);
-				sheet.insertRule(
-					selector + ' > * {position:relative;}',
-					sheet.cssRules.length
-				);
+			var hasLayeredBg=(contentstyles && typeof contentstyles.backgroundColor != 'undefined' && contentstyles.backgroundColor
+			&& typeof contentstyles.backgroundImage != 'undefined' && contentstyles.backgroundImage);
+	
+			if(hasLayeredBg){
+				contentstyles.backgroundImage='linear-gradient(' + contentstyles.backgroundColor + ', ' + contentstyles.backgroundColor +' ), ' + contentstyles.backgroundImage;
 			}
 
 			if(!windowResponse && contentstyles && contentstyles.color){
