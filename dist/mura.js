@@ -2495,7 +2495,7 @@ var Mura=(function(){
 		//obj.hide().show();
 
 		if (Mura.layoutmanager && Mura.editing) {
-			if (obj.hasClass('mura-body-object')) {
+			if (obj.hasClass('mura-body-object') || obj.is('div.mura-object[data-targetattr]')) {
 				obj.children('.frontEndToolsModal').remove();
 				obj.prepend(layoutmanagertoolbar);
 				if(obj.data('objectname')){
