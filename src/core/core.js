@@ -2014,6 +2014,7 @@ var Mura=(function(){
 
 	function resetAsyncObject(el,empty) {
 		var self = Mura(el);
+
 		if(typeof empty =='undefined'){
 			empty=true;
 		}
@@ -2046,15 +2047,8 @@ var Mura=(function(){
 
 			self.find('.mura-object[data-object="container"]').each(
 				function() {
-					var self = Mura(this);
-					var content = self.children('div.mura-object-content');
-
-					if (content.length && empty) {
-						self.data('content', content.html());
-					}
-					if(empty){
-						content.html('');
-					}
+					resetAsyncObject(this,empty);
+					
 				});
 
 			self.find('.mura-object-meta').html('');
