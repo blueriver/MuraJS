@@ -3204,11 +3204,10 @@ var Mura=(function(){
 	function getBreakpoint(){
 		if(typeof document != 'undefined'){
 			var width=document.documentElement.clientWidth;
-			/*
+			
 			if(Mura.editing){
 				width=width-300;
 			}
-			*/
 		
 			if(width >=1200){
 				return 'lg';
