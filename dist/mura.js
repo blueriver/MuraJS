@@ -3204,6 +3204,12 @@ var Mura=(function(){
 	function getBreakpoint(){
 		if(typeof document != 'undefined'){
 			var width=document.documentElement.clientWidth;
+			/*
+			if(Mura.editing){
+				width=width-300;
+			}
+			*/
+		
 			if(width >=1200){
 				return 'lg';
 			} else if(width >=992){
@@ -18193,12 +18199,9 @@ Mura.DOMSelection = Mura.Core.extend(
 					break;
 				}
 			}
+			
 			var fullsize=breakpoints.indexOf('mura-' + Mura.getBreakpoint()) >= breakpoints.indexOf(objBreakpoint);
-
-			if(Mura.editing){
-				fullsize=fullsize+300;
-			}
-
+		
 			Mura.windowResponsiveModules=Mura.windowResponsiveModules||{};
 			Mura.windowResponsiveModules[obj.data('instanceid')]=false;
 
@@ -18439,52 +18442,50 @@ Mura.DOMSelection = Mura.Core.extend(
 				}
 			}
 
-			var width='100%';
-
-			if(obj.is('.mura-one')){
-				width='8.33%';
-			} else if(obj.is('.mura-two')){
-				width='16.66%';
-			} else if(obj.is('.mura-three')){
-				width='25%';
-			} else if(obj.is('.mura-four')){
-				width='33.33%';
-			} else if(obj.is('.mura-five')){
-				width='41.66%';
-			} else if(obj.is('.mura-six')){
-				width='50%';
-			} else if(obj.is('.mura-seven')){
-				width='58.33';
-			} else if(obj.is('.mura-eigth')){
-				width='66.66%';
-			} else if(obj.is('.mura-nine')){
-				width='75%';
-			} else if(obj.is('.mura-ten')){
-				width='83.33%';
-			} else if(obj.is('.mura-eleven')){
-				width='91.66%';
-			} else if(obj.is('.mura-twelve')){
-				width='100%';
-			} else if(obj.is('.mura-one-third')){
-				width='33.33%';
-			} else if(obj.is('.mura-two-thirds')){
-				width='66.66%';
-			} else if(obj.is('.mura-one-half')){
-				width='50%';
-			} else {
-				width='100%';
-			}
-
 			var left=obj.css('marginLeft');
 			var right=obj.css('marginRight')
-
+			
 			if(!obj.is('.mura-center') && !(left=='0px' && right=='0px') && !(left=='auto' || right=='auto') && left.charAt(0) != "-" && right.charAt(0) != "-"){
 				if(fullsize){
+					var width='100%';
+
+					if(obj.is('.mura-one')){
+						width='8.33%';
+					} else if(obj.is('.mura-two')){
+						width='16.66%';
+					} else if(obj.is('.mura-three')){
+						width='25%';
+					} else if(obj.is('.mura-four')){
+						width='33.33%';
+					} else if(obj.is('.mura-five')){
+						width='41.66%';
+					} else if(obj.is('.mura-six')){
+						width='50%';
+					} else if(obj.is('.mura-seven')){
+						width='58.33';
+					} else if(obj.is('.mura-eigth')){
+						width='66.66%';
+					} else if(obj.is('.mura-nine')){
+						width='75%';
+					} else if(obj.is('.mura-ten')){
+						width='83.33%';
+					} else if(obj.is('.mura-eleven')){
+						width='91.66%';
+					} else if(obj.is('.mura-twelve')){
+						width='100%';
+					} else if(obj.is('.mura-one-third')){
+						width='33.33%';
+					} else if(obj.is('.mura-two-thirds')){
+						width='66.66%';
+					} else if(obj.is('.mura-one-half')){
+						width='50%';
+					} else {
+						width='100%';
+					}
 					obj.css('width','calc(' + width + ' - (' + left + ' + ' + right + '))');
 				}
 				Mura.windowResponsiveModules[obj.data('instanceid')]=true;
 			}
-
 
 			if(obj.css('paddingTop').replace(/[^0-9]/g,'') != '0' || obj.css('paddingLeft').replace(/[^0-9]/g,'') != '0'){
 				obj.addClass('mura-object-pin-tools');
