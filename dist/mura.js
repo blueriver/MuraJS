@@ -18195,6 +18195,10 @@ Mura.DOMSelection = Mura.Core.extend(
 			}
 			var fullsize=breakpoints.indexOf('mura-' + Mura.getBreakpoint()) >= breakpoints.indexOf(objBreakpoint);
 
+			if(Mura.editing){
+				fullsize=fullsize+300;
+			}
+
 			Mura.windowResponsiveModules=Mura.windowResponsiveModules||{};
 			Mura.windowResponsiveModules[obj.data('instanceid')]=false;
 
