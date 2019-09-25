@@ -17940,7 +17940,7 @@ Mura.DOMSelection = Mura.Core.extend(
 			if (typeof el == 'string') {
 				this.insertAdjacentHTML('beforebegin', el);
 			} else {
-				this.parent.insertBefore(el,this);
+				this.parentNode.insertBefore(el,this);
 			}
 		});
 		return this;
