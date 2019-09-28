@@ -1193,7 +1193,7 @@ Mura.DOMSelection = Mura.Core.extend(
 
 				if(styleSupport && objectstyles){
 					if(objectstyles && objectstyles.color){
-						var style=selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + objectstyles.color + ';} ';
+						var style=selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' .breadcrumb-item + .breadcrumb-item::before, ' + selector + ' a:active { color:' + objectstyles.color + ';} ';
 						sheet.insertRule(
 							style,
 							sheet.cssRules.length
@@ -1256,8 +1256,7 @@ Mura.DOMSelection = Mura.Core.extend(
 							var selector='div.mura-object[data-instanceid="' + obj.data('instanceid') + '"] .mura-object-meta';
 
 							if(metastyles && metastyles.color){
-
-								var style = selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + metastyles.color + ';} ';
+								var style=selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' .breadcrumb-item + .breadcrumb-item::before, ' + selector + ' a:active { color:' + metastyles.color + ';} ';
 								sheet.insertRule(
 									style,
 									sheet.cssRules.length
@@ -1311,7 +1310,7 @@ Mura.DOMSelection = Mura.Core.extend(
 			}
 
 			if(!windowResponse && contentstyles && contentstyles.color){
-				var style=	selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' a:active { color:' + contentstyles.color + ';} ';
+				var style=selector + ', ' + selector + ' label, ' + selector + ' p, ' + selector + ' h1, ' + selector + ' h2, ' + selector + ' h3, ' + selector + ' h4, ' + selector + ' h5, ' + selector + ' h6, ' +selector + ' a:link, ' + selector + ' a:visited, '  + selector + ' a:hover, ' + selector + ' .breadcrumb-item + .breadcrumb-item::before, ' + selector + ' a:active { color:' + contentstyles.color + ';} ';
 				sheet.insertRule(
 					style,
 					sheet.cssRules.length
