@@ -3437,9 +3437,7 @@ var Mura=(function(){
 					Mura(document).on("keydown", function(event) {
 						loginCheck(event.which);
 					});
-
-					Mura('label.mura-editable-label').show();
-
+					
 					Mura.breakpoint=getBreakpoint();
 					Mura.windowResponsiveModules={};
 
