@@ -694,6 +694,16 @@ Mura.DOMSelection = Mura.Core.extend(
 	},
 
 	/**
+	 * appendModule - Appends display object to selected items
+	 *
+	 * @param	{object} data Display objectparams (including object='objectkey')
+	 * @return {Promise}
+	 */
+	appendModule: function(data) {
+		return this.appendDisplayObject(data);
+	},
+
+	/**
 	 * insertDisplayObjectAfter - Inserts display object after selected items
 	 *
 	 * @param	{object} data Display objectparams (including object='objectkey')
@@ -729,6 +739,16 @@ Mura.DOMSelection = Mura.Core.extend(
 				watcher();
 			});
 		});
+	},
+
+	/**
+	 * insertModuleAfter - Appends display object to selected items
+	 *
+	 * @param	{object} data Display objectparams (including object='objectkey')
+	 * @return {Promise}
+	 */
+	insertModuleAfter: function(data) {
+		return this.insertDisplayObjectAfter(data);
 	},
 
 	/**
@@ -769,6 +789,16 @@ Mura.DOMSelection = Mura.Core.extend(
 	},
 
 	/**
+	 * insertModuleBefore - Appends display object to selected items
+	 *
+	 * @param	{object} data Display objectparams (including object='objectkey')
+	 * @return {Promise}
+	 */
+	insertModuleBefore: function(data) {
+		return this.insertDisplayObjectBefore(data);
+	},
+
+	/**
 	 * prependDisplayObject - Prepends display object to selected items
 	 *
 	 * @param	{object} data Display objectparams (including object='objectkey')
@@ -806,6 +836,16 @@ Mura.DOMSelection = Mura.Core.extend(
 	},
 
 	/**
+	 * prependModule - Prepends display object to selected items
+	 *
+	 * @param	{object} data Display objectparams (including object='objectkey')
+	 * @return {Promise}
+	 */
+	prependModule: function(data) {
+		return this.prependDisplayObject(data);
+	},
+
+	/**
 	 * processDisplayObject - Handles processing of display object params to selection
 	 *
 	 * @param	{object} data Display object params
@@ -822,6 +862,16 @@ Mura.DOMSelection = Mura.Core.extend(
 				);
 			});
 		});
+	},
+
+	/**
+	 * processModule - Prepends display object to selected items
+	 *
+	 * @param	{object} data Display objectparams (including object='objectkey')
+	 * @return {Promise}
+	 */
+	processModule: function(data) {
+		return this.processDisplayObject(data);
 	},
 
 	/**

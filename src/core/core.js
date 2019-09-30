@@ -2101,6 +2101,10 @@ var Mura=(function(){
 		}
 	}
 
+	function destroyModules(){
+		destroyDisplayObjects();
+	}
+
 	function wireUpObject(obj, response, attempt) {
 
 		attempt= attempt || 0;
@@ -2666,6 +2670,10 @@ var Mura=(function(){
 			}
 		});
 
+	}
+
+	function processModule(el, queue, rerender, resolveFn, usePreloaderMarkup) {
+		return processDisplayObject(el, queue, rerender, resolveFn, usePreloaderMarkup);
 	}
 
 	var hashparams = {};
@@ -3236,6 +3244,7 @@ var Mura=(function(){
 			escapeHTML: escapeHTML,
 			unescapeHTML: unescapeHTML,
 			processDisplayObject: processDisplayObject,
+			processModule:processModule,
 			processAsyncObject: processAsyncObject,
 			resetAsyncObject: resetAsyncObject,
 			setLowerCaseKeys: setLowerCaseKeys,
@@ -3290,6 +3299,7 @@ var Mura=(function(){
 			DisplayObject: {},
 			displayObjectInstances: {},
 			destroyDisplayObjects: destroyDisplayObjects,
+			destroyModules: destroyModules,
 			holdReady: holdReady,
 			trackEvent: trackEvent,
 			recordEvent: trackEvent,
