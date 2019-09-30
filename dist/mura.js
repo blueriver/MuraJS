@@ -17848,7 +17848,7 @@ Mura.DOMSelection = Mura.Core.extend(
 	},
 
 	/**
-	 * insertDisplayObjectAfter - Inserts display object after selected items
+	 * insertDisplayObjectBefore - Inserts display object after selected items
 	 *
 	 * @param	{object} data Display objectparams (including object='objectkey')
 	 * @return {Promise}
