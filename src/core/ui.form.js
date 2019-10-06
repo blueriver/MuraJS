@@ -1019,7 +1019,7 @@ Mura.UI.Form=Mura.UI.extend(
 
 		if(errorsSel.length){
 			errorsSel=errorsSel.first().node;
-			if(typeof errorsSel.scrollIntoView != 'undefined'){
+			if(!Mura.isScrolledIntoView(errorsSel) && typeof errorsSel.scrollIntoView != 'undefined'){
 				errorsSel.scrollIntoView(true);
 			}
 		}
