@@ -18561,7 +18561,7 @@ Mura.DOMSelection = Mura.Core.extend(
 	 * @return {object}						Self
 	 */
 	text: function(textString) {
-		if (typeof textString == 'undefined') {
+		if (typeof textString != 'undefined') {
 			this.each(function(el) {
 				el.textContent = textString;
 			});
