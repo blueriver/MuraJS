@@ -20726,8 +20726,8 @@ Mura.UI.Form=Mura.UI.extend(
 			var escapeExpression=Mura.Handlebars.escapeExpression;
 			var returnString='mura-form';
 
-			if(this['class']){
-				returnString += ' ' + escapeExpression(this['class']);
+			if(self.formJSON && self.formJSON.form && self.formJSON.form.formattributes && self.formJSON.form.formattributes.class){
+				returnString += ' ' + escapeExpression(self.formJSON.form.formattributes.class);
 			}
 
 			return returnString;
