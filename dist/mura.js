@@ -13939,6 +13939,11 @@ Mura.Request=Mura.Core.extend(
 				}
 			}
 
+			if(typeof params.data != 'undefined' && typeof params.data.httpmethod != 'undefined'){
+				params.type=params.data.httpmethod;
+				delete params.data.httpmethod;
+			}
+
 			params.progress=params.progress || params.onProgress || params.onUploadProgress || function(){};
 			params.abort=params.abort || params.onAbort|| function(){};
 			params.success=params.success || params.onSuccess || function(){};
