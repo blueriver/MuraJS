@@ -2905,10 +2905,24 @@ var Mura=(function(){
 								self.innerHTML = Mura.preloaderMarkup;
 							}
 						}
+
+						var requestType='get';
+						var requestData=filterUnwantedParams(data);
+						var postCheck=new RegExp(/<\/?[a-z][\s\S]*>/i);
+
+						for(var p in requestData){
+							if(requestData.hasOwnProperty(p) 
+								&& requestData[p]
+								&& postCheck.test(requestData[p])
+							){
+								requestType='post';
+								break;
+							}
+						}
 						ajax({
 							url: Mura.apiEndpoint + '?method=processAsyncObject',
-							type: 'get',
-							data: filterUnwantedParams(data),
+							type: requestType,
+							data: requestData,
 							success: function(resp) {
 								handleResponse(obj,resp);
 								if (typeof resolve =='function') {
