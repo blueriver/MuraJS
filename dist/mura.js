@@ -18354,6 +18354,10 @@ Mura.DOMSelection = Mura.Core.extend(
 							selector + ' * {color:inherit}',
 							sheet.cssRules.length
 						);
+						sheet.insertRule(
+							selector + ' hr { border-color:' + objectstyles.color + ';}',
+							sheet.cssRules.length
+						);
 					}
 				}
 
@@ -18417,6 +18421,10 @@ Mura.DOMSelection = Mura.Core.extend(
 									selector + ' * {color:inherit}',
 									sheet.cssRules.length
 								);
+								sheet.insertRule(
+									selector + ' hr { border-color:' + metastyles.color + ';}',
+									sheet.cssRules.length
+								);
 							}
 						}
 
@@ -18469,6 +18477,10 @@ Mura.DOMSelection = Mura.Core.extend(
 				);
 				sheet.insertRule(
 					selector + ' * {color:inherit}',
+					sheet.cssRules.length
+				);
+				sheet.insertRule(
+					selector + ' hr { border-color:' + contentstyles.color + ';}',
 					sheet.cssRules.length
 				);
 			}
